@@ -7,3 +7,4 @@ export const validateBody = (req: Request, res: Response, next: NextFunction) =>
     }
     next();
 };
+

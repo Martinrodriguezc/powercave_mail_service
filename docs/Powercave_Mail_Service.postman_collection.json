@@ -1,0 +1,317 @@
+{
+	"info": {
+		"_postman_id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+		"name": "Powercave Mail Service",
+		"description": "API para el servicio de correos de Powercave. Incluye endpoints para envío individual y masivo de recordatorios de vencimiento de planes.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Single Reminder",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Response has success message\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.message).to.eql(\"Reminder sent successfully\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"to\": \"martin.rodriguez@uc.cl\",\n    \"userName\": \"Martin\",\n    \"planName\": \"Plan Mensual\",\n    \"expiryDate\": \"01/09/25\"\n}"
+				},
+				"url": {
+					"raw": "{{base_url}}/mail/send_reminder",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"mail/send_reminder"
+					]
+				},
+				"description": "Envía un recordatorio individual de vencimiento de plan.\n\n**Campos requeridos:**\n- `to`: Email del destinatario\n- `userName`: Nombre del usuario\n- `planName`: Nombre del plan\n- `expiryDate`: Fecha de vencimiento del plan\n\n**Respuesta exitosa:**\n```json\n{\n    \"message\": \"Reminder sent successfully\"\n}\n```"
+			},
+			"response": [
+				{
+					"name": "Success Response",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"to\": \"martin.rodriguez@uc.cl\",\n    \"userName\": \"Martin\",\n    \"planName\": \"Plan Mensual\",\n    \"expiryDate\": \"01/09/25\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/mail/send_reminder",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"mail/send_reminder"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"message\": \"Reminder sent successfully\"\n}"
+				},
+				{
+					"name": "Error Response - Missing Fields",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"to\": \"martin.rodriguez@uc.cl\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/mail/send_reminder",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"mail/send_reminder"
+							]
+						}
+					},
+					"status": "Bad Request",
+					"code": 400,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"message\": \"Missing required fields: userName, planName, expiryDate\"\n}"
+				}
+			]
+		},
+		{
+			"name": "Bulk Reminders",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Response has bulk success message\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.message).to.eql(\"Bulk reminders sent successfully\");",
+							"});",
+							"",
+							"pm.test(\"Response has successful count\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData).to.have.property('successful');",
+							"    pm.expect(jsonData).to.have.property('failed');",
+							"    pm.expect(jsonData).to.have.property('failures');",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"reminders\": [\n        {\n            \"to\": \"martin.rodriguez@uc.cl\",\n            \"userName\": \"Martin\",\n            \"expiryDate\": \"01/09/25\",\n            \"planName\": \"Plan Mensual\"\n        },\n        {\n            \"to\": \"powercave.chile@gmail.com\",\n            \"userName\": \"Powercave\",\n            \"expiryDate\": \"01/09/25\",\n            \"planName\": \"Plan de prueba\"\n        }\n    ]\n}"
+				},
+				"url": {
+					"raw": "{{base_url}}/mail/send_bulk_reminders",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"mail/send_bulk_reminders"
+					]
+				},
+				"description": "Envía múltiples recordatorios de vencimiento de plan de forma concurrente.\n\n**Campos requeridos:**\n- `reminders`: Array de objetos con los recordatorios\n  - `to`: Email del destinatario\n  - `userName`: Nombre del usuario\n  - `planName`: Nombre del plan\n  - `expiryDate`: Fecha de vencimiento del plan\n\n**Ventajas:**\n- ⚡ Envío concurrente (todos los emails se procesan al mismo tiempo)\n- 🛡️ Resistente a fallos (si uno falla, los otros continúan)\n- 📊 Reporte detallado de éxitos y fallos\n\n**Respuesta exitosa:**\n```json\n{\n    \"message\": \"Bulk reminders sent successfully\",\n    \"successful\": 2,\n    \"failed\": 0,\n    \"failures\": []\n}\n```\n\n**Respuesta con fallos parciales:**\n```json\n{\n    \"message\": \"Bulk reminders sent successfully\",\n    \"successful\": 1,\n    \"failed\": 1,\n    \"failures\": [\n        {\n            \"email\": \"invalid@email.com\",\n            \"error\": \"Invalid email address\"\n        }\n    ]\n}\n```"
+			},
+			"response": [
+				{
+					"name": "Success Response - All Sent",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"reminders\": [\n        {\n            \"to\": \"martin.rodriguez@uc.cl\",\n            \"userName\": \"Martin\",\n            \"expiryDate\": \"01/09/25\",\n            \"planName\": \"Plan Mensual\"\n        },\n        {\n            \"to\": \"powercave.chile@gmail.com\",\n            \"userName\": \"Powercave\",\n            \"expiryDate\": \"01/09/25\",\n            \"planName\": \"Plan de prueba\"\n        }\n    ]\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/mail/send_bulk_reminders",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"mail/send_bulk_reminders"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"message\": \"Bulk reminders sent successfully\",\n    \"successful\": 2,\n    \"failed\": 0,\n    \"failures\": []\n}"
+				},
+				{
+					"name": "Partial Success Response",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"reminders\": [\n        {\n            \"to\": \"martin.rodriguez@uc.cl\",\n            \"userName\": \"Martin\",\n            \"expiryDate\": \"01/09/25\",\n            \"planName\": \"Plan Mensual\"\n        },\n        {\n            \"to\": \"invalid-email\",\n            \"userName\": \"Test User\",\n            \"expiryDate\": \"01/09/25\",\n            \"planName\": \"Plan de prueba\"\n        }\n    ]\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/mail/send_bulk_reminders",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"mail/send_bulk_reminders"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"message\": \"Bulk reminders sent successfully\",\n    \"successful\": 1,\n    \"failed\": 1,\n    \"failures\": [\n        {\n            \"email\": \"invalid-email\",\n            \"error\": \"Invalid email address\"\n        }\n    ]\n}"
+				},
+				{
+					"name": "Error Response - Empty Array",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"reminders\": []\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/mail/send_bulk_reminders",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"mail/send_bulk_reminders"
+							]
+						}
+					},
+					"status": "Bad Request",
+					"code": 400,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"message\": \"Array of reminders is required\"\n}"
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:3000",
+			"type": "string",
+			"description": "Base URL for the Powercave Mail Service API"
+		}
+	]
+}
