@@ -33,6 +33,7 @@ export const sendReminderMail = async (opts: ReminderMail, sentBy: string): Prom
         html = html.replace(/\{\{year\}\}/g, new Date().getFullYear().toString());
 
         html = html.replace(/\{\{#if.*?\}\}[\s\S]*?\{\{\/if\}\}/g, '');
+        console.log("Sending reminder mail to ", opts.to);
 
         await sendMail({
             to: opts.to,
