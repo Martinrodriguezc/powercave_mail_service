@@ -7,14 +7,25 @@ const prisma = new PrismaClient();
 
 export async function sendMail(opts: Mail | ReminderMail): Promise<void> {
     try {
-        await transporter.sendMail({
+        console.log('📧 Attempting to send email to:', opts.to);
+        console.log('📧 SMTP Config:', {
+            host: process.env.SMTP_HOST,
+            port: process.env.SMTP_PORT,
+            user: process.env.SMTP_USER ? 'configured' : 'missing',
+            pass: process.env.SMTP_PASS ? 'configured' : 'missing'
+        });
+        
+        const result = await transporter.sendMail({
             from: `"Powercave" <${process.env.SMTP_USER}>`,
             to: opts.to,
             subject: opts.subject,
             text: opts.text,
             html: opts.html,
         });
+        
+        console.log('✅ Email sent successfully:', result.messageId);
     } catch (error) {
+        console.error('❌ Email sending failed:', error);
         throw error;
     }
 }
@@ -43,6 +54,8 @@ export const sendReminderMail = async (opts: ReminderMail, sentBy: string): Prom
             planName: opts.planName,
             expiryDate: opts.expiryDate,
         });
+        
+        console.log("✅ Email sent successfully, now saving to database...");
 
        await prisma.emailLog.create({
             data: {
@@ -55,8 +68,11 @@ export const sendReminderMail = async (opts: ReminderMail, sentBy: string): Prom
                 sentBy: sentBy,
             },
         });
+        
+        console.log("✅ Email log saved to database successfully!");
 
     } catch (error) {
+        console.error("❌ Error in sendReminderMail:", error);
         throw error;
     }
 }
