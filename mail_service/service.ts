@@ -11,8 +11,8 @@ export async function sendMail(opts: Mail | ReminderMail): Promise<void> {
         console.log('📧 SMTP Config:', {
             host: process.env.SMTP_HOST,
             port: process.env.SMTP_PORT,
-            user: process.env.SMTP_USER ? 'configured' : 'missing',
-            pass: process.env.SMTP_PASS ? 'configured' : 'missing'
+            user: process.env.SMTP_USER,
+            pass: process.env.SMTP_PASS
         });
         
         const result = await transporter.sendMail({
