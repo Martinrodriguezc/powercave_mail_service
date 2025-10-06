@@ -6,26 +6,15 @@ import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
 export async function sendMail(opts: Mail | ReminderMail): Promise<void> {
-    try {
-        console.log('📧 Attempting to send email to:', opts.to);
-        console.log('📧 SMTP Config:', {
-            host: process.env.SMTP_HOST,
-            port: process.env.SMTP_PORT,
-            user: process.env.SMTP_USER,
-            pass: process.env.SMTP_PASS
-        });
-        
-        const result = await transporter.sendMail({
+    try {        
+        await transporter.sendMail({
             from: `"Powercave" <${process.env.SMTP_USER}>`,
             to: opts.to,
             subject: opts.subject,
             text: opts.text,
             html: opts.html,
         });
-        
-        console.log('✅ Email sent successfully:', result.messageId);
     } catch (error) {
-        console.error('❌ Email sending failed:', error);
         throw error;
     }
 }
@@ -44,7 +33,6 @@ export const sendReminderMail = async (opts: ReminderMail, sentBy: string): Prom
         html = html.replace(/\{\{year\}\}/g, new Date().getFullYear().toString());
 
         html = html.replace(/\{\{#if.*?\}\}[\s\S]*?\{\{\/if\}\}/g, '');
-        console.log("Sending reminder mail to ", opts.to);
 
         await sendMail({
             to: opts.to,
@@ -54,8 +42,6 @@ export const sendReminderMail = async (opts: ReminderMail, sentBy: string): Prom
             planName: opts.planName,
             expiryDate: opts.expiryDate,
         });
-        
-        console.log("✅ Email sent successfully, now saving to database...");
 
        await prisma.emailLog.create({
             data: {
@@ -68,11 +54,8 @@ export const sendReminderMail = async (opts: ReminderMail, sentBy: string): Prom
                 sentBy: sentBy,
             },
         });
-        
-        console.log("✅ Email log saved to database successfully!");
 
     } catch (error) {
-        console.error("❌ Error in sendReminderMail:", error);
         throw error;
     }
 }
