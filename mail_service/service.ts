@@ -50,6 +50,7 @@ export const sendReminderMail = async (opts: ReminderMail, sentBy: string): Prom
                 mail_type: 'plan_renovation_reminder',
                 clientId: opts.clientId || 0,
                 clientName: opts.userName,
+                status: 'sent',
                 sentBy: sentBy,
             },
         });
@@ -79,6 +80,50 @@ export const sendBulkReminderMails = async (reminders: ReminderMail[], sentBy: s
         }));
 
     return { successful, failed };
+}
+
+export const getLastEmailByTenant = async () => {
+    try {
+        const lastEmails = await prisma.emailLog.groupBy({
+            by: ['clientId'],
+            _max: {
+                sentAt: true,
+            },
+        });
+
+        const emailDetails = await Promise.all(
+            lastEmails
+                .filter((group: { _max: { sentAt: Date | null } }) => group._max.sentAt !== null)
+                .map(async (group: { clientId: number; _max: { sentAt: Date | null } }) => {
+                    const lastEmail = await prisma.emailLog.findFirst({
+                        where: {
+                            clientId: group.clientId,
+                            sentAt: group._max.sentAt!,
+                        },
+                    select: {
+                        id: true,
+                        clientId: true,
+                        clientName: true,
+                        recipient: true,
+                        subject: true,
+                        mail_type: true,
+                        status: true,
+                        sentAt: true,
+                        errorMessage: true,
+                        sentBy: true,
+                    },
+                });
+                return lastEmail;
+            })
+        );
+
+        return emailDetails
+            .filter(email => email !== null)
+            .sort((a, b) => new Date(b!.sentAt).getTime() - new Date(a!.sentAt).getTime());
+            
+    } catch (error) {
+        throw error;
+    }
 }
 
 export const sendDiscountEmail = async (opts: DiscountMail): Promise<void> => {

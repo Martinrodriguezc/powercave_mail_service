@@ -1,15 +1,16 @@
 import { Router } from "express";
-import { sendReminderMail, sendBulkReminderMails, sendDiscountEmail } from "../mail_service/service";
+import { sendReminderMail, sendBulkReminderMails, sendDiscountEmail, getLastEmailByTenant } from "../mail_service/service";
 import { requireMailServiceAccess, validateBody } from "../middleware.ts/mail";
-import { AuthenticatedRequest } from "../middleware.ts/auth";
+import { AuthenticatedRequest, requireAuth } from "../middleware.ts/auth";
 
 const router = Router();
 
+router.use(requireAuth);
 router.use(requireMailServiceAccess);
 
 router.post("/send_reminder", validateBody, async (req: AuthenticatedRequest, res) => {
     const { to, userName, planName, expiryDate, clientId } = req.body;
-    const sentBy = req.user.name;
+    const sentBy = req.user?.name || 'test-user';
     try {
         await sendReminderMail({
             to,
@@ -27,7 +28,7 @@ router.post("/send_reminder", validateBody, async (req: AuthenticatedRequest, re
 
 router.post("/send_bulk_reminders", async (req: AuthenticatedRequest, res) => {
     const { reminders } = req.body;
-    const sentBy = req.user.name;
+    const sentBy = req.user?.name || 'test-user';
     
     if (!Array.isArray(reminders) || reminders.length === 0) {
         return res.status(400).json({ message: "Array of reminders is required" });
@@ -60,6 +61,20 @@ router.post("/send_discount_email", async (req: AuthenticatedRequest, res) => {
         res.status(200).json({ message: "Discount email sent successfully" });
     } catch (error) {
         res.status(500).json({ message: "Error sending discount email" });
+    }
+});
+
+router.get("/last-emails-by-tenant", async (req: AuthenticatedRequest, res) => {
+    try {
+        const lastEmails = await getLastEmailByTenant();
+        
+        res.status(200).json({
+            count: lastEmails.length,
+            data: lastEmails
+        });
+    } catch (error) {
+        console.error('Error getting last emails by tenant:', error);
+        res.status(500).json({ message: "Error retrieving last emails by tenant" });
     }
 });
 

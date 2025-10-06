@@ -19,8 +19,10 @@ export const requireMailServiceAccess = (
     if (!payload) {
       return res.status(401).json({ message: "Unauthorized" });
     }
-    if (payload.hasAccessToMailService !== true) {
+    
+    if (payload.hasAccessToSendMails !== true) {
       return res.status(403).json({ message: "User does not have necessary permissions" });
     }
+    
     next();
   }

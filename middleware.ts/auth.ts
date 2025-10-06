@@ -23,15 +23,20 @@ export const requireAuth = (
   }
 
   try {
-    const secret = config.JWT_SECRET 
+    const secret = config.JWT_SECRET;
+    
     if (!secret) {
       return res.status(500).json({ message: "Server misconfiguration: missing JWT secret" });
     }
+    
     const decoded = jwt.verify(token, secret);
+    
     if (typeof decoded === "string") {
       return res.status(403).json({ message: "Invalid token payload" });
     }
+    
     const payload = decoded as JwtPayload;
+    
     req.user = payload;
     next();
   } catch (error) {
