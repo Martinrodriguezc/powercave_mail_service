@@ -1,23 +1,34 @@
-import transporter from "../domain/config";
+import { config } from "../config/config";
 import { DiscountMail, Mail, ReminderMail } from "../domain/mail";
 import { discountEmailTemplate, reminderTemplate } from "../domain/templates";
 import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
+import { Resend } from "resend";
+
+const resend = new Resend(config.RESEND_API_KEY);
+
+/**
+ * Envía un correo usando la API de Resend.
+ * Compatible con tipos Mail y ReminderMail.
+ */
 export async function sendMail(opts: Mail | ReminderMail): Promise<void> {
-    try {        
-        await transporter.sendMail({
-            from: `"Powercave" <${process.env.SMTP_USER}>`,
-            to: opts.to,
-            subject: opts.subject,
-            text: opts.text,
-            html: opts.html,
-        });
-    } catch (error) {
-        throw error;
-    }
+  try {
+    const data = await resend.emails.send({
+      from: `"Powercave 💪" <${process.env.SENDER_EMAIL || "powercave@resend.dev"}>`,
+      to: opts.to,
+      subject: opts.subject,
+      text: opts.text || '',
+      html: opts.html,
+    });
+
+  } catch (error: any) {
+    console.error("❌ Error enviando correo:", error);
+    throw error;
+  }
 }
+
 
 export const sendReminderMail = async (opts: ReminderMail, sentBy: string): Promise<void> => {
     if (!sentBy) {

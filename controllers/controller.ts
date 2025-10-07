@@ -22,6 +22,7 @@ router.post("/send_reminder", validateBody, async (req: AuthenticatedRequest, re
         }, sentBy);
         res.status(200).json({ message: "Reminder sent successfully" });
     } catch (error) {
+        console.error('Error sending reminder:', error);
         res.status(500).json({ message: "Error sending reminder" });
     }
 });
