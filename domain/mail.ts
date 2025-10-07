@@ -9,7 +9,7 @@ export interface ReminderMail extends Mail {
     userName: string;
     planName: string;
     expiryDate: string;
-    clientId: number;
+    clientId?: number; // Opcional para correos de prueba
 }
 
 export interface DiscountMail extends Mail  {

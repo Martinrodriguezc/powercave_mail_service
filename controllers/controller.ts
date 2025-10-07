@@ -18,7 +18,7 @@ router.post("/send_reminder", validateBody, async (req: AuthenticatedRequest, re
             planName,
             expiryDate,
             subject: 'Recordatorio: tu plan vence pronto | Powercave',
-            clientId: clientId
+            ...(clientId && { clientId }) // Solo incluir clientId si está presente
         }, sentBy);
         res.status(200).json({ message: "Reminder sent successfully" });
     } catch (error) {
@@ -39,7 +39,7 @@ router.post("/send_bulk_reminders", async (req: AuthenticatedRequest, res) => {
         const reminderMails = reminders.map((reminder) => ({
             ...reminder,
             subject: 'Recordatorio: tu plan vence pronto | Powercave',
-            clientId: reminder.clientId
+            ...(reminder.clientId && { clientId: reminder.clientId }) // Solo incluir clientId si está presente
         }));
 
         const result = await sendBulkReminderMails(reminderMails, sentBy);

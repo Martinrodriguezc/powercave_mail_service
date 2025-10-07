@@ -54,17 +54,23 @@ export const sendReminderMail = async (opts: ReminderMail, sentBy: string): Prom
             expiryDate: opts.expiryDate,
         });
 
-       await prisma.emailLog.create({
-            data: {
-                recipient: opts.to,
-                subject: opts.subject,
-                mail_type: 'plan_renovation_reminder',
-                clientId: opts.clientId || 0,
-                clientName: opts.userName,
-                status: 'sent',
-                sentBy: sentBy,
-            },
-        });
+        // Solo guardar en la base de datos si no es un correo de prueba
+        if (opts.clientId) {
+            await prisma.emailLog.create({
+                data: {
+                    recipient: opts.to,
+                    subject: opts.subject,
+                    mail_type: 'plan_renovation_reminder',
+                    clientId: opts.clientId,
+                    clientName: opts.userName,
+                    status: 'sent',
+                    sentBy: sentBy,
+                },
+            });
+            console.log("✅ Email log saved to database successfully!");
+        } else {
+            console.log("📧 Test email - skipping database log");
+        }
 
     } catch (error) {
         throw error;
