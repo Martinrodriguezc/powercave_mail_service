@@ -8,6 +8,7 @@ export interface AppConfig {
   ALLOWED_ORIGINS: string | undefined;
   PORT: string | number | undefined;
   RESEND_API_KEY: string;
+  SENDER_EMAIL: string;
 }
 
 export const config: AppConfig = {
@@ -16,4 +17,5 @@ export const config: AppConfig = {
   ALLOWED_ORIGINS: process.env.ALLOWED_ORIGINS,
   PORT: process.env.PORT,
   RESEND_API_KEY: process.env.RESEND_API_KEY || '',
+  SENDER_EMAIL: process.env.SENDER_EMAIL || '',
 };

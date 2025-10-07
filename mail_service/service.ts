@@ -16,7 +16,7 @@ const resend = new Resend(config.RESEND_API_KEY);
 export async function sendMail(opts: Mail | ReminderMail): Promise<void> {
   try {
     const data = await resend.emails.send({
-      from: `"Powercave 💪" <${process.env.SENDER_EMAIL || "powercave@resend.dev"}>`,
+      from: `${config.SENDER_EMAIL}`,
       to: opts.to,
       subject: opts.subject,
       text: opts.text || '',
