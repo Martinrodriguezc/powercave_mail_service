@@ -1,5 +1,5 @@
 import { config } from "../config/config";
-import { DiscountMail, Mail, ReminderMail } from "../domain/mail";
+import { AdminRenewalReportMail, DiscountMail, Mail, ReminderMail } from "../domain/mail";
 import { discountEmailTemplate, reminderTemplate } from "../domain/templates";
 import { PrismaClient } from '@prisma/client';
 
@@ -9,13 +9,9 @@ import { Resend } from "resend";
 
 const resend = new Resend(config.RESEND_API_KEY);
 
-/**
- * Envía un correo usando la API de Resend.
- * Compatible con tipos Mail y ReminderMail.
- */
-export async function sendMail(opts: Mail | ReminderMail): Promise<void> {
+export async function sendMail(opts: Mail | ReminderMail | AdminRenewalReportMail): Promise<void> {
   try {
-    const data = await resend.emails.send({
+    await resend.emails.send({
       from: `${config.SENDER_EMAIL}`,
       to: opts.to,
       subject: opts.subject,
@@ -24,7 +20,7 @@ export async function sendMail(opts: Mail | ReminderMail): Promise<void> {
     });
 
   } catch (error: any) {
-    console.error("❌ Error enviando correo:", error);
+    console.error("Error enviando correo:", error);
     throw error;
   }
 }
@@ -99,50 +95,6 @@ export const sendBulkReminderMails = async (reminders: ReminderMail[], sentBy: s
     return { successful, failed };
 }
 
-export const getLastEmailByTenant = async () => {
-    try {
-        const lastEmails = await prisma.emailLog.groupBy({
-            by: ['clientId'],
-            _max: {
-                sentAt: true,
-            },
-        });
-
-        const emailDetails = await Promise.all(
-            lastEmails
-                .filter((group: { _max: { sentAt: Date | null } }) => group._max.sentAt !== null)
-                .map(async (group: { clientId: number; _max: { sentAt: Date | null } }) => {
-                    const lastEmail = await prisma.emailLog.findFirst({
-                        where: {
-                            clientId: group.clientId,
-                            sentAt: group._max.sentAt!,
-                        },
-                    select: {
-                        id: true,
-                        clientId: true,
-                        clientName: true,
-                        recipient: true,
-                        subject: true,
-                        mail_type: true,
-                        status: true,
-                        sentAt: true,
-                        errorMessage: true,
-                        sentBy: true,
-                    },
-                });
-                return lastEmail;
-            })
-        );
-
-        return emailDetails
-            .filter(email => email !== null)
-            .sort((a, b) => new Date(b!.sentAt).getTime() - new Date(a!.sentAt).getTime());
-            
-    } catch (error) {
-        throw error;
-    }
-}
-
 export const sendDiscountEmail = async (opts: DiscountMail): Promise<void> => {
     try {
         let html = discountEmailTemplate;
@@ -163,3 +115,4 @@ export const sendDiscountEmail = async (opts: DiscountMail): Promise<void> => {
         throw error;
     }
 }
+
