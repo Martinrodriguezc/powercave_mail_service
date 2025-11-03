@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { sendReminderMail, sendBulkReminderMails, sendDiscountEmail } from "../mail_service/service";
+import { sendReminderMail, sendBulkReminderMails, sendDiscountEmail, getLastEmailByTenant } from "../mail_service/service";
 import { requireMailServiceAccess, validateBody } from "../middleware.ts/mail";
 import { AuthenticatedRequest, requireAuth } from "../middleware.ts/auth";
 import { sendDailyAdminReportMail } from "../mail_service/admin/admin_service";
@@ -77,6 +77,21 @@ router.post("/send_daily_admin_report", async (req: AuthenticatedRequest, res) =
         res.status(500).json({ message: "Error sending daily admin report" });
     }
 });
+
+router.get("/last-emails-by-tenant", async (req: AuthenticatedRequest, res) => {
+    try {
+        const lastEmails = await getLastEmailByTenant();
+
+        res.status(200).json({
+            count: lastEmails.length,
+            data: lastEmails
+        });
+    } catch (error) {
+        console.error('Error getting last emails by tenant:', error);
+        res.status(500).json({ message: "Error retrieving last emails by tenant" });
+    }
+});
+
 
 
 export default router;
