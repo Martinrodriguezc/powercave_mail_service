@@ -11,16 +11,18 @@ const resend = new Resend(config.RESEND_API_KEY);
 
 export async function sendMail(opts: Mail | ReminderMail | AdminRenewalReportMail): Promise<void> {
     try {
-        await resend.emails.send({
+        const result = await resend.emails.send({
             from: `${config.SENDER_EMAIL}`,
             to: opts.to,
             subject: opts.subject,
             text: opts.text || '',
             html: opts.html,
         });
-
+        
+        console.log(`📨 Email sent via Resend to ${opts.to}, ID: ${result.data?.id || 'N/A'}`);
+        
     } catch (error: any) {
-        console.error("Error enviando correo:", error);
+        console.error(`❌ Error enviando correo a ${opts.to}:`, error);
         throw error;
     }
 }

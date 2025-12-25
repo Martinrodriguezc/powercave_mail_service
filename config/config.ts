@@ -9,6 +9,7 @@ export interface AppConfig {
   PORT: string | number | undefined;
   RESEND_API_KEY: string;
   SENDER_EMAIL: string;
+  MAIL_SERVICE_API_KEY: string;
 }
 
 export const config: AppConfig = {
@@ -18,4 +19,5 @@ export const config: AppConfig = {
   PORT: process.env.PORT,
   RESEND_API_KEY: process.env.RESEND_API_KEY || '',
   SENDER_EMAIL: process.env.SENDER_EMAIL || '',
+  MAIL_SERVICE_API_KEY: process.env.MAIL_SERVICE_API_KEY || '',
 };
