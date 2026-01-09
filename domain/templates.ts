@@ -15,3 +15,8 @@ export const dailyAdminReportTemplate = fs.readFileSync(
     path.join(__dirname, '../html/daily_admin_report.html'),
     'utf8'
 );
+
+export const dailySalesReportTemplate = fs.readFileSync(
+    path.join(__dirname, '../html/daily_sales_report.html'),
+    'utf8'
+);

@@ -32,3 +32,35 @@ export interface AdminRenewalReportMail extends Mail {
 
     reportDate?: string;
 }
+
+export interface DailySalesReportMail extends Mail {
+    reportDate: string;
+    totalRevenue: number;
+    planSales: {
+        sales: {
+            clientName: string;
+            planName: string;
+            amount: number;
+            time: string;
+        }[];
+        totalAmount: number;
+    };
+    foodSales: {
+        sales: {
+            clientName: string;
+            foodName: string;
+            amount: number;
+            time: string;
+        }[];
+        totalAmount: number;
+    };
+    merchandiseSales: {
+        sales: {
+            clientName: string;
+            productName: string;
+            amount: number;
+            time: string;
+        }[];
+        totalAmount: number;
+    };
+}

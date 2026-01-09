@@ -4,6 +4,7 @@ import { requireMailServiceAccess, validateBody } from "../middleware.ts/mail";
 import { AuthenticatedRequest, requireAuth } from "../middleware.ts/auth";
 import { requireApiKey } from "../middleware.ts/apiKeyAuth";
 import { sendDailyAdminReportMail } from "../mail_service/admin/admin_service";
+import { sendDailySalesReportMail } from "../mail_service/sales/sales_service";
 
 const router = Router();
 
@@ -153,6 +154,20 @@ router.post("/send_daily_admin_report", requireApiKey, async (req, res) => {
     } catch (error: any) {
         console.error('Error sending daily admin report:', error);
         res.status(500).json({ message: "Error sending daily admin report", error: error?.message });
+    }
+});
+
+router.post("/send_daily_sales_report", requireApiKey, async (req, res) => {
+    const mailData = req.body;
+    // Para backend-to-backend, usar un identificador del servicio
+    const sentBy = 'sales_registry_backend';
+
+    try {
+        await sendDailySalesReportMail(mailData, sentBy);
+        res.status(200).json({ message: "Daily sales report sent successfully" });
+    } catch (error: any) {
+        console.error('Error sending daily sales report:', error);
+        res.status(500).json({ message: "Error sending daily sales report", error: error?.message });
     }
 });
 
