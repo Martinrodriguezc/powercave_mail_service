@@ -238,28 +238,38 @@ export async function sendReminderReportEmail(reporte_final: ReminderReportResul
         day: 'numeric'
     });
 
-    try {
-        const subject = `[Gym Report] Estado de Recordatorios Diarios - ${fecha}`;
-        const html = generateReminderReportHTML(reporte_final, fecha);
+    const subject = `[Gym Report] Estado de Recordatorios Diarios - ${fecha}`;
+    const html = generateReminderReportHTML(reporte_final, fecha);
+    const recipients = ['martin.rodriguez@uc.cl', 'powercave.chile@gmail.com'];
 
-        await sendMail({
-            to: 'martin.rodriguez@uc.cl',
-            subject: subject,
-            html: html,
-        });
+    // Enviar a cada destinatario con delay de 1 segundo entre envíos
+    for (let i = 0; i < recipients.length; i++) {
+        const recipient = recipients[i];
+        try {
+            await sendMail({
+                to: recipient,
+                subject: subject,
+                html: html,
+            });
 
-        logger.success('Administrative report sent', { 
-            email: 'martin.rodriguez@uc.cl', 
-            reportDate: fecha,
-            totalRecords: reporte_final.length 
-        });
-    } catch (error: any) {
-        logger.error('Error sending administrative report', error, { 
-            email: 'martin.rodriguez@uc.cl',
-            reportDate: fecha 
-        });
-        // No lanzamos el error para que no afecte el flujo principal
-        // Solo lo registramos
+            logger.success('Administrative report sent', { 
+                email: recipient, 
+                reportDate: fecha,
+                totalRecords: reporte_final.length 
+            });
+        } catch (error: any) {
+            logger.error('Error sending administrative report', error, { 
+                email: recipient,
+                reportDate: fecha 
+            });
+            // No lanzamos el error para que no afecte el flujo principal
+            // Solo lo registramos y continuamos con el siguiente destinatario
+        }
+
+        // Delay de 1 segundo entre envíos (excepto después del último)
+        if (i < recipients.length - 1) {
+            await delay(1000);
+        }
     }
 }
 
@@ -270,7 +280,7 @@ export const sendBulkReminderMails = async (reminders: ReminderMail[], sentBy: s
 }> => {
     const reporte_final: ReminderReportResult[] = [];
     
-    // Procesar emails uno por uno con delay de 500ms entre cada envío
+    // Procesar emails uno por uno con delay de 1 segundo entre cada envío
     // Esto respeta el límite de 2 correos por segundo del proveedor
     for (let i = 0; i < reminders.length; i++) {
         const reminder = reminders[i];
@@ -335,9 +345,9 @@ export const sendBulkReminderMails = async (reminders: ReminderMail[], sentBy: s
             }
         }
         
-        // Delay de 500ms entre envíos (excepto después del último)
+        // Delay de 1 segundo entre envíos (excepto después del último)
         if (i < reminders.length - 1) {
-            await delay(500);
+            await delay(1000);
         }
     }
 

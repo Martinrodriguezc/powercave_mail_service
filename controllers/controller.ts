@@ -49,8 +49,11 @@ router.post("/send_reminder", requireApiKey, async (req, res) => {
         // Procesar todos los recordatorios con throttling
         const result = await sendBulkReminderMails(reminderMails, sentBy);
 
+        // Esperar 2 segundos antes de enviar el reporte administrativo
+        // Esto asegura que todos los correos hayan sido procesados completamente
+        await new Promise(resolve => setTimeout(resolve, 2000));
+
         // Enviar reporte administrativo automáticamente al finalizar el procesamiento
-        // Esto se ejecuta después de que el loop haya procesado al último cliente
         logger.info('Processing completed, sending administrative report', { 
             total: reminders.length,
             successful: result.successful,
