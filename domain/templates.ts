@@ -20,3 +20,8 @@ export const dailySalesReportTemplate = fs.readFileSync(
     path.join(__dirname, '../html/daily_sales_report.html'),
     'utf8'
 );
+
+export const reminderReportTemplate = fs.readFileSync(
+    path.join(__dirname, '../html/reminder_report.html'),
+    'utf8'
+);

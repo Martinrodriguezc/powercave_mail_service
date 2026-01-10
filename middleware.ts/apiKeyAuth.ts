@@ -1,5 +1,8 @@
 import { Request, Response, NextFunction } from "express";
 import { config } from "../config/config";
+import { createServiceLogger } from "../utils/logger";
+
+const logger = createServiceLogger('api-key-auth');
 
 /**
  * Middleware para autenticación mediante API Key
@@ -12,7 +15,9 @@ export const requireApiKey = (
 ) => {
   // Verificar que la API Key esté configurada en el servidor
   if (!config.MAIL_SERVICE_API_KEY) {
-    console.error("❌ Configuration error: MAIL_SERVICE_API_KEY is not set in environment variables");
+    logger.error('Configuration error: MAIL_SERVICE_API_KEY is not set in environment variables', undefined, {
+      action: 'api_key_validation'
+    });
     return res.status(500).json({ 
       message: "Server misconfiguration: API Key authentication is not properly configured" 
     });
@@ -23,7 +28,10 @@ export const requireApiKey = (
 
   // Verificar que el header esté presente
   if (!apiKey) {
-    console.warn(`⚠️  Unauthorized attempt: Missing X-API-Key header from ${req.ip}`);
+    logger.warn('Unauthorized attempt: Missing X-API-Key header', {
+      action: 'api_key_validation',
+      ip: req.ip
+    });
     return res.status(401).json({ 
       message: "Unauthorized: Missing X-API-Key header" 
     });
@@ -31,14 +39,20 @@ export const requireApiKey = (
 
   // Comparar la API Key proporcionada con la configurada
   if (apiKey !== config.MAIL_SERVICE_API_KEY) {
-    console.warn(`⚠️  Forbidden attempt: Invalid API Key from ${req.ip}`);
+    logger.warn('Forbidden attempt: Invalid API Key', {
+      action: 'api_key_validation',
+      ip: req.ip
+    });
     return res.status(403).json({ 
       message: "Forbidden: Invalid API Key" 
     });
   }
 
   // API Key válida, continuar
-  console.log(`✅ API Key authentication successful from ${req.ip}`);
+  logger.success('API Key authentication', {
+    action: 'api_key_validation',
+    ip: req.ip
+  });
   next();
 };
 

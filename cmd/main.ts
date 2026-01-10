@@ -2,7 +2,9 @@ import express from "express";
 import mailRouter from "../controllers/controller";
 import { config } from "../config/config";
 import cors from "cors";
+import { createServiceLogger } from "../utils/logger";
 
+const logger = createServiceLogger('mail-service-app');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
@@ -36,5 +38,5 @@ app.use(express.json());
 app.use("/mail", mailRouter);
 
 app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
+  logger.info('Server started', { port: PORT });
 });

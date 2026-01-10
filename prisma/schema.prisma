@@ -15,7 +15,7 @@ model EmailLog {
   sentAt        DateTime @default(now())
   status        EmailStatus @default(pending)
   errorMessage  String?
-  clientId      Int  
+  publicId      String  
   clientName    String
   sentBy String
   createdAt     DateTime @default(now())

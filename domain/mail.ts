@@ -9,7 +9,7 @@ export interface ReminderMail extends Mail {
     userName: string;
     planName: string;
     expiryDate: string;
-    clientId?: number;
+    publicId?: string;
 }
 
 export interface DiscountMail extends Mail {
@@ -63,4 +63,12 @@ export interface DailySalesReportMail extends Mail {
         }[];
         totalAmount: number;
     };
+}
+
+export interface ReminderReportResult {
+    publicId: string | null;
+    email: string;
+    status: 'success' | 'failed' | 'skipped';
+    error: string | null;
+    reason: string | null; // Razón por la que no se envió (error, o "Ya se envió en las últimas 48 horas")
 }
