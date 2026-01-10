@@ -233,6 +233,7 @@ function generateReminderReportHTML(reporte_final: ReminderReportResult[], fecha
  */
 export async function sendReminderReportEmail(reporte_final: ReminderReportResult[]): Promise<void> {
     const fecha = new Date().toLocaleDateString('es-CL', {
+        timeZone: 'America/Santiago',
         year: 'numeric',
         month: 'long',
         day: 'numeric'
@@ -304,11 +305,13 @@ export const sendBulkReminderMails = async (reminders: ReminderMail[], sentBy: s
             if (error instanceof RecentEmailSentError) {
                 const lastSentDate = error.lastSentAt 
                     ? new Date(error.lastSentAt).toLocaleString('es-CL', {
+                        timeZone: 'America/Santiago',
                         year: 'numeric',
                         month: 'long',
                         day: 'numeric',
                         hour: '2-digit',
-                        minute: '2-digit'
+                        minute: '2-digit',
+                        hour12: false
                     })
                     : 'fecha desconocida';
                 const reason = `Ya se envió un correo de recordatorio en las últimas 48 horas (último envío: ${lastSentDate})`;
