@@ -241,7 +241,7 @@ export async function sendReminderReportEmail(reporte_final: ReminderReportResul
 
     const subject = `[Gym Report] Estado de Recordatorios Diarios - ${fecha}`;
     const html = generateReminderReportHTML(reporte_final, fecha);
-    const recipients = ['martin.rodriguez@uc.cl', 'powercave.chile@gmail.com'];
+    const recipients = ['martin.rodriguez@uc.cl', 'powercave.chile@gmail.com', 'axelcandiaq@gmail.com'];
 
     // Enviar a cada destinatario con delay de 1 segundo entre envíos
     for (let i = 0; i < recipients.length; i++) {
