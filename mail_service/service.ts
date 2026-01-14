@@ -138,7 +138,7 @@ async function hasRecentReminderSent(publicId: string): Promise<{ hasRecent: boo
     }
 
     const fortyEightHoursAgo = new Date();
-    fortyEightHoursAgo.setHours(fortyEightHoursAgo.getHours() - 48);
+    fortyEightHoursAgo.setHours(fortyEightHoursAgo.getHours() - 47);
 
     const lastEmail = await prisma.emailLog.findFirst({
         where: {
