@@ -10,19 +10,22 @@ export const validateBody = (req: Request, res: Response, next: NextFunction) =>
     next();
 };
 
+const ALLOWED_MAIL_ROLES = ["MANAGER", "SUPERADMIN"] as const;
+
 export const requireMailServiceAccess = (
     req: AuthenticatedRequest,
     res: Response,
     next: NextFunction
   ) => {
-    const payload = req.user as JwtPayload | undefined;
+    const payload = req.user as (JwtPayload & { role?: string }) | undefined;
     if (!payload) {
       return res.status(401).json({ message: "Unauthorized" });
     }
-    
-    if (payload.hasAccessToSendMails !== true) {
+
+    const role = payload.role;
+    if (!role || !ALLOWED_MAIL_ROLES.includes(role as typeof ALLOWED_MAIL_ROLES[number])) {
       return res.status(403).json({ message: "User does not have necessary permissions" });
     }
-    
+
     next();
   }
