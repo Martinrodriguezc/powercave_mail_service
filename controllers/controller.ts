@@ -10,19 +10,38 @@ import { createServiceLogger } from "../utils/logger";
 const router = Router();
 const logger = createServiceLogger('mail-controller');
 
+/** Shape de cada ítem en body.reminders del POST /send_reminder */
+interface SendReminderBodyItem {
+    to: string;
+    userName: string;
+    planName: string;
+    expiryDate: string;
+    publicId?: string;
+}
+
 // TODO: Descomentar cuando se necesite autenticación
 // router.use(requireAuth);
 // router.use(requireMailServiceAccess);
 
 router.post("/send_reminder", requireApiKey, async (req, res) => {
-    // El backend enviará un array de recordatorios
-    const reminders = req.body;
+    // Body debe ser { reminders: [...], report_recipients: string[] }
+    if (!req.body || !Array.isArray(req.body.reminders)) {
+        return res.status(400).json({
+            message: "Request body must be { reminders: [...], report_recipients: string[] }"
+        });
+    }
+    const reminders = req.body.reminders as SendReminderBodyItem[];
+    const reportRecipients = req.body.report_recipients as string[];
+    if (!Array.isArray(reportRecipients) || reportRecipients.length === 0) {
+        return res.status(400).json({
+            message: "report_recipients is required and must be a non-empty array of email addresses"
+        });
+    }
     const sentBy = 'backend_service';
 
-    // Validar que sea un array
-    if (!Array.isArray(reminders) || reminders.length === 0) {
-        return res.status(400).json({ 
-            message: "Request body must be a non-empty JSON array" 
+    if (reminders.length === 0) {
+        return res.status(400).json({
+            message: "reminders must be a non-empty array"
         });
     }
 
@@ -59,7 +78,7 @@ router.post("/send_reminder", requireApiKey, async (req, res) => {
             successful: result.successful,
             failed: result.failed.length
         });
-        await sendReminderReportEmail(result.reporte_final);
+        await sendReminderReportEmail(result.reporte_final, reportRecipients);
 
         res.status(200).json({
             message: "Reminders processed successfully",

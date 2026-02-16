@@ -228,10 +228,10 @@ function generateReminderReportHTML(reporte_final: ReminderReportResult[], fecha
     return html;
 }
 
-/**
- * Envía el reporte administrativo de recordatorios
- */
-export async function sendReminderReportEmail(reporte_final: ReminderReportResult[]): Promise<void> {
+export async function sendReminderReportEmail(
+    reporte_final: ReminderReportResult[],
+    recipients: string[]
+): Promise<void> {
     const fecha = new Date().toLocaleDateString('es-CL', {
         timeZone: 'America/Santiago',
         year: 'numeric',
@@ -241,7 +241,6 @@ export async function sendReminderReportEmail(reporte_final: ReminderReportResul
 
     const subject = `[Gym Report] Estado de Recordatorios Diarios - ${fecha}`;
     const html = generateReminderReportHTML(reporte_final, fecha);
-    const recipients = ['martin.rodriguez@uc.cl', 'powercave.chile@gmail.com', 'axelcandiaq@gmail.com'];
 
     // Enviar a cada destinatario con delay de 1 segundo entre envíos
     for (let i = 0; i < recipients.length; i++) {
