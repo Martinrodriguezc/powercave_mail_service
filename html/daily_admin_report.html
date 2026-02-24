@@ -2,93 +2,91 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Reporte diario de renovaciones | Powercave</title>
+  <title>Reporte Diario | {{gymName}}</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 </head>
-<body style="margin:0; padding:0; background-color:#f4f4f4; font-family:Arial, sans-serif;">
-  <!-- Preheader -->
-  <div style="display:none; max-height:0; overflow:hidden; font-size:1px; line-height:1px; color:#f4f4f4; mso-hide:all;">
-    Reporte diario de planes por vencer y vencidos recientemente en Powercave.
+<body style="margin:0; padding:0; background-color:#0a0a0a; font-family:'Segoe UI',Arial,sans-serif;">
+
+  <!-- Preheader hidden -->
+  <div style="display:none; max-height:0; overflow:hidden; font-size:1px; line-height:1px; color:#0a0a0a; mso-hide:all;">
+    Reporte diario de planes por vencer y vencidos recientemente — {{gymName}}.
   </div>
 
-  <table width="100%" bgcolor="#f4f4f4" cellpadding="0" cellspacing="0" role="presentation">
+  <table width="100%" bgcolor="#0a0a0a" cellpadding="0" cellspacing="0" role="presentation">
     <tr>
-      <td align="center">
-        <table width="600" cellpadding="0" cellspacing="0" role="presentation" style="background-color:#ffffff; margin:20px 0; border-radius:8px; overflow:hidden;">
-          <!-- Header -->
+      <td align="center" style="padding:32px 16px;">
+
+        <table width="620" cellpadding="0" cellspacing="0" role="presentation" style="max-width:620px; width:100%;">
+
+          <!-- ═══ HEADER ═══ -->
           <tr>
-            <td align="center" style="background-color:#1a1a1a; padding:20px;">
-              <h1 style="color:#ffffff; margin:0; font-size:24px;">Powercave</h1>
-              <p style="color:#cccccc; margin:5px 0 0; font-size:14px;">Reporte diario de renovaciones</p>
+            <td align="center" style="background-color:#0f0f0f; border-radius:12px 12px 0 0; border-top:1px solid #D4A853; border-left:1px solid #D4A853; border-right:1px solid #D4A853; padding:40px 48px 30px;">
+              <h1 style="color:#D4A853; margin:0; font-size:26px; font-weight:700; letter-spacing:4px; text-transform:uppercase;">{{gymName}}</h1>
+              <!-- decorative divider -->
+              <table width="100%" cellpadding="0" cellspacing="0" role="presentation" style="margin:16px 0 12px;">
+                <tr>
+                  <td style="border-bottom:1px solid #2a2a2a;"></td>
+                  <td width="32" align="center" style="padding:0 10px;">
+                    <div style="width:5px; height:5px; background-color:#D4A853; border-radius:50%;"></div>
+                  </td>
+                  <td style="border-bottom:1px solid #2a2a2a;"></td>
+                </tr>
+              </table>
+              <p style="color:#6b7280; margin:0; font-size:11px; letter-spacing:3px; text-transform:uppercase;">Reporte Diario de Renovaciones</p>
             </td>
           </tr>
 
-          <!-- Content -->
+          <!-- ═══ DATE BAR ═══ -->
           <tr>
-            <td style="padding:30px; color:#333333; font-size:15px; line-height:1.6;">
-              <p>Hola <strong>Equipo Powercave</strong>,</p>
-              <p>Este es el resumen diario de usuarios con planes próximos a vencer o recientemente vencidos.</p>
-
-              <!-- Expiring soon -->
-              <h3 style="margin-top:24px; color:#d97706;">🟡 Planes que vencen en 3 días o menos</h3>
-              {{#if expiringSoon.length}}
-                <table width="100%" cellpadding="8" cellspacing="0" style="border-collapse:collapse; margin-top:8px;">
-                  <thead>
-                    <tr style="background-color:#f0f0f0;">
-                      <th align="left" style="font-weight:bold;">Usuario</th>
-                      <th align="left" style="font-weight:bold;">Plan</th>
-                      <th align="left" style="font-weight:bold;">Vence el</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {{#each expiringSoon}}
-                      <tr>
-                        <td>{{this.userName}}</td>
-                        <td>{{this.planName}}</td>
-                        <td>{{this.expiryDate}}</td>
-                      </tr>
-                    {{/each}}
-                  </tbody>
-                </table>
-              {{else}}
-                <p style="color:#555;">Ningún usuario tiene planes próximos a vencer.</p>
-              {{/if}}
-
-              <!-- Recently expired -->
-              <h3 style="margin-top:32px; color:#dc2626;">🔴 Planes vencidos en los últimos 7 días</h3>
-              {{#if recentlyExpired.length}}
-                <table width="100%" cellpadding="8" cellspacing="0" style="border-collapse:collapse; margin-top:8px;">
-                  <thead>
-                    <tr style="background-color:#f0f0f0;">
-                      <th align="left" style="font-weight:bold;">Usuario</th>
-                      <th align="left" style="font-weight:bold;">Plan</th>
-                      <th align="left" style="font-weight:bold;">Venció el</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {{#each recentlyExpired}}
-                      <tr>
-                        <td>{{this.userName}}</td>
-                        <td>{{this.planName}}</td>
-                        <td>{{this.expiryDate}}</td>
-                      </tr>
-                    {{/each}}
-                  </tbody>
-                </table>
-              {{else}}
-                <p style="color:#555;">No hay planes vencidos en los últimos 7 días.</p>
-              {{/if}}
-
-              <p style="margin-top:28px;">Recuerda verificar estas renovaciones con el equipo de recepción o actualizar el estado en el sistema si ya fueron renovadas.</p>
-              <p style="margin-top:20px;">Saludos,<br><strong>Equipo Powercave</strong></p>
+            <td style="background-color:#D4A853; border-left:1px solid #D4A853; border-right:1px solid #D4A853; padding:9px 48px;">
+              <p style="margin:0; font-size:11px; color:#0f0f0f; font-weight:700; letter-spacing:2px; text-transform:uppercase; text-align:center;">{{reportDate}}</p>
             </td>
           </tr>
 
-          <!-- Footer -->
+          <!-- ═══ BODY ═══ -->
           <tr>
-            <td style="background-color:#f0f0f0; padding:16px; text-align:center; font-size:12px; color:#777;">
-              <p style="margin:0;">&copy; Powercave. Todos los derechos reservados.</p>
-              <p style="margin:6px 0 0;">Contacto: powercave.chile@gmail.com</p>
+            <td style="background-color:#0f0f0f; border-left:1px solid #232323; border-right:1px solid #232323; padding:36px 48px;">
+
+              <p style="color:#d1d5db; font-size:15px; line-height:1.8; margin:0 0 32px;">
+                Hola <strong style="color:#ffffff;">Equipo {{gymName}}</strong>, aquí está el resumen del día. A continuación encontrarás los usuarios con planes próximos a vencer o recientemente vencidos.
+              </p>
+
+              <!-- Expiring soon block -->
+              <table width="100%" cellpadding="0" cellspacing="0" role="presentation" style="margin-bottom:24px;">
+                <tr>
+                  <td style="background-color:#1c1608; border:1px solid rgba(212,168,83,0.35); border-radius:8px; padding:22px 26px;">
+                    <p style="margin:0 0 16px; font-size:11px; font-weight:700; color:#D4A853; letter-spacing:2px; text-transform:uppercase;">
+                      &#9679;&nbsp; Planes que vencen en 3 días o menos
+                    </p>
+                    {{EXPIRING_SECTION}}
+                  </td>
+                </tr>
+              </table>
+
+              <!-- Recently expired block -->
+              <table width="100%" cellpadding="0" cellspacing="0" role="presentation">
+                <tr>
+                  <td style="background-color:#180a0a; border:1px solid rgba(239,68,68,0.32); border-radius:8px; padding:22px 26px;">
+                    <p style="margin:0 0 16px; font-size:11px; font-weight:700; color:#fca5a5; letter-spacing:2px; text-transform:uppercase;">
+                      &#9679;&nbsp; Planes vencidos en los últimos 7 días
+                    </p>
+                    {{RECENTLY_SECTION}}
+                  </td>
+                </tr>
+              </table>
+
+              <p style="color:#374151; font-size:12px; line-height:1.7; margin:32px 0 0; border-top:1px solid #1a1a1a; padding-top:24px; text-align:center;">
+                Verifica estas renovaciones con recepción o actualiza el estado en el sistema si ya fueron procesadas.
+              </p>
+
+            </td>
+          </tr>
+
+          <!-- ═══ FOOTER ═══ -->
+          <tr>
+            <td style="background-color:#0a0a0a; border:1px solid #1a1a1a; border-top:1px solid #D4A853; border-radius:0 0 12px 12px; padding:22px 48px; text-align:center;">
+              <p style="margin:0 0 4px; font-size:11px; color:#374151; letter-spacing:1px; text-transform:uppercase;">&copy; {{year}} {{gymName}} &mdash; Todos los derechos reservados</p>
+              <p style="margin:0; font-size:11px; color:#1f2937;">Correo automático generado por el sistema de gestión.</p>
             </td>
           </tr>
 
@@ -96,5 +94,6 @@
       </td>
     </tr>
   </table>
+
 </body>
 </html>

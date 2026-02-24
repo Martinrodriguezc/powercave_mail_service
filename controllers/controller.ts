@@ -37,7 +37,8 @@ router.post("/send_reminder", requireApiKey, async (req, res) => {
             message: "report_recipients is required and must be a non-empty array of email addresses"
         });
     }
-    const sentBy = 'backend_service';
+    const sentBy = req.body.sentBy ?? 'backend_service';
+    const gymName = req.body.gymName as string | undefined;
 
     if (reminders.length === 0) {
         return res.status(400).json({
@@ -56,13 +57,15 @@ router.post("/send_reminder", requireApiKey, async (req, res) => {
     }
 
     try {
+        const reminderSubject = `Recordatorio: tu plan vence pronto | ${gymName ?? ''}`;
         const reminderMails = reminders.map((reminder) => ({
             to: reminder.to,
             userName: reminder.userName,
             planName: reminder.planName,
             expiryDate: reminder.expiryDate,
-            subject: 'Recordatorio: tu plan vence pronto | Powercave',
-            ...(reminder.publicId && { publicId: reminder.publicId })
+            subject: reminderSubject,
+            ...(reminder.publicId && { publicId: reminder.publicId }),
+            ...(gymName !== undefined && { gymName }),
         }));
 
         // Procesar todos los recordatorios con throttling
@@ -78,7 +81,7 @@ router.post("/send_reminder", requireApiKey, async (req, res) => {
             successful: result.successful,
             failed: result.failed.length
         });
-        await sendReminderReportEmail(result.reporte_final, reportRecipients);
+        await sendReminderReportEmail(result.reporte_final, reportRecipients, gymName);
 
         res.status(200).json({
             message: "Reminders processed successfully",
@@ -99,18 +102,23 @@ router.post("/send_reminder", requireApiKey, async (req, res) => {
 });
 
 router.post("/send_bulk_reminders", requireAuth, requireMailServiceAccess, async (req: AuthenticatedRequest, res) => {
-    const { reminders } = req.body;
-    const sentBy = req.user?.name || 'test-user';
+    const { reminders, gymName } = req.body;
+    const sentBy = req.user?.name || req.body.sentBy || 'test-user';
 
     if (!Array.isArray(reminders) || reminders.length === 0) {
         return res.status(400).json({ message: "Array of reminders is required" });
     }
 
     try {
-        const reminderMails = reminders.map((reminder) => ({
-            ...reminder,
-            subject: 'Recordatorio: tu plan vence pronto | Powercave',
-            ...(reminder.publicId && { publicId: reminder.publicId })
+        const reminderSubject = `Recordatorio: tu plan vence pronto | ${gymName ?? ''}`;
+        const reminderMails = reminders.map((reminder: SendReminderBodyItem & { gymName?: string }) => ({
+            to: reminder.to,
+            userName: reminder.userName,
+            planName: reminder.planName,
+            expiryDate: reminder.expiryDate,
+            subject: reminderSubject,
+            ...(reminder.publicId && { publicId: reminder.publicId }),
+            ...(gymName !== undefined && { gymName }),
         }));
 
         const result = await sendBulkReminderMails(reminderMails, sentBy);
@@ -149,7 +157,7 @@ router.post("/send_discount_email", async (req, res) => {
                 
                 try {
                     // Agregar identificador único al subject para evitar que se agrupen emails duplicados
-                    const uniqueSubject = `🎄 Oferta Navideña Especial - Hasta 35% de Descuento | Powercave [${timestamp}-${i + 1}]`;
+                    const uniqueSubject = `🎄 Oferta Navideña Especial - Hasta 35% de Descuento | [${timestamp}-${i + 1}]`;
                     
                     await sendDiscountEmail({
                         to: email.to,
@@ -226,8 +234,7 @@ router.post("/send_discount_email", async (req, res) => {
 
 router.post("/send_daily_admin_report", requireApiKey, async (req, res) => {
     const mailData = req.body;
-    // Para backend-to-backend, usar un identificador del servicio
-    const sentBy = 'sales_registry_backend';
+    const sentBy = mailData?.sentBy ?? 'daily_admin_report_backend';
 
     try {
         await sendDailyAdminReportMail(mailData, sentBy);
@@ -240,8 +247,7 @@ router.post("/send_daily_admin_report", requireApiKey, async (req, res) => {
 
 router.post("/send_daily_sales_report", requireApiKey, async (req, res) => {
     const mailData = req.body;
-    // Para backend-to-backend, usar un identificador del servicio
-    const sentBy = 'sales_registry_backend';
+    const sentBy = mailData?.sentBy ?? 'sales_registry_backend';
 
     try {
         await sendDailySalesReportMail(mailData, sentBy);

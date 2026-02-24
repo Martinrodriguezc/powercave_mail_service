@@ -14,10 +14,10 @@ function formatCurrency(amount: number): string {
 function renderSaleRow(clientName: string, itemName: string, amount: number, time: string): string {
     return `
                       <tr>
-                        <td style="padding:10px 8px; border-bottom:1px solid #e0e0e0;">${clientName}</td>
-                        <td style="padding:10px 8px; border-bottom:1px solid #e0e0e0;">${itemName}</td>
-                        <td style="padding:10px 8px; border-bottom:1px solid #e0e0e0; text-align:right; font-weight:600; color:#333333;">${formatCurrency(amount)}</td>
-                        <td style="padding:10px 8px; border-bottom:1px solid #e0e0e0; text-align:center; color:#666666;">${time}</td>
+                        <td style="padding:10px 8px; border-bottom:1px solid #1e1e1e; color:#d1d5db; background-color:#0f0f0f;">${clientName}</td>
+                        <td style="padding:10px 8px; border-bottom:1px solid #1e1e1e; color:#d1d5db; background-color:#0f0f0f;">${itemName}</td>
+                        <td style="padding:10px 8px; border-bottom:1px solid #1e1e1e; text-align:right; font-weight:600; color:#ffffff; background-color:#0f0f0f;">${formatCurrency(amount)}</td>
+                        <td style="padding:10px 8px; border-bottom:1px solid #1e1e1e; text-align:center; color:#6b7280; background-color:#0f0f0f;">${time}</td>
                       </tr>`;
 }
 
@@ -142,6 +142,7 @@ export function renderDailySalesReportHTML(opts: DailySalesReportMail): string {
 
     // Reemplazar valores simples
     html = html.replace('{{reportDate}}', opts.reportDate || '');
+    html = html.replace(/\{\{gymName\}\}/g, opts.gymName || '');
     html = html.replace('{{totalRevenue}}', formatCurrency(opts.totalRevenue));
     html = html.replace('{{year}}', new Date().getFullYear().toString());
 

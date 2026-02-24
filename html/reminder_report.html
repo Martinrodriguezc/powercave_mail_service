@@ -2,70 +2,98 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Reporte de Recordatorios Diarios | Powercave</title>
+  <title>Reporte de Recordatorios Diarios | {{gymName}}</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 </head>
-<body style="margin:0; padding:0; background-color:#f5f7fa; font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;">
-  <table width="100%" bgcolor="#f5f7fa" cellpadding="0" cellspacing="0" role="presentation" style="background-color:#f5f7fa;">
+<body style="margin:0; padding:0; background-color:#0a0a0a; font-family:'Segoe UI',Arial,sans-serif;">
+
+  <!-- Preheader hidden -->
+  <div style="display:none; max-height:0; overflow:hidden; font-size:1px; line-height:1px; color:#0a0a0a; mso-hide:all;">
+    Reporte de recordatorios diarios — {{gymName}}.
+  </div>
+
+  <table width="100%" bgcolor="#0a0a0a" cellpadding="0" cellspacing="0" role="presentation">
     <tr>
-      <td align="center" style="padding:40px 20px;">
-        <table width="700" cellpadding="0" cellspacing="0" role="presentation" style="background-color:#ffffff; margin:0 auto; border-radius:12px; overflow:hidden; box-shadow:0 4px 12px rgba(0, 0, 0, 0.08);">
-          
-          <!-- Header -->
+      <td align="center" style="padding:32px 16px;">
+
+        <table width="620" cellpadding="0" cellspacing="0" role="presentation" style="max-width:620px; width:100%;">
+
+          <!-- ═══ HEADER ═══ -->
           <tr>
-            <td align="center" bgcolor="#1a1a1a" style="background-color:#1a1a1a; padding:32px 30px;">
-              <h1 style="color:#ffffff; margin:0; font-size:28px; font-weight:700; letter-spacing:-0.5px;">Powercave</h1>
-              <p style="color:#e0e0e0; margin:8px 0 0; font-size:13px; font-weight:400; letter-spacing:0.5px; text-transform:uppercase;">Reporte de Recordatorios</p>
+            <td align="center" style="background-color:#0f0f0f; border-radius:12px 12px 0 0; border-top:1px solid #D4A853; border-left:1px solid #D4A853; border-right:1px solid #D4A853; padding:40px 48px 30px;">
+              <h1 style="color:#D4A853; margin:0; font-size:26px; font-weight:700; letter-spacing:4px; text-transform:uppercase;">{{gymName}}</h1>
+              <!-- decorative divider -->
+              <table width="100%" cellpadding="0" cellspacing="0" role="presentation" style="margin:16px 0 12px;">
+                <tr>
+                  <td style="border-bottom:1px solid #2a2a2a;"></td>
+                  <td width="32" align="center" style="padding:0 10px;">
+                    <div style="width:5px; height:5px; background-color:#D4A853; border-radius:50%;"></div>
+                  </td>
+                  <td style="border-bottom:1px solid #2a2a2a;"></td>
+                </tr>
+              </table>
+              <p style="color:#6b7280; margin:0; font-size:11px; letter-spacing:3px; text-transform:uppercase;">Reporte de Recordatorios</p>
             </td>
           </tr>
 
-          <!-- Content -->
+          <!-- ═══ DATE BAR ═══ -->
           <tr>
-            <td style="padding:40px; color:#333333; font-size:15px; line-height:1.6;">
-              
-              <!-- Saludo -->
-              <p style="margin:0 0 16px;">Estimado equipo de administración,</p>
-              <p style="margin:0 0 32px;">A continuación se presenta el reporte del estado de envío de recordatorios diarios del <strong>{{reportDate}}</strong>.</p>
+            <td style="background-color:#D4A853; border-left:1px solid #D4A853; border-right:1px solid #D4A853; padding:9px 48px;">
+              <p style="margin:0; font-size:11px; color:#0f0f0f; font-weight:700; letter-spacing:2px; text-transform:uppercase; text-align:center;">{{reportDate}}</p>
+            </td>
+          </tr>
 
-              <!-- Resumen Superior -->
-              <div style="background-color:#f9fafb; border-radius:8px; padding:24px; margin-bottom:32px; border-left:4px solid #1a1a1a;">
-                <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
-                  <tr>
-                    <td style="padding:8px 0;">
-                      <strong style="color:#1a1a1a; font-size:16px;">Total Procesados:</strong>
-                      <span style="color:#6b7280; margin-left:8px; font-size:16px;">{{total}}</span>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td style="padding:8px 0;">
-                      <strong style="color:#10b981; font-size:16px;">Enviados con Éxito:</strong>
-                      <span style="color:#6b7280; margin-left:8px; font-size:16px;">{{successful}}</span>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td style="padding:8px 0;">
-                      <strong style="color:#f59e0b; font-size:16px;">Omitidos (48h):</strong>
-                      <span style="color:#6b7280; margin-left:8px; font-size:16px;">{{skipped}}</span>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td style="padding:8px 0;">
-                      <strong style="color:#ef4444; font-size:16px;">Fallidos:</strong>
-                      <span style="color:#6b7280; margin-left:8px; font-size:16px;">{{failed}}</span>
-                    </td>
-                  </tr>
-                </table>
-              </div>
+          <!-- ═══ BODY ═══ -->
+          <tr>
+            <td style="background-color:#0f0f0f; border-left:1px solid #232323; border-right:1px solid #232323; padding:36px 48px;">
+
+              <p style="color:#d1d5db; font-size:15px; line-height:1.8; margin:0 0 32px;">
+                Hola <strong style="color:#ffffff;">Equipo {{gymName}}</strong>, aquí está el reporte del estado de envío de recordatorios diarios.
+              </p>
+
+              <!-- Resumen de Stats -->
+              <table width="100%" cellpadding="0" cellspacing="0" role="presentation" style="margin-bottom:32px;">
+                <tr>
+                  <td style="background-color:#131313; border:1px solid #2a2a2a; border-left:3px solid #D4A853; border-radius:8px; padding:22px 26px;">
+                    <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
+                      <tr>
+                        <td style="padding:6px 0; border-bottom:1px solid #1a1a1a;">
+                          <strong style="color:#ffffff; font-size:14px;">Total Procesados:</strong>
+                          <span style="color:#6b7280; margin-left:8px; font-size:14px;">{{total}}</span>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td style="padding:6px 0; border-bottom:1px solid #1a1a1a;">
+                          <strong style="color:#86efac; font-size:14px;">Enviados con Éxito:</strong>
+                          <span style="color:#6b7280; margin-left:8px; font-size:14px;">{{successful}}</span>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td style="padding:6px 0; border-bottom:1px solid #1a1a1a;">
+                          <strong style="color:#fbbf24; font-size:14px;">Omitidos (48h):</strong>
+                          <span style="color:#6b7280; margin-left:8px; font-size:14px;">{{skipped}}</span>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td style="padding:6px 0;">
+                          <strong style="color:#fca5a5; font-size:14px;">Fallidos:</strong>
+                          <span style="color:#6b7280; margin-left:8px; font-size:14px;">{{failed}}</span>
+                        </td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+              </table>
 
               <!-- Tabla de Resultados -->
-              <h3 style="margin-top:32px; margin-bottom:16px; color:#333333; font-size:18px; font-weight:600; border-bottom:2px solid #e0e0e0; padding-bottom:8px;">Detalle de Resultados</h3>
-              <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse; margin-top:8px; border:1px solid #e0e0e0;">
+              <p style="margin:0 0 12px; font-size:11px; font-weight:700; color:#D4A853; letter-spacing:2px; text-transform:uppercase; border-bottom:1px solid #1a1a1a; padding-bottom:10px;">&#9679;&nbsp; Detalle de Resultados</p>
+              <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse; margin-top:8px; border:1px solid #2a2a2a;">
                 <thead>
-                  <tr style="background-color:#f0f0f0;">
-                    <th align="left" style="padding:12px 8px; font-weight:bold; color:#333333; font-size:13px; border-bottom:2px solid #d0d0d0;">Public ID</th>
-                    <th align="left" style="padding:12px 8px; font-weight:bold; color:#333333; font-size:13px; border-bottom:2px solid #d0d0d0;">Email</th>
-                    <th align="center" style="padding:12px 8px; font-weight:bold; color:#333333; font-size:13px; border-bottom:2px solid #d0d0d0;">Estado</th>
-                    <th align="left" style="padding:12px 8px; font-weight:bold; color:#333333; font-size:13px; border-bottom:2px solid #d0d0d0;">Razón / Error</th>
+                  <tr style="background-color:#131313;">
+                    <th align="left" style="padding:12px 10px; font-weight:700; color:#D4A853; font-size:11px; letter-spacing:1px; text-transform:uppercase; border-bottom:1px solid #2a2a2a;">Public ID</th>
+                    <th align="left" style="padding:12px 10px; font-weight:700; color:#D4A853; font-size:11px; letter-spacing:1px; text-transform:uppercase; border-bottom:1px solid #2a2a2a;">Email</th>
+                    <th align="center" style="padding:12px 10px; font-weight:700; color:#D4A853; font-size:11px; letter-spacing:1px; text-transform:uppercase; border-bottom:1px solid #2a2a2a;">Estado</th>
+                    <th align="left" style="padding:12px 10px; font-weight:700; color:#D4A853; font-size:11px; letter-spacing:1px; text-transform:uppercase; border-bottom:1px solid #2a2a2a;">Razón / Error</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -73,17 +101,18 @@
                 </tbody>
               </table>
 
-              <!-- Cierre -->
-              <p style="margin-top:32px; margin-bottom:8px;">Saludos cordiales,</p>
-              <p style="margin:0;"><strong>Servicio de Mailing - Powercave</strong></p>
+              <p style="color:#374151; font-size:12px; line-height:1.7; margin:32px 0 0; border-top:1px solid #1a1a1a; padding-top:24px; text-align:center;">
+                Correo automático generado por el sistema de gestión de recordatorios.
+              </p>
 
             </td>
           </tr>
 
-          <!-- Footer -->
+          <!-- ═══ FOOTER ═══ -->
           <tr>
-            <td style="background-color:#f0f0f0; padding:16px; text-align:center; font-size:12px; color:#777;">
-              <p style="margin:0;">© {{year}} Powercave. Todos los derechos reservados.</p>
+            <td style="background-color:#0a0a0a; border:1px solid #1a1a1a; border-top:1px solid #D4A853; border-radius:0 0 12px 12px; padding:22px 48px; text-align:center;">
+              <p style="margin:0 0 4px; font-size:11px; color:#374151; letter-spacing:1px; text-transform:uppercase;">&copy; {{year}} {{gymName}} &mdash; Todos los derechos reservados</p>
+              <p style="margin:0 0 4px; font-size:11px; color:#1f2937;">Correo automático generado por el sistema de gestión.</p>
             </td>
           </tr>
 
@@ -93,4 +122,3 @@
   </table>
 </body>
 </html>
-

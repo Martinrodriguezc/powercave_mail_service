@@ -10,6 +10,7 @@ export interface ReminderMail extends Mail {
     planName: string;
     expiryDate: string;
     publicId?: string;
+    gymName?: string;
 }
 
 export interface DiscountMail extends Mail {
@@ -31,10 +32,12 @@ export interface AdminRenewalReportMail extends Mail {
     }[];
 
     reportDate?: string;
+    gymName?: string;
 }
 
 export interface DailySalesReportMail extends Mail {
     reportDate: string;
+    gymName?: string;
     totalRevenue: number;
     planSales: {
         sales: {

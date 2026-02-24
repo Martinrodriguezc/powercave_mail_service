@@ -59,6 +59,7 @@ export const sendReminderMail = async (opts: ReminderMail, sentBy: string): Prom
         html = html.replace(/\{\{userName\}\}/g, opts.userName || '');
         html = html.replace(/\{\{planName\}\}/g, opts.planName || '');
         html = html.replace(/\{\{expiryDate\}\}/g, opts.expiryDate || '');
+        html = html.replace(/\{\{gymName\}\}/g, opts.gymName || '');
         html = html.replace(/\{\{year\}\}/g, new Date().getFullYear().toString());
 
         html = html.replace(/\{\{#if.*?\}\}[\s\S]*?\{\{\/if\}\}/g, '');
@@ -166,7 +167,7 @@ async function hasRecentReminderSent(publicId: string): Promise<{ hasRecent: boo
 /**
  * Genera el HTML del reporte administrativo de recordatorios
  */
-function generateReminderReportHTML(reporte_final: ReminderReportResult[], fecha: string): string {
+function generateReminderReportHTML(reporte_final: ReminderReportResult[], fecha: string, gymName?: string): string {
     const total = reporte_final.length;
     const successful = reporte_final.filter(r => r.status === 'success').length;
     const failed = reporte_final.filter(r => r.status === 'failed').length;
@@ -191,22 +192,22 @@ function generateReminderReportHTML(reporte_final: ReminderReportResult[], fecha
         // Mostrar razón o error según corresponda
         let reasonCell: string;
         if (result.reason) {
-            reasonCell = `<td style="padding:10px 8px; border-bottom:1px solid #e0e0e0; color:${result.status === 'skipped' ? '#f59e0b' : '#ef4444'}; font-size:13px;">${result.reason}</td>`;
+            reasonCell = `<td style="padding:10px 8px; border-bottom:1px solid #1e1e1e; color:${result.status === 'skipped' ? '#f59e0b' : '#ef4444'}; font-size:13px; background-color:#0f0f0f;">${result.reason}</td>`;
         } else if (result.error) {
             // Mostrar error completo (puede incluir stack trace)
-            const errorDisplay = result.error.length > 200 
-                ? result.error.substring(0, 200) + '...' 
+            const errorDisplay = result.error.length > 200
+                ? result.error.substring(0, 200) + '...'
                 : result.error;
-            reasonCell = `<td style="padding:10px 8px; border-bottom:1px solid #e0e0e0; color:#ef4444; font-size:12px; font-family:monospace; word-break:break-word;">${errorDisplay}</td>`;
+            reasonCell = `<td style="padding:10px 8px; border-bottom:1px solid #1e1e1e; color:#ef4444; font-size:12px; font-family:monospace; word-break:break-word; background-color:#0f0f0f;">${errorDisplay}</td>`;
         } else {
-            reasonCell = '<td style="padding:10px 8px; border-bottom:1px solid #e0e0e0; color:#9ca3af;">-</td>';
+            reasonCell = '<td style="padding:10px 8px; border-bottom:1px solid #1e1e1e; color:#6b7280; background-color:#0f0f0f;">-</td>';
         }
 
         return `
             <tr>
-                <td style="padding:10px 8px; border-bottom:1px solid #e0e0e0; font-family:monospace; font-size:12px; color:#6b7280;">${result.publicId || 'N/A'}</td>
-                <td style="padding:10px 8px; border-bottom:1px solid #e0e0e0;">${result.email}</td>
-                <td style="padding:10px 8px; border-bottom:1px solid #e0e0e0; text-align:center;">
+                <td style="padding:10px 8px; border-bottom:1px solid #1e1e1e; font-family:monospace; font-size:12px; color:#6b7280; background-color:#0f0f0f;">${result.publicId || 'N/A'}</td>
+                <td style="padding:10px 8px; border-bottom:1px solid #1e1e1e; color:#d1d5db; background-color:#0f0f0f;">${result.email}</td>
+                <td style="padding:10px 8px; border-bottom:1px solid #1e1e1e; text-align:center; background-color:#0f0f0f;">
                     <span style="color:${statusColor}; font-weight:600;">${statusText}</span>
                 </td>
                 ${reasonCell}
@@ -223,6 +224,7 @@ function generateReminderReportHTML(reporte_final: ReminderReportResult[], fecha
     html = html.replace('{{skipped}}', skipped.toString());
     html = html.replace('{{failed}}', failed.toString());
     html = html.replace('{{tableRows}}', tableRows);
+    html = html.replace(/\{\{gymName\}\}/g, gymName || '');
     html = html.replace('{{year}}', new Date().getFullYear().toString());
 
     return html;
@@ -230,7 +232,8 @@ function generateReminderReportHTML(reporte_final: ReminderReportResult[], fecha
 
 export async function sendReminderReportEmail(
     reporte_final: ReminderReportResult[],
-    recipients: string[]
+    recipients: string[],
+    gymName?: string
 ): Promise<void> {
     const fecha = new Date().toLocaleDateString('es-CL', {
         timeZone: 'America/Santiago',
@@ -240,7 +243,7 @@ export async function sendReminderReportEmail(
     });
 
     const subject = `[Gym Report] Estado de Recordatorios Diarios - ${fecha}`;
-    const html = generateReminderReportHTML(reporte_final, fecha);
+    const html = generateReminderReportHTML(reporte_final, fecha, gymName);
 
     // Enviar a cada destinatario con delay de 1 segundo entre envíos
     for (let i = 0; i < recipients.length; i++) {
