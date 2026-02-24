@@ -1,6 +1,6 @@
 import { config } from "../config/config";
-import { AdminRenewalReportMail, DiscountMail, Mail, ReminderMail, ReminderReportResult } from "../domain/mail";
-import { discountEmailTemplate, reminderTemplate, reminderReportTemplate } from "../domain/templates";
+import { AdminRenewalReportMail, DiscountMail, Mail, PasswordResetMail, ReminderMail, ReminderReportResult } from "../domain/mail";
+import { discountEmailTemplate, passwordResetTemplate, reminderTemplate, reminderReportTemplate } from "../domain/templates";
 import { PrismaClient } from '@prisma/client';
 import { createServiceLogger } from "../utils/logger";
 
@@ -382,6 +382,24 @@ export const sendDiscountEmail = async (opts: DiscountMail): Promise<void> => {
             subject: opts.subject,
             html: html,
             userName: opts.userName,
+        });
+    } catch (error) {
+        throw error;
+    }
+}
+
+export const sendPasswordResetEmail = async (opts: PasswordResetMail): Promise<void> => {
+    try {
+        let html = passwordResetTemplate;
+
+        html = html.replace(/\{\{resetLink\}\}/g, opts.resetLink);
+        html = html.replace(/\{\{year\}\}/g, new Date().getFullYear().toString());
+        html = html.replace(/\{\{gymName\}\}/g, opts.gymName ?? '');
+
+        await sendMail({
+            to: opts.to,
+            subject: opts.subject,
+            html: html,
         });
     } catch (error) {
         throw error;

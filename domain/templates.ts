@@ -25,3 +25,8 @@ export const reminderReportTemplate = fs.readFileSync(
     path.join(__dirname, '../html/reminder_report.html'),
     'utf8'
 );
+
+export const passwordResetTemplate = fs.readFileSync(
+    path.join(__dirname, '../html/password_reset.html'),
+    'utf8'
+);

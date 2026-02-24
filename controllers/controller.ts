@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { sendBulkReminderMails, sendDiscountEmail, getLastEmailByTenant, sendReminderReportEmail } from "../mail_service/service";
+import { sendBulkReminderMails, sendDiscountEmail, getLastEmailByTenant, sendReminderReportEmail, sendPasswordResetEmail } from "../mail_service/service";
 import { requireMailServiceAccess } from "../middleware.ts/mail";
 import { AuthenticatedRequest, requireAuth } from "../middleware.ts/auth";
 import { requireApiKey } from "../middleware.ts/apiKeyAuth";
@@ -255,6 +255,54 @@ router.post("/send_daily_sales_report", requireApiKey, async (req, res) => {
     } catch (error: any) {
         logger.error('Error sending daily sales report', error);
         res.status(500).json({ message: "Error sending daily sales report", error: error?.message });
+    }
+});
+
+/*
+ * POST /mail/send_password_reset
+ *
+ * Envía un correo de recuperación de contraseña al usuario.
+ *
+ * Auth: X-API-Key header (mismo esquema que /send_reminder)
+ *
+ * Request body:
+ *   {
+ *     "to":        string   — dirección de destino (requerido)
+ *     "resetLink": string   — URL completa de restablecimiento generada por el backend (requerido)
+ *     "gymName":   string   — nombre del gimnasio para mostrar en el correo (opcional)
+ *     "subject":   string   — asunto personalizado (opcional,
+ *                             default: "Restablece tu contraseña | {gymName}")
+ *   }
+ *
+ * Responses:
+ *   200  { message: "Password reset email sent successfully" }
+ *   400  { message: "..." }   — campos faltantes
+ *   401  Missing X-API-Key
+ *   403  Invalid X-API-Key
+ *   500  { message: "...", error: "..." }
+ */
+router.post("/send_password_reset", requireApiKey, async (req, res) => {
+    const { to, resetLink, subject, gymName } = req.body;
+
+    if (!to || !resetLink) {
+        return res.status(400).json({
+            message: "Missing required fields: to, resetLink"
+        });
+    }
+
+    try {
+        await sendPasswordResetEmail({
+            to,
+            resetLink,
+            subject: subject || `Restablece tu contraseña${gymName ? ` | ${gymName}` : ''}`,
+            gymName,
+        });
+
+        logger.success('Password reset email sent', { email: to });
+        res.status(200).json({ message: "Password reset email sent successfully" });
+    } catch (error: any) {
+        logger.error('Error sending password reset email', error, { email: to });
+        res.status(500).json({ message: "Error sending password reset email", error: error?.message });
     }
 });
 

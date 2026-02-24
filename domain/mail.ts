@@ -68,6 +68,11 @@ export interface DailySalesReportMail extends Mail {
     };
 }
 
+export interface PasswordResetMail extends Mail {
+    resetLink: string;
+    gymName?: string;
+}
+
 export interface ReminderReportResult {
     publicId: string | null;
     email: string;
