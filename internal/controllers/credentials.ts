@@ -7,7 +7,7 @@ const router = Router();
 const logger = createServiceLogger('credentials');
 
 router.post("/send_password_reset", requireApiKey, async (req, res) => {
-    const { to, resetLink, subject, gymName } = req.body;
+    const { to, resetLink, subject, gymName, logoUrl } = req.body;
 
     if (!to || !resetLink) {
         return res.status(400).json({
@@ -21,6 +21,7 @@ router.post("/send_password_reset", requireApiKey, async (req, res) => {
             resetLink,
             subject: subject || `Restablece tu contraseña${gymName ? ` | ${gymName}` : ''}`,
             gymName,
+            logoUrl: logoUrl ?? null,
         });
 
         logger.success('Password reset email sent', { email: to });
@@ -32,7 +33,7 @@ router.post("/send_password_reset", requireApiKey, async (req, res) => {
 });
 
 router.post("/send_platform_user_credentials", requireApiKey, async (req, res) => {
-    const { to, temporaryPassword, gymName, resetPasswordLink } = req.body;
+    const { to, temporaryPassword, gymName, resetPasswordLink, logoUrl } = req.body;
 
     if (!to || !temporaryPassword || !resetPasswordLink) {
         return res.status(400).json({
@@ -48,6 +49,7 @@ router.post("/send_platform_user_credentials", requireApiKey, async (req, res) =
             temporaryPassword,
             gymName: gymName ?? null,
             resetPasswordLink,
+            logoUrl: logoUrl ?? null,
         });
 
         logger.success('Platform user credentials email sent', { email: to });

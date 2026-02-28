@@ -20,5 +20,7 @@ export const sendDailyAdminReportMail = async (opts: AdminRenewalReportMail, sen
     subject: opts.subject,
     html,
     userName: sentBy,
+    logoUrl: opts.logoUrl ?? undefined,
+    gymName: opts.gymName ?? undefined,
   });
 };

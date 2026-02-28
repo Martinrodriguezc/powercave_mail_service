@@ -1,4 +1,5 @@
 import { DailySalesReportMail } from "../../domain/mail";
+import { getLogoImgHtml } from "../../domain/logo";
 import { dailySalesReportTemplate } from "../../domain/templates";
 
 /**
@@ -141,6 +142,7 @@ export function renderDailySalesReportHTML(opts: DailySalesReportMail): string {
     html = html.replace('{{merchandiseSalesSection}}', renderMerchandiseSalesSection(opts.merchandiseSales));
 
     // Reemplazar valores simples
+    html = html.replace(/\{\{logoImg\}\}/g, getLogoImgHtml(opts.logoUrl, opts.gymName));
     html = html.replace('{{reportDate}}', opts.reportDate || '');
     html = html.replace(/\{\{gymName\}\}/g, opts.gymName || '');
     html = html.replace('{{totalRevenue}}', formatCurrency(opts.totalRevenue));

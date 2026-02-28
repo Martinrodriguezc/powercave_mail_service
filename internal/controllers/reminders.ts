@@ -29,6 +29,7 @@ router.post("/send_reminder", requireApiKey, async (req, res) => {
     }
     const sentBy = req.body.sentBy ?? 'backend_service';
     const gymName = req.body.gymName as string | undefined;
+    const logoUrl = req.body.logoUrl as string | null | undefined;
 
     for (let i = 0; i < reminders.length; i++) {
         const reminder = reminders[i];
@@ -49,6 +50,7 @@ router.post("/send_reminder", requireApiKey, async (req, res) => {
             subject: reminderSubject,
             ...(reminder.publicId && { publicId: reminder.publicId }),
             ...(gymName !== undefined && { gymName }),
+            ...(logoUrl != null && { logoUrl }),
         }));
 
         const result = await sendBulkReminderMails(reminderMails, sentBy);
@@ -60,7 +62,7 @@ router.post("/send_reminder", requireApiKey, async (req, res) => {
             successful: result.successful,
             failed: result.failed.length
         });
-        await sendReminderReportEmail(result.reporte_final, reportRecipients, gymName);
+        await sendReminderReportEmail(result.reporte_final, reportRecipients, gymName, logoUrl);
 
         res.status(200).json({
             message: "Reminders processed successfully",

@@ -3,6 +3,8 @@ export interface Mail {
     subject: string;
     text?: string;
     html?: string;
+    logoUrl?: string | null;
+    gymName?: string | null;
 }
 
 export interface ReminderMail extends Mail {
@@ -11,6 +13,7 @@ export interface ReminderMail extends Mail {
     expiryDate: string;
     publicId?: string;
     gymName?: string;
+    logoUrl?: string | null;
 }
 
 export interface DiscountMail extends Mail {
@@ -33,11 +36,13 @@ export interface AdminRenewalReportMail extends Mail {
 
     reportDate?: string;
     gymName?: string;
+    logoUrl?: string | null;
 }
 
 export interface DailySalesReportMail extends Mail {
     reportDate: string;
     gymName?: string;
+    logoUrl?: string | null;
     totalRevenue: number;
     planSales: {
         sales: {
@@ -71,12 +76,14 @@ export interface DailySalesReportMail extends Mail {
 export interface PasswordResetMail extends Mail {
     resetLink: string;
     gymName?: string;
+    logoUrl?: string | null;
 }
 
 export interface PlatformUserCredentialsMail extends Mail {
     temporaryPassword: string;
     gymName: string | null;
     resetPasswordLink: string;
+    logoUrl?: string | null;
 }
 
 export interface ReminderReportResult {

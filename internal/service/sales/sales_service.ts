@@ -25,6 +25,8 @@ export const sendDailySalesReportMail = async (opts: DailySalesReportMail, sentB
         to: opts.to,
         subject: opts.subject,
         html,
+        logoUrl: opts.logoUrl ?? undefined,
+        gymName: opts.gymName ?? undefined,
     });
 };
 

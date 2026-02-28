@@ -1,4 +1,5 @@
 import { ReminderMail, ReminderReportResult } from "../domain/mail";
+import { getLogoImgHtml } from "../domain/logo";
 import { reminderReportTemplate, reminderTemplate } from "../domain/templates";
 import { createServiceLogger } from "../../utils/logger";
 import { prisma } from "./db";
@@ -48,7 +49,7 @@ async function hasRecentReminderSent(publicId: string): Promise<{ hasRecent: boo
     };
 }
 
-function generateReminderReportHTML(reporte_final: ReminderReportResult[], fecha: string, gymName?: string): string {
+function generateReminderReportHTML(reporte_final: ReminderReportResult[], fecha: string, gymName?: string, logoUrl?: string | null): string {
     const total = reporte_final.length;
     const successful = reporte_final.filter(r => r.status === 'success').length;
     const failed = reporte_final.filter(r => r.status === 'failed').length;
@@ -101,6 +102,7 @@ function generateReminderReportHTML(reporte_final: ReminderReportResult[], fecha
     html = html.replace('{{skipped}}', skipped.toString());
     html = html.replace('{{failed}}', failed.toString());
     html = html.replace('{{tableRows}}', tableRows);
+    html = html.replace(/\{\{logoImg\}\}/g, getLogoImgHtml(logoUrl, gymName));
     html = html.replace(/\{\{gymName\}\}/g, gymName || '');
     html = html.replace('{{year}}', new Date().getFullYear().toString());
 
@@ -124,6 +126,7 @@ export const sendReminderMail = async (opts: ReminderMail, sentBy: string): Prom
     try {
         let html = reminderTemplate;
 
+        html = html.replace(/\{\{logoImg\}\}/g, getLogoImgHtml(opts.logoUrl, opts.gymName));
         html = html.replace(/\{\{userName\}\}/g, opts.userName || '');
         html = html.replace(/\{\{planName\}\}/g, opts.planName || '');
         html = html.replace(/\{\{expiryDate\}\}/g, opts.expiryDate || '');
@@ -153,6 +156,8 @@ export const sendReminderMail = async (opts: ReminderMail, sentBy: string): Prom
             userName: opts.userName,
             planName: opts.planName,
             expiryDate: opts.expiryDate,
+            logoUrl: opts.logoUrl ?? undefined,
+            gymName: opts.gymName ?? undefined,
         });
 
         if (logId) {
@@ -186,7 +191,8 @@ export const sendReminderMail = async (opts: ReminderMail, sentBy: string): Prom
 export async function sendReminderReportEmail(
     reporte_final: ReminderReportResult[],
     recipients: string[],
-    gymName?: string
+    gymName?: string,
+    logoUrl?: string | null
 ): Promise<void> {
     const fecha = new Date().toLocaleDateString('es-CL', {
         timeZone: 'America/Santiago',
@@ -196,7 +202,7 @@ export async function sendReminderReportEmail(
     });
 
     const subject = `[Gym Report] Estado de Recordatorios Diarios - ${fecha}`;
-    const html = generateReminderReportHTML(reporte_final, fecha, gymName);
+    const html = generateReminderReportHTML(reporte_final, fecha, gymName, logoUrl);
 
     for (let i = 0; i < recipients.length; i++) {
         const recipient = recipients[i];
@@ -205,6 +211,8 @@ export async function sendReminderReportEmail(
                 to: recipient,
                 subject: subject,
                 html: html,
+                logoUrl: logoUrl ?? undefined,
+                gymName: gymName ?? undefined,
             });
 
             logger.success('Administrative report sent', {

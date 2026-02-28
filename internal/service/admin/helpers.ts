@@ -1,4 +1,5 @@
 import { AdminRenewalReportMail } from "../../domain/mail";
+import { getLogoImgHtml } from "../../domain/logo";
 import { dailyAdminReportTemplate } from "../../domain/templates";
 
 function renderExpiringRows(items: { userName: string; planName: string; expiryDate: string }[]): string {
@@ -65,6 +66,7 @@ export function renderDailyAdminReportHTML(opts: AdminRenewalReportMail): string
             </table>`
         : `<p style="color:#6b7280; font-size:14px; margin:0; font-style:italic;">Sin planes vencidos en los últimos 7 días.</p>`;
 
+    html = html.replace(/\{\{logoImg\}\}/g, getLogoImgHtml(opts.logoUrl, opts.gymName));
     html = html.replace(/\{\{gymName\}\}/g, opts.gymName || '');
     html = html.replace('{{EXPIRING_SECTION}}', expiringSection);
     html = html.replace('{{RECENTLY_SECTION}}', recentlySection);
