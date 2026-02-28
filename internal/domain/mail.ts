@@ -73,6 +73,12 @@ export interface PasswordResetMail extends Mail {
     gymName?: string;
 }
 
+export interface PlatformUserCredentialsMail extends Mail {
+    temporaryPassword: string;
+    gymName: string | null;
+    resetPasswordLink: string;
+}
+
 export interface ReminderReportResult {
     publicId: string | null;
     email: string;

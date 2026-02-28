@@ -1,5 +1,5 @@
 import express from "express";
-import mailRouter from "../controllers/controller";
+import mailRouter from "../internal/controllers";
 import { config } from "../config/config";
 import cors from "cors";
 import { createServiceLogger } from "../utils/logger";

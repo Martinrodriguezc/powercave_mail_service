@@ -1,6 +1,6 @@
 import { DailySalesReportMail } from "../../domain/mail";
 import { renderDailySalesReportHTML } from "./helpers";
-import { sendMail } from "../service";
+import { sendMail } from "..";
 
 export const sendDailySalesReportMail = async (opts: DailySalesReportMail, sentBy: string): Promise<void> => {
     if (!sentBy) {

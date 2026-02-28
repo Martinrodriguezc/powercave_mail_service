@@ -1,19 +1,15 @@
 import { Request, Response, NextFunction } from "express";
-import { config } from "../config/config";
-import { createServiceLogger } from "../utils/logger";
+import { config } from "../../config/config";
+import { createServiceLogger } from "../../utils/logger";
 
 const logger = createServiceLogger('api-key-auth');
 
-/**
- * Middleware para autenticación mediante API Key
- * Valida el header X-API-Key contra la variable de entorno MAIL_SERVICE_API_KEY
- */
+
 export const requireApiKey = (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
-  // Verificar que la API Key esté configurada en el servidor
   if (!config.MAIL_SERVICE_API_KEY) {
     logger.error('Configuration error: MAIL_SERVICE_API_KEY is not set in environment variables', undefined, {
       action: 'api_key_validation'

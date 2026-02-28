@@ -30,3 +30,8 @@ export const passwordResetTemplate = fs.readFileSync(
     path.join(__dirname, '../html/password_reset.html'),
     'utf8'
 );
+
+export const platformUserCredentialsTemplate = fs.readFileSync(
+    path.join(__dirname, '../html/platform_user_credentials.html'),
+    'utf8'
+);

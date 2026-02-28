@@ -1,6 +1,6 @@
 import { AdminRenewalReportMail } from "../../domain/mail";
 import { renderDailyAdminReportHTML } from "./helpers";
-import { sendMail } from "../service";
+import { sendMail } from "..";
 
 export const sendDailyAdminReportMail = async (opts: AdminRenewalReportMail, sentBy: string): Promise<void> => {
   if (!sentBy) {
