@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>🎄 Oferta Navideña Especial | {{gymName}}</title>
+  <title>Oferta Navideña Especial | {{gymName}}</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 </head>
 <body style="margin:0; padding:0; background-color:#f5f7fa;">
@@ -19,7 +19,7 @@
           <!-- Header -->
           <tr>
             <td align="center" bgcolor="#1a1a1a" style="background-color:#1a1a1a; padding:32px 30px;">
-              <h1 style="color:#ffffff; margin:0; font-size:28px; font-weight:700; letter-spacing:-0.5px;">Powercave</h1>
+              <h1 style="color:#ffffff; margin:0; font-size:28px; font-weight:700; letter-spacing:-0.5px;">{{gymName}}</h1>
               <p style="color:#e0e0e0; margin:8px 0 0; font-size:13px; font-weight:400; letter-spacing:0.5px; text-transform:uppercase;">Centro de Entrenamiento</p>
             </td>
           </tr>
@@ -146,12 +146,12 @@
             <td align="center" style="padding:0 40px 40px; background-color:#ffffff;">
               <h3 style="color:#1a1a1a; font-size:20px; font-weight:600; margin:0 0 12px; letter-spacing:-0.2px;">¿Cómo canjear esta oferta navideña?</h3>
               <p style="color:#4a5568; font-size:15px; margin:0 0 28px; line-height:1.7; font-weight:400; max-width:520px;">
-                Puedes reactivar tu plan contactándonos directamente en 
-                <strong><a href="https://www.instagram.com/powercave_" target="_blank" style="color:#dc2626; text-decoration:none; font-weight:600;">@powercave_</a></strong> 
+                Puedes reactivar tu plan contactándonos directamente en
+                <strong><a href="{{contactUrl}}" target="_blank" style="color:#dc2626; text-decoration:none; font-weight:600;">{{contactLabel}}</a></strong>
                 o acercándote presencialmente a nuestro gimnasio.
               </p>
 
-              <a href="https://www.instagram.com/powercave_" target="_blank" bgcolor="#dc2626" style="display:inline-block; background-color:#dc2626; color:#ffffff; text-decoration:none; padding:16px 36px; border-radius:8px; font-weight:600; font-size:16px; letter-spacing:0.3px; border:2px solid #b91c1c;">
+              <a href="{{contactUrl}}" target="_blank" bgcolor="#dc2626" style="display:inline-block; background-color:#dc2626; color:#ffffff; text-decoration:none; padding:16px 36px; border-radius:8px; font-weight:600; font-size:16px; letter-spacing:0.3px; border:2px solid #b91c1c;">
                 🎄 Canjear oferta navideña
               </a>
 
@@ -164,7 +164,7 @@
           <!-- Footer -->
           <tr>
             <td bgcolor="#f7fafc" style="background-color:#f7fafc; padding:24px 40px; text-align:center; border-top:1px solid #e2e8f0;">
-              <p style="margin:0 0 8px; color:#4a5568; font-size:12px; font-weight:400; letter-spacing:0.2px;">&copy; {{year}} Powercave. Todos los derechos reservados.</p>
+              <p style="margin:0 0 8px; color:#4a5568; font-size:12px; font-weight:400; letter-spacing:0.2px;">&copy; {{year}} {{gymName}}. Todos los derechos reservados.</p>
               <p style="margin:0; color:#718096; font-size:12px; font-weight:400;">
                 <a href="mailto:powercave.chile@gmail.com" style="color:#718096; text-decoration:none; border-bottom:1px solid #cbd5e0;">powercave.chile@gmail.com</a>
               </p>

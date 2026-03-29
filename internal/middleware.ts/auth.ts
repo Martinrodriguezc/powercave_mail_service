@@ -2,14 +2,22 @@ import { Request, Response, NextFunction } from "express";
 import jwt, { JwtPayload } from "jsonwebtoken";
 import { config } from "../../config/config";
 
+export interface DashcoreJwtPayload extends JwtPayload {
+  publicId: string;
+  email: string;
+  role: "SUPERADMIN" | "MANAGER" | "STAFF";
+  gymPublicId: string | null;
+  gymName: string;
+}
+
 export interface AuthenticatedRequest extends Request {
-  user?: any;
+  user?: DashcoreJwtPayload;
 }
 
 export const requireAuth = (
   req: AuthenticatedRequest,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   const authHeader = req.headers.authorization;
 
@@ -24,24 +32,24 @@ export const requireAuth = (
 
   try {
     const secret = config.JWT_SECRET;
-    
+
     if (!secret) {
-      return res.status(500).json({ message: "Server misconfiguration: missing JWT secret" });
+      return res
+        .status(500)
+        .json({ message: "Server misconfiguration: missing JWT secret" });
     }
-    
+
     const decoded = jwt.verify(token, secret);
-    
+
     if (typeof decoded === "string") {
       return res.status(403).json({ message: "Invalid token payload" });
     }
-    
-    const payload = decoded as JwtPayload;
-    
+
+    const payload = decoded as DashcoreJwtPayload;
+
     req.user = payload;
     next();
   } catch (error) {
     return res.status(403).json({ message: "Invalid or expired token" });
   }
 };
-
-
