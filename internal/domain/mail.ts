@@ -86,6 +86,16 @@ export interface PlatformUserCredentialsMail extends Mail {
   logoUrl?: string | null;
 }
 
+export interface PaymentLinkMail extends Mail {
+  clientName: string;
+  paymentUrl: string;
+  amount: string;
+  description: string;
+  providerName: string;
+  providerLogoUrl: string;
+  isRecurring: boolean;
+}
+
 export interface ReminderReportResult {
   publicId: string | null;
   email: string;

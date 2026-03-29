@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Link de pago | {{gymName}}</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+</head>
+<body style="margin:0; padding:0; background-color:#0a0a0a; font-family:'Segoe UI',Arial,sans-serif;">
+
+  <!-- Preheader hidden -->
+  <div style="display:none; max-height:0; overflow:hidden; font-size:1px; line-height:1px; color:#0a0a0a; mso-hide:all;">
+    Tienes un pago pendiente en {{gymName}}. Haz clic para completarlo.
+  </div>
+
+  <table width="100%" bgcolor="#0a0a0a" cellpadding="0" cellspacing="0" role="presentation">
+    <tr>
+      <td align="center" style="padding:32px 16px;">
+
+        <table width="620" cellpadding="0" cellspacing="0" role="presentation" style="max-width:620px; width:100%;">
+
+          <!-- ═══ HEADER ═══ -->
+          <tr>
+            <td align="center" style="background-color:#0f0f0f; border-radius:12px 12px 0 0; border-top:1px solid #D4A853; border-left:1px solid #D4A853; border-right:1px solid #D4A853; padding:40px 48px 30px;">
+              {{logoImg}}
+              <h1 style="color:#D4A853; margin:0; font-size:26px; font-weight:700; letter-spacing:4px; text-transform:uppercase;">{{gymName}}</h1>
+              <table width="100%" cellpadding="0" cellspacing="0" role="presentation" style="margin:16px 0 12px;">
+                <tr>
+                  <td style="border-bottom:1px solid #2a2a2a;"></td>
+                  <td width="32" align="center" style="padding:0 10px;">
+                    <div style="width:5px; height:5px; background-color:#D4A853; border-radius:50%;"></div>
+                  </td>
+                  <td style="border-bottom:1px solid #2a2a2a;"></td>
+                </tr>
+              </table>
+              <p style="color:#6b7280; margin:0; font-size:11px; letter-spacing:3px; text-transform:uppercase;">Link de Pago</p>
+            </td>
+          </tr>
+
+          <!-- ═══ BODY ═══ -->
+          <tr>
+            <td style="background-color:#0f0f0f; border-left:1px solid #232323; border-right:1px solid #232323; padding:36px 48px;">
+
+              <p style="color:#d1d5db; font-size:15px; line-height:1.8; margin:0 0 20px;">
+                Hola <strong style="color:#ffffff;">{{clientName}}</strong>,
+              </p>
+
+              <p style="color:#d1d5db; font-size:15px; line-height:1.8; margin:0 0 28px;">
+                {{bodyText}}
+              </p>
+
+              <!-- ── Payment details card ── -->
+              <table width="100%" cellpadding="0" cellspacing="0" role="presentation" style="margin:0 0 28px; border-radius:8px; overflow:hidden;">
+
+                <!-- Amount hero — gold-tinted box -->
+                <tr>
+                  <td align="center" style="background-color:#1c1608; border:1px solid rgba(212,168,83,0.35); border-bottom:none; border-radius:8px 8px 0 0; padding:28px 24px 24px;">
+                    <p style="margin:0 0 2px; font-size:11px; font-weight:700; color:#D4A853; letter-spacing:2px; text-transform:uppercase;">Total a pagar</p>
+                    <p style="margin:0; font-size:36px; font-weight:700; color:#ffffff; letter-spacing:0.5px; line-height:1.2;">{{amount}}</p>
+                  </td>
+                </tr>
+
+                <!-- Concepto row -->
+                <tr>
+                  <td style="background-color:#141414; border-left:1px solid #2a2a2a; border-right:1px solid #2a2a2a; padding:16px 24px;">
+                    <table width="100%" cellpadding="0" cellspacing="0" role="presentation">
+                      <tr>
+                        <td style="vertical-align:middle;">
+                          <p style="margin:0; font-size:12px; color:#6b7280;">Concepto</p>
+                        </td>
+                        <td align="right" style="vertical-align:middle;">
+                          <p style="margin:0; font-size:14px; color:#ffffff; font-weight:600;">{{description}}</p>
+                        </td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+
+                <!-- Provider footer strip -->
+                <tr>
+                  <td align="center" style="background-color:#111111; border:1px solid #2a2a2a; border-top:1px solid #1e1e1e; border-radius:0 0 8px 8px; padding:14px 24px;">
+                    <table cellpadding="0" cellspacing="0" role="presentation">
+                      <tr>
+                        <td style="vertical-align:middle; padding-right:10px;">
+                          <p style="margin:0; font-size:11px; color:#4b5563;">Procesado por</p>
+                        </td>
+                        <td style="vertical-align:middle;">
+                          <!--[if mso]><table cellpadding="0" cellspacing="0" border="0"><tr><td style="background-color:#ffffff;padding:3px 8px;border-radius:4px"><![endif]-->
+                          <div style="background-color:#ffffff; padding:3px 8px; border-radius:4px; display:inline-block; line-height:0;">
+                            <img src="{{providerLogoUrl}}" alt="{{providerName}}" width="80" height="auto" style="display:block; max-width:80px; height:auto;" />
+                          </div>
+                          <!--[if mso]></td></tr></table><![endif]-->
+                        </td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+
+              </table>
+
+              <!-- CTA button -->
+              <table width="100%" cellpadding="0" cellspacing="0" role="presentation" style="margin:0 0 28px;">
+                <tr>
+                  <td align="center">
+                    <a href="{{paymentUrl}}"
+                       style="display:inline-block; background-color:#D4A853; color:#0f0f0f; font-size:15px; font-weight:700; text-decoration:none; padding:14px 36px; border-radius:8px; letter-spacing:1px; border:2px solid #D4A853;">
+                      {{ctaText}}
+                    </a>
+                  </td>
+                </tr>
+              </table>
+
+              <!-- Fallback link -->
+              <table width="100%" cellpadding="0" cellspacing="0" role="presentation" style="margin:0 0 20px;">
+                <tr>
+                  <td style="background-color:#141414; border:1px solid #2a2a2a; border-radius:8px; padding:16px 20px;">
+                    <p style="margin:0 0 6px; font-size:12px; color:#6b7280;">Si el boton no funciona, copia y pega este enlace en tu navegador:</p>
+                    <p style="margin:0; font-size:12px; word-break:break-all;"><a href="{{paymentUrl}}" style="color:#D4A853; text-decoration:none;">{{paymentUrl}}</a></p>
+                  </td>
+                </tr>
+              </table>
+
+              <!-- Expiration note (optional, replaced with empty string if not applicable) -->
+              {{expirationNote}}
+
+              <p style="color:#6b7280; font-size:13px; line-height:1.7; margin:0;">
+                Este es un correo automatico enviado por {{gymName}}. Si no reconoces esta solicitud, puedes ignorar este mensaje.
+              </p>
+
+            </td>
+          </tr>
+
+          <!-- ═══ FOOTER ═══ -->
+          <tr>
+            <td style="background-color:#0a0a0a; border:1px solid #1a1a1a; border-top:1px solid #D4A853; border-radius:0 0 12px 12px; padding:22px 48px; text-align:center;">
+              <p style="margin:0 0 4px; font-size:11px; color:#6b7280; letter-spacing:1px; text-transform:uppercase;">&copy; {{year}} {{gymName}} &mdash; Todos los derechos reservados</p>
+            </td>
+          </tr>
+
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>
