@@ -5,7 +5,7 @@ export {
   sendReminderReportEmail,
   sendBulkReminderMails,
 } from "./reminders";
-export { sendDiscountEmail } from "./discount";
+export { sendCampaignEmail } from "./campaign";
 export {
   sendPasswordResetEmail,
   sendPlatformUserCredentialsEmail,

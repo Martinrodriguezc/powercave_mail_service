@@ -14,13 +14,6 @@ export interface ReminderMail extends Mail {
   publicId?: string;
 }
 
-export interface DiscountMail extends Mail {
-  userName: string;
-  promotionEndDate: string;
-  contactUrl?: string;
-  contactLabel?: string;
-}
-
 export interface AdminRenewalReportMail extends Mail {
   expiringSoon: {
     userName: string;
