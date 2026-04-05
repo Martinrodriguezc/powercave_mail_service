@@ -9,6 +9,7 @@ export { sendCampaignEmail } from "./campaign";
 export {
   sendPasswordResetEmail,
   sendPlatformUserCredentialsEmail,
+  sendClientAppInvitationEmail,
 } from "./credentials";
 export { getLastEmailByTenant } from "./tenant";
 export { sendPaymentLinkEmail } from "./paymentLink";

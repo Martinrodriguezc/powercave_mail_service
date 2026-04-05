@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Invitacion a la app</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+</head>
+<body style="margin:0; padding:0; background-color:#0a0a0a; font-family:'Segoe UI',Arial,sans-serif;">
+
+  <!-- Preheader hidden -->
+  <div style="display:none; max-height:0; overflow:hidden; font-size:1px; line-height:1px; color:#0a0a0a; mso-hide:all;">
+    Ya puedes acceder a tu gimnasio desde la app. Descarga Dashcore e inicia sesion con tu contrasena temporal.
+  </div>
+
+  <table width="100%" bgcolor="#0a0a0a" cellpadding="0" cellspacing="0" role="presentation">
+    <tr>
+      <td align="center" style="padding:32px 16px;">
+
+        <table width="620" cellpadding="0" cellspacing="0" role="presentation" style="max-width:620px; width:100%;">
+
+          <!-- HEADER -->
+          <tr>
+            <td align="center" style="background-color:#0f0f0f; border-radius:12px 12px 0 0; border-top:1px solid #D4A853; border-left:1px solid #D4A853; border-right:1px solid #D4A853; padding:40px 48px 30px;">
+              {{logoImg}}
+              <h1 style="color:#D4A853; margin:0; font-size:26px; font-weight:700; letter-spacing:4px; text-transform:uppercase;">{{gymName}}</h1>
+              <table width="100%" cellpadding="0" cellspacing="0" role="presentation" style="margin:16px 0 12px;">
+                <tr>
+                  <td style="border-bottom:1px solid #2a2a2a;"></td>
+                  <td width="32" align="center" style="padding:0 10px;">
+                    <div style="width:5px; height:5px; background-color:#D4A853; border-radius:50%;"></div>
+                  </td>
+                  <td style="border-bottom:1px solid #2a2a2a;"></td>
+                </tr>
+              </table>
+              <p style="color:#6b7280; margin:0; font-size:11px; letter-spacing:3px; text-transform:uppercase;">Bienvenido a la app</p>
+            </td>
+          </tr>
+
+          <!-- BODY -->
+          <tr>
+            <td style="background-color:#0f0f0f; border-left:1px solid #232323; border-right:1px solid #232323; padding:36px 48px;">
+
+              <p style="color:#d1d5db; font-size:15px; line-height:1.8; margin:0 0 20px;">
+                Tu gimnasio <strong style="color:#ffffff;">{{gymName}}</strong> te ha invitado a usar la app <strong style="color:#D4A853;">Dashcore</strong>. Desde la app podras ver tus suscripciones, pagos, historial de accesos y generar tu codigo QR de entrada.
+              </p>
+
+              <!-- Credentials box -->
+              <table width="100%" cellpadding="0" cellspacing="0" role="presentation" style="margin:0 0 28px;">
+                <tr>
+                  <td style="background-color:#141414; border:1px solid #2a2a2a; border-radius:8px; padding:24px;">
+                    <p style="margin:0 0 16px; font-size:12px; color:#6b7280; letter-spacing:2px; text-transform:uppercase;">Tus credenciales de acceso</p>
+
+                    <table width="100%" cellpadding="0" cellspacing="0" role="presentation">
+                      <tr>
+                        <td style="padding:8px 0; border-bottom:1px solid #1a1a1a;">
+                          <p style="margin:0; font-size:13px; color:#6b7280;">Codigo del Gym</p>
+                          <p style="margin:4px 0 0; font-size:16px; color:#D4A853; font-weight:700; font-family:monospace;">{{gymSlug}}</p>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td style="padding:8px 0; border-bottom:1px solid #1a1a1a;">
+                          <p style="margin:0; font-size:13px; color:#6b7280;">Email</p>
+                          <p style="margin:4px 0 0; font-size:16px; color:#ffffff; font-weight:600;">{{userEmail}}</p>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td style="padding:8px 0;">
+                          <p style="margin:0; font-size:13px; color:#6b7280;">Contrasena temporal</p>
+                          <p style="margin:4px 0 0; font-size:20px; color:#D4A853; font-weight:700; font-family:monospace; letter-spacing:2px;">{{tempPassword}}</p>
+                        </td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+              </table>
+
+              <p style="color:#d1d5db; font-size:15px; line-height:1.8; margin:0 0 28px;">
+                Al iniciar sesion por primera vez, se te pedira que cambies tu contrasena por una propia.
+              </p>
+
+              <!-- Steps -->
+              <table width="100%" cellpadding="0" cellspacing="0" role="presentation" style="margin:0 0 28px;">
+                <tr>
+                  <td style="padding:10px 0;">
+                    <table cellpadding="0" cellspacing="0" role="presentation">
+                      <tr>
+                        <td style="width:28px; height:28px; background-color:#D4A853; border-radius:50%; text-align:center; vertical-align:middle; font-size:13px; font-weight:700; color:#0a0a0a;">1</td>
+                        <td style="padding-left:12px; color:#d1d5db; font-size:14px;">Descarga <strong style="color:#ffffff;">Dashcore</strong> en la App Store o Google Play</td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+                <tr>
+                  <td style="padding:10px 0;">
+                    <table cellpadding="0" cellspacing="0" role="presentation">
+                      <tr>
+                        <td style="width:28px; height:28px; background-color:#D4A853; border-radius:50%; text-align:center; vertical-align:middle; font-size:13px; font-weight:700; color:#0a0a0a;">2</td>
+                        <td style="padding-left:12px; color:#d1d5db; font-size:14px;">Inicia sesion con tu email y la contrasena temporal</td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+                <tr>
+                  <td style="padding:10px 0;">
+                    <table cellpadding="0" cellspacing="0" role="presentation">
+                      <tr>
+                        <td style="width:28px; height:28px; background-color:#D4A853; border-radius:50%; text-align:center; vertical-align:middle; font-size:13px; font-weight:700; color:#0a0a0a;">3</td>
+                        <td style="padding-left:12px; color:#d1d5db; font-size:14px;">Cambia tu contrasena y listo</td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+              </table>
+
+              <p style="color:#6b7280; font-size:13px; line-height:1.7; margin:0;">
+                Si no reconoces este mensaje o no perteneces a este gimnasio, puedes ignorar este correo.
+              </p>
+
+            </td>
+          </tr>
+
+          <!-- FOOTER -->
+          <tr>
+            <td style="background-color:#0a0a0a; border:1px solid #1a1a1a; border-top:1px solid #D4A853; border-radius:0 0 12px 12px; padding:22px 48px; text-align:center;">
+              <p style="margin:0 0 4px; font-size:11px; color:#6b7280; letter-spacing:1px; text-transform:uppercase;">&copy; {{year}} {{gymName}} &mdash; Todos los derechos reservados</p>
+            </td>
+          </tr>
+
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>

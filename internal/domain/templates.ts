@@ -35,3 +35,8 @@ export const paymentLinkTemplate = fs.readFileSync(
   path.join(__dirname, "../html/payment_link.html"),
   "utf8",
 );
+
+export const clientAppInvitationTemplate = fs.readFileSync(
+  path.join(__dirname, "../html/client_app_invitation.html"),
+  "utf8",
+);
