@@ -10,6 +10,7 @@ export {
   sendPasswordResetEmail,
   sendPlatformUserCredentialsEmail,
   sendClientAppInvitationEmail,
+  sendClientPasswordResetEmail,
 } from "./credentials";
 export { getLastEmailByTenant } from "./tenant";
 export { sendPaymentLinkEmail } from "./paymentLink";

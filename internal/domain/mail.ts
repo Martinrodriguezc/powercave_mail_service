@@ -89,6 +89,12 @@ export interface PaymentLinkMail extends Mail {
   isRecurring: boolean;
 }
 
+export interface ClientPasswordResetMail extends Mail {
+  otp: string;
+  gymName: string;
+  logoUrl?: string | null;
+}
+
 export interface ClientAppInvitationMail extends Mail {
   tempPassword: string;
   gymName: string;

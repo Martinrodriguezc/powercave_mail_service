@@ -3,6 +3,7 @@ import {
   sendPasswordResetEmail,
   sendPlatformUserCredentialsEmail,
   sendClientAppInvitationEmail,
+  sendClientPasswordResetEmail,
 } from "../service";
 import { requireApiKey } from "../middleware.ts/apiKeyAuth";
 import { createServiceLogger } from "../../utils/logger";
@@ -109,6 +110,40 @@ router.post("/send_client_app_invitation", requireApiKey, async (req, res) => {
     });
     res.status(500).json({
       message: "Error sending client app invitation email",
+      error: error?.message,
+    });
+  }
+});
+
+router.post("/send_client_password_reset", requireApiKey, async (req, res) => {
+  const { to, otp, gymName, logoUrl } = req.body;
+
+  if (!to || !otp || !gymName) {
+    return res.status(400).json({
+      message: "Missing required fields: to, otp, gymName",
+    });
+  }
+
+  try {
+    const subject = `Codigo de verificacion | ${gymName}`;
+    await sendClientPasswordResetEmail({
+      to,
+      subject,
+      otp,
+      gymName,
+      logoUrl: logoUrl ?? null,
+    });
+
+    logger.success("Client password reset email sent", { email: to });
+    res
+      .status(200)
+      .json({ message: "Client password reset email sent successfully" });
+  } catch (error: any) {
+    logger.error("Error sending client password reset email", error, {
+      email: to,
+    });
+    res.status(500).json({
+      message: "Error sending client password reset email",
       error: error?.message,
     });
   }

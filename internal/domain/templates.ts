@@ -40,3 +40,8 @@ export const clientAppInvitationTemplate = fs.readFileSync(
   path.join(__dirname, "../html/client_app_invitation.html"),
   "utf8",
 );
+
+export const clientPasswordResetTemplate = fs.readFileSync(
+  path.join(__dirname, "../html/client_password_reset.html"),
+  "utf8",
+);

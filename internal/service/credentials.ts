@@ -2,12 +2,14 @@ import {
   PasswordResetMail,
   PlatformUserCredentialsMail,
   ClientAppInvitationMail,
+  ClientPasswordResetMail,
 } from "../domain/mail";
 import { getLogoImgHtml } from "../domain/logo";
 import {
   passwordResetTemplate,
   platformUserCredentialsTemplate,
   clientAppInvitationTemplate,
+  clientPasswordResetTemplate,
 } from "../domain/templates";
 import { sendMail } from "./mail";
 
@@ -70,6 +72,28 @@ export const sendClientAppInvitationEmail = async (
   html = html.replace(/\{\{gymSlug\}\}/g, opts.gymSlug);
   html = html.replace(/\{\{userEmail\}\}/g, opts.to);
   html = html.replace(/\{\{tempPassword\}\}/g, opts.tempPassword);
+  html = html.replace(/\{\{year\}\}/g, new Date().getFullYear().toString());
+
+  await sendMail({
+    to: opts.to,
+    subject: opts.subject,
+    html: html,
+    logoUrl: opts.logoUrl ?? undefined,
+    gymName: opts.gymName ?? undefined,
+  });
+};
+
+export const sendClientPasswordResetEmail = async (
+  opts: ClientPasswordResetMail,
+): Promise<void> => {
+  let html = clientPasswordResetTemplate;
+
+  html = html.replace(
+    /\{\{logoImg\}\}/g,
+    getLogoImgHtml(opts.logoUrl, opts.gymName),
+  );
+  html = html.replace(/\{\{gymName\}\}/g, opts.gymName ?? "");
+  html = html.replace(/\{\{otp\}\}/g, opts.otp);
   html = html.replace(/\{\{year\}\}/g, new Date().getFullYear().toString());
 
   await sendMail({
