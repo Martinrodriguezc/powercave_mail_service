@@ -1,5 +1,6 @@
 import express from "express";
 import mailRouter from "../internal/controllers";
+import b2bSalesOrderRouter from "../internal/b2b/salesOrder/controllers";
 import { config, validateRequiredEnvVars } from "../config/config";
 import cors from "cors";
 import { createServiceLogger } from "../utils/logger";
@@ -33,9 +34,10 @@ const corsOptions: cors.CorsOptions = {
 };
 
 app.use(cors(corsOptions));
-app.use(express.json());
+app.use(express.json({ limit: "20mb" }));
 
 app.use("/mail", mailRouter);
+app.use("/mail", b2bSalesOrderRouter);
 
 app.listen(PORT, () => {
   logger.info("Server started", { port: PORT });

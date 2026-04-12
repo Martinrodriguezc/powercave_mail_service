@@ -81,7 +81,17 @@ router.post(
 );
 
 router.post("/send_client_app_invitation", requireApiKey, async (req, res) => {
-  const { to, tempPassword, gymName, gymSlug, logoUrl } = req.body;
+  const {
+    to,
+    tempPassword,
+    gymName,
+    gymSlug,
+    logoUrl,
+    appStoreBadgeUrl,
+    googlePlayBadgeUrl,
+    appStoreLink,
+    googlePlayLink,
+  } = req.body;
 
   if (!to || !tempPassword || !gymName || !gymSlug) {
     return res.status(400).json({
@@ -98,6 +108,10 @@ router.post("/send_client_app_invitation", requireApiKey, async (req, res) => {
       gymName,
       gymSlug,
       logoUrl: logoUrl ?? null,
+      appStoreBadgeUrl: appStoreBadgeUrl ?? null,
+      googlePlayBadgeUrl: googlePlayBadgeUrl ?? null,
+      appStoreLink: appStoreLink ?? null,
+      googlePlayLink: googlePlayLink ?? null,
     });
 
     logger.success("Client app invitation email sent", { email: to });
