@@ -77,8 +77,6 @@ export const sendClientAppInvitationEmail = async (
     /\{\{googlePlayBadgeUrl\}\}/g,
     opts.googlePlayBadgeUrl ?? "",
   );
-  html = html.replace(/\{\{appStoreLink\}\}/g, opts.appStoreLink ?? "#");
-  html = html.replace(/\{\{googlePlayLink\}\}/g, opts.googlePlayLink ?? "#");
   html = html.replace(/\{\{year\}\}/g, new Date().getFullYear().toString());
 
   await sendMail({
