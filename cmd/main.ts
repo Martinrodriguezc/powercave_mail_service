@@ -16,18 +16,44 @@ const allowedOrigins: string[] = (config.ALLOWED_ORIGINS || "")
   .map((o: string) => o.trim())
   .filter(Boolean);
 
+if (allowedOrigins.length === 0) {
+  if (config.isProduction) {
+    logger.error(
+      "ALLOWED_ORIGINS no configurado en produccion: requests cross-origin seran rechazadas",
+      undefined,
+      {
+        action: "cors_config",
+        env: config.NODE_ENV ?? "undefined",
+      },
+    );
+  } else {
+    logger.warn(
+      "ALLOWED_ORIGINS no configurado: se permite cualquier origen (solo desarrollo)",
+      {
+        action: "cors_config",
+        env: config.NODE_ENV ?? "undefined",
+      },
+    );
+  }
+}
+
+const CORS_REJECTION_ERROR = new Error("Not allowed by CORS");
+
 const corsOptions: cors.CorsOptions = {
   origin: (origin, callback) => {
     if (!origin) {
       return callback(null, true);
     }
     if (allowedOrigins.length === 0) {
+      if (config.isProduction) {
+        return callback(CORS_REJECTION_ERROR);
+      }
       return callback(null, true);
     }
     if (allowedOrigins.includes(origin)) {
       return callback(null, true);
     }
-    return callback(new Error("Not allowed by CORS"));
+    return callback(CORS_REJECTION_ERROR);
   },
   methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
   credentials: true,
