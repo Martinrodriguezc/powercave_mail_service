@@ -14,3 +14,7 @@ export {
 } from "./credentials";
 export { getLastEmailByTenant } from "./tenant";
 export { sendPaymentLinkEmail } from "./paymentLink";
+export {
+  sendManagerWelcomeEmail,
+  sendStaffWelcomeEmail,
+} from "./welcome";

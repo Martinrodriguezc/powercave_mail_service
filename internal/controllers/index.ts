@@ -5,6 +5,7 @@ import remindersRouter from "./reminders";
 import reportsRouter from "./reports";
 import tenantRouter from "./tenant";
 import paymentLinkRouter from "./paymentLink";
+import welcomeRouter from "./welcome";
 
 const router = Router();
 
@@ -14,5 +15,6 @@ router.use(reportsRouter);
 router.use(credentialsRouter);
 router.use(tenantRouter);
 router.use(paymentLinkRouter);
+router.use(welcomeRouter);
 
 export default router;

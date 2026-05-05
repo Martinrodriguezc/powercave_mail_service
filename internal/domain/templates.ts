@@ -45,3 +45,13 @@ export const clientPasswordResetTemplate = fs.readFileSync(
   path.join(__dirname, "../html/client_password_reset.html"),
   "utf8",
 );
+
+export const managerWelcomeTemplate = fs.readFileSync(
+  path.join(__dirname, "../html/manager_welcome.html"),
+  "utf8",
+);
+
+export const staffWelcomeTemplate = fs.readFileSync(
+  path.join(__dirname, "../html/staff_welcome.html"),
+  "utf8",
+);

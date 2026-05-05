@@ -106,6 +106,22 @@ export interface ClientAppInvitationMail extends Mail {
   googlePlayLink?: string | null;
 }
 
+export interface ManagerWelcomeMail extends Mail {
+  userName: string;
+  gymName: string;
+  serviceStartDate: string;
+  freeMonthEndsAt: string;
+  loginLink: string;
+  logoUrl?: string | null;
+}
+
+export interface StaffWelcomeMail extends Mail {
+  userName: string;
+  gymName: string;
+  loginLink: string;
+  logoUrl?: string | null;
+}
+
 export interface ReminderReportResult {
   publicId: string | null;
   email: string;
