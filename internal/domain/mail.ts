@@ -100,6 +100,7 @@ export interface ClientAppInvitationMail extends Mail {
   gymName: string;
   gymSlug: string;
   logoUrl?: string | null;
+  appLogoUrl?: string | null;
   appStoreBadgeUrl?: string | null;
   googlePlayBadgeUrl?: string | null;
   appStoreLink?: string | null;

@@ -64,6 +64,14 @@ export const sendClientAppInvitationEmail = async (
 ): Promise<void> => {
   let html = clientAppInvitationTemplate;
 
+  const appLogoImg = opts.appLogoUrl
+    ? `<table cellpadding="0" cellspacing="0" border="0" role="presentation" style="margin:0 auto 14px auto;">
+        <tr><td align="center" style="line-height:0;">
+          <img src="${opts.appLogoUrl}" alt="Dashcore" width="80" height="80" border="0" style="display:block;width:80px;height:80px;border-radius:18px;outline:none;text-decoration:none;" />
+        </td></tr>
+      </table>`
+    : "";
+  html = html.replace(/\{\{appLogoImg\}\}/g, appLogoImg);
   html = html.replace(
     /\{\{logoImg\}\}/g,
     getLogoImgHtml(opts.logoUrl, opts.gymName),
