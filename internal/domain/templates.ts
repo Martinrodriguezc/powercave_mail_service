@@ -55,3 +55,8 @@ export const staffWelcomeTemplate = fs.readFileSync(
   path.join(__dirname, "../html/staff_welcome.html"),
   "utf8",
 );
+
+export const lowStockAlertTemplate = fs.readFileSync(
+  path.join(__dirname, "../html/low_stock_alert.html"),
+  "utf8",
+);

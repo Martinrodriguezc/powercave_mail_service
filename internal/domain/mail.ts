@@ -123,6 +123,27 @@ export interface StaffWelcomeMail extends Mail {
   logoUrl?: string | null;
 }
 
+export type LowStockItemKind = "material" | "inventory";
+
+export interface LowStockAlertItem {
+  kind: LowStockItemKind;
+  name: string;
+  currentStock: number;
+  minStockAlert: number;
+  unit?: string;
+}
+
+export interface LowStockAlertMail extends Omit<Mail, "to"> {
+  to: string[];
+  gymName: string;
+  logoUrl?: string | null;
+  generatedAt: string;
+  materialItems: LowStockAlertItem[];
+  inventoryItems: LowStockAlertItem[];
+  hasMaterials: boolean;
+  hasInventory: boolean;
+}
+
 export interface ReminderReportResult {
   publicId: string | null;
   email: string;

@@ -18,3 +18,4 @@ export {
   sendManagerWelcomeEmail,
   sendStaffWelcomeEmail,
 } from "./welcome";
+export { sendLowStockAlertEmail } from "./lowStockAlert";
