@@ -1,0 +1,7 @@
+{
+  "to": "cliente@example.com",
+  "subject": "Promoción de verano en PowerCave",
+  "html": "<!DOCTYPE html><html><body><h1>Hola María,</h1><p>Aprovecha 30% off en planes anuales. {{logoImg}}</p></body></html>",
+  "gymName": "PowerCave Las Condes",
+  "logoUrl": "https://cdn.dashcore.cl/gyms/powercave-las-condes/logo.jpg"
+}

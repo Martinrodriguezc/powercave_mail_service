@@ -1,0 +1,12 @@
+{
+  "to": "valentina.silva@example.com",
+  "tempPassword": "Acc-7K3mQ8",
+  "gymName": "PowerCave Las Condes",
+  "gymSlug": "powercave-las-condes",
+  "logoUrl": "https://gym-imagenes.s3.amazonaws.com/powercave-las-condes/logo.jpg",
+  "appLogoUrl": "https://gym-imagenes.s3.amazonaws.com/static/dashcore-members-icon.png",
+  "appStoreBadgeUrl": "https://gym-imagenes.s3.amazonaws.com/static/app-store-badge.png",
+  "googlePlayBadgeUrl": "https://gym-imagenes.s3.amazonaws.com/static/google-play-badge.png",
+  "appStoreLink": "https://apps.apple.com/cl/app/dashcore-members/id123456789",
+  "googlePlayLink": "https://play.google.com/store/apps/details?id=cl.dashcore.clientapp"
+}

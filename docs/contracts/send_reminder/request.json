@@ -1,0 +1,32 @@
+{
+  "reminders": [
+    {
+      "to": "paola.perez@example.com",
+      "userName": "Paola Pérez",
+      "planName": "Plan Mensual Premium",
+      "expiryDate": "17/05/2026",
+      "publicId": "client_01HXYZABC123"
+    },
+    {
+      "to": "rodrigo.fuentes@example.com",
+      "userName": "Rodrigo Fuentes",
+      "planName": "Plan Trimestral",
+      "expiryDate": "18/05/2026",
+      "publicId": "client_01HXYZDEF456"
+    },
+    {
+      "to": "javiera.morales@example.com",
+      "userName": "Javiera Morales",
+      "planName": "Plan Anual Elite",
+      "expiryDate": "19/05/2026",
+      "publicId": "client_01HXYZGHI789"
+    }
+  ],
+  "report_recipients": [
+    "manager@powercave.cl",
+    "admin@powercave.cl"
+  ],
+  "sentBy": "backend_service",
+  "gymName": "Power Cave Las Condes",
+  "logoUrl": "https://gym-imagenes.s3.localhost.localstack.cloud/powercave/logo.jpg"
+}

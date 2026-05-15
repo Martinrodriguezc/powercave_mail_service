@@ -1,0 +1,9 @@
+{
+  "to": "manager@example.com",
+  "userName": "Camila Rodríguez",
+  "gymName": "PowerCave Las Condes",
+  "serviceStartDate": "01-05-2026",
+  "freeMonthEndsAt": "01-06-2026",
+  "loginLink": "https://app.dashcore.cl/login",
+  "logoUrl": "https://cdn.dashcore.cl/gyms/powercave-las-condes/logo.jpg"
+}

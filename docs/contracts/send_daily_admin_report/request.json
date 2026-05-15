@@ -1,0 +1,37 @@
+{
+  "to": "admin@powercavegym.cl",
+  "subject": "Reporte diario de renovaciones - PowerCave",
+  "gymName": "PowerCave",
+  "logoUrl": "https://cdn.powercave.cl/logos/powercave.jpg",
+  "reportDate": "15 de mayo de 2026",
+  "sentBy": "daily_admin_report_backend",
+  "expiringSoon": [
+    {
+      "userName": "Juan Pérez",
+      "planName": "Plan Mensual Premium",
+      "expiryDate": "17/05/2026"
+    },
+    {
+      "userName": "María González",
+      "planName": "Plan Trimestral",
+      "expiryDate": "18/05/2026"
+    },
+    {
+      "userName": "Diego Soto",
+      "planName": "Plan Mensual Básico",
+      "expiryDate": "18/05/2026"
+    }
+  ],
+  "recentlyExpired": [
+    {
+      "userName": "Carla Muñoz",
+      "planName": "Plan Mensual Premium",
+      "expiryDate": "12/05/2026"
+    },
+    {
+      "userName": "Felipe Rojas",
+      "planName": "Plan Anual",
+      "expiryDate": "10/05/2026"
+    }
+  ]
+}

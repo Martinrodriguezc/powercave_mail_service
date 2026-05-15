@@ -1,0 +1,12 @@
+{
+  "message": "Reminders processed successfully",
+  "total": 3,
+  "successful": 1,
+  "failed": 1,
+  "failures": [
+    {
+      "email": "javiera.morales@example.com",
+      "error": "Invalid `to` field: recipient address is malformed"
+    }
+  ]
+}

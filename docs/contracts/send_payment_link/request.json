@@ -1,0 +1,12 @@
+{
+  "to": "cliente@example.com",
+  "clientName": "María González",
+  "paymentUrl": "https://mpago.la/abc123XYZ",
+  "amount": "$45.000 CLP",
+  "description": "Plan mensual Premium",
+  "providerName": "Mercado Pago",
+  "providerLogoUrl": "https://cdn.dashcore.cl/providers/mercadopago.png",
+  "gymName": "PowerCave Las Condes",
+  "logoUrl": "https://cdn.dashcore.cl/gyms/powercave-las-condes/logo.jpg",
+  "isRecurring": false
+}

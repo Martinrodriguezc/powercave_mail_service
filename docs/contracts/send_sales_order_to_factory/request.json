@@ -1,0 +1,48 @@
+{
+  "to": "produccion@fabrica-proveedor.cl",
+  "gymName": "PowerCave Las Condes",
+  "gymLegalName": "Powercave SpA",
+  "gymRut": "76.123.456-7",
+  "logoUrl": "https://cdn.dashcore.cl/gyms/powercave-las-condes/logo.png",
+  "orderNumber": 1042,
+  "purchaseOrderNumber": "OC-2026-00873",
+  "createdAtISO": "2026-05-15T14:32:10.000Z",
+  "clientBusinessName": "Distribuidora Andes Sur Ltda.",
+  "clientRut": "77.998.221-3",
+  "notes": "Entregar en bodega central antes de las 18:00 hrs. Coordinar con Patricio.",
+  "lines": [
+    {
+      "productName": "Proteina Whey Chocolate 1kg",
+      "description": "Tarro 1 kg sabor chocolate, lote 2026-Q2",
+      "quantity": 24,
+      "quantityUnit": "UNIT",
+      "unitPrice": "18.990",
+      "lineTotal": "455.760"
+    },
+    {
+      "productName": "Creatina Monohidrato",
+      "description": "Bolsa granel 5 kg",
+      "quantity": 2.5,
+      "quantityUnit": "KG",
+      "unitPrice": "22.500",
+      "lineTotal": "56.250"
+    },
+    {
+      "productName": "Barras de proteina mix",
+      "description": null,
+      "quantity": 6,
+      "quantityUnit": "BOX",
+      "unitPrice": "14.900",
+      "lineTotal": "89.400"
+    }
+  ],
+  "subtotal": "601.410",
+  "taxAmount": "114.268",
+  "taxPercent": 19,
+  "total": "715.678",
+  "attachment": {
+    "filename": "nota-venta-1042.pdf",
+    "contentBase64": "JVBERi0xLjQKJeLjz9MKMyAwIG9iago8PC9MZW5ndGggNCAwIFIvRmlsdGVyL0ZsYXRlRGVjb2RlPj4Kc3RyZWFtCnicJYy7DcAgEAT7r2KbsHbW...truncated...AKJSVFT0YK",
+    "mimeType": "application/pdf"
+  }
+}

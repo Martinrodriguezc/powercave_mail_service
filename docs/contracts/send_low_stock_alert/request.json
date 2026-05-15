@@ -1,0 +1,52 @@
+{
+  "to": [
+    "admin@powercavegym.cl",
+    "operaciones@powercavegym.cl",
+    "bodega@powercavegym.cl"
+  ],
+  "subject": "Alerta de stock bajo - PowerCave",
+  "gymName": "PowerCave",
+  "logoUrl": "https://cdn.powercave.cl/logos/powercave.jpg",
+  "items": [
+    {
+      "kind": "material",
+      "name": "Toallas de papel",
+      "currentStock": 12,
+      "minStockAlert": 20,
+      "unit": "rollos"
+    },
+    {
+      "kind": "material",
+      "name": "Desinfectante para máquinas",
+      "currentStock": 2,
+      "minStockAlert": 5,
+      "unit": "litros"
+    },
+    {
+      "kind": "material",
+      "name": "Bolsas de basura industriales",
+      "currentStock": 4,
+      "minStockAlert": 10
+    },
+    {
+      "kind": "inventory",
+      "name": "Batido proteico chocolate 30g",
+      "currentStock": 8,
+      "minStockAlert": 15,
+      "unit": "unidades"
+    },
+    {
+      "kind": "inventory",
+      "name": "Barra de proteína sabor maní",
+      "currentStock": 0,
+      "minStockAlert": 10,
+      "unit": "unidades"
+    },
+    {
+      "kind": "inventory",
+      "name": "Polera técnica PowerCave M",
+      "currentStock": 3,
+      "minStockAlert": 6
+    }
+  ]
+}

@@ -1,0 +1,7 @@
+{
+  "to": "diego.morales@example.com",
+  "temporaryPassword": "Tmp-9f4xZ2qP",
+  "gymName": "PowerCave Las Condes",
+  "resetPasswordLink": "https://app.powercave.cl/reset-password?token=eyJhbGciOiJIUzI1NiJ9.xyz789",
+  "logoUrl": "https://gym-imagenes.s3.amazonaws.com/powercave-las-condes/logo.jpg"
+}

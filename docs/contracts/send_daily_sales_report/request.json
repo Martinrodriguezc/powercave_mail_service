@@ -1,0 +1,102 @@
+{
+  "to": "admin@powercavegym.cl",
+  "subject": "Reporte diario de ventas - PowerCave",
+  "gymName": "PowerCave",
+  "logoUrl": "https://cdn.powercave.cl/logos/powercave.jpg",
+  "reportDate": "15 de mayo de 2026",
+  "sentBy": "sales_registry_backend",
+  "totalRevenue": 285000,
+  "planSales": {
+    "totalAmount": 180000,
+    "sales": [
+      {
+        "clientName": "Juan Pérez",
+        "planName": "Plan Mensual Premium",
+        "amount": 45000,
+        "time": "09:15"
+      },
+      {
+        "clientName": "María González",
+        "planName": "Plan Trimestral",
+        "amount": 120000,
+        "time": "11:42"
+      },
+      {
+        "clientName": "Diego Soto",
+        "planName": "Plan Mensual Básico",
+        "amount": 15000,
+        "time": "17:08"
+      }
+    ]
+  },
+  "foodSales": {
+    "totalAmount": 35000,
+    "sales": [
+      {
+        "clientName": "Carla Muñoz",
+        "foodName": "Batido proteico 30g",
+        "amount": 5500,
+        "time": "10:23"
+      },
+      {
+        "clientName": "Felipe Rojas",
+        "foodName": "Barra de proteína",
+        "amount": 2500,
+        "time": "13:47"
+      },
+      {
+        "clientName": "Juan Pérez",
+        "foodName": "Pre-entreno scoop",
+        "amount": 4000,
+        "time": "18:05"
+      },
+      {
+        "clientName": "Cliente Mostrador",
+        "foodName": "Botella de agua 500ml",
+        "amount": 1500,
+        "time": "19:30"
+      },
+      {
+        "clientName": "Andrea Silva",
+        "foodName": "Batido proteico 30g",
+        "amount": 5500,
+        "time": "20:15"
+      },
+      {
+        "clientName": "Cliente Mostrador",
+        "foodName": "Combo post-entreno",
+        "amount": 16000,
+        "time": "21:02"
+      }
+    ]
+  },
+  "merchandiseSales": {
+    "totalAmount": 70000,
+    "sales": [
+      {
+        "clientName": "Diego Soto",
+        "productName": "Polera técnica PowerCave M",
+        "amount": 25000,
+        "time": "12:18"
+      },
+      {
+        "clientName": "Andrea Silva",
+        "productName": "Shaker 700ml",
+        "amount": 8000,
+        "time": "15:42"
+      },
+      {
+        "clientName": "María González",
+        "productName": "Guantes de entrenamiento L",
+        "amount": 18000,
+        "time": "16:55"
+      },
+      {
+        "clientName": "Cliente Mostrador",
+        "productName": "Toalla deportiva",
+        "amount": 19000,
+        "time": "20:48"
+      }
+    ]
+  }
+}

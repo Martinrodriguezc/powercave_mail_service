@@ -1,0 +1,7 @@
+{
+  "to": "carolina.perez@example.com",
+  "resetLink": "https://app.powercave.cl/reset-password?token=eyJhbGciOiJIUzI1NiJ9.abc123",
+  "subject": "Restablece tu contraseña | PowerCave Las Condes",
+  "gymName": "PowerCave Las Condes",
+  "logoUrl": "https://gym-imagenes.s3.amazonaws.com/powercave-las-condes/logo.jpg"
+}

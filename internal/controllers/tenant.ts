@@ -9,7 +9,13 @@ const logger = createServiceLogger('tenant');
 
 router.get("/last-emails-by-tenant", requireAuth, requireMailServiceAccess, async (req: AuthenticatedRequest, res) => {
     try {
-        const lastEmails = await getLastEmailByTenant();
+        if (!req.user) {
+            return res.status(401).json({ message: "Unauthorized" });
+        }
+        const lastEmails = await getLastEmailByTenant({
+            role: req.user.role,
+            gymName: req.user.gymName,
+        });
 
         res.status(200).json({
             count: lastEmails.length,
