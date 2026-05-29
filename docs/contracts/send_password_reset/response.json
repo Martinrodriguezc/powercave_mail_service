@@ -1,3 +1,8 @@
 {
-  "message": "Password reset email sent successfully"
+  "success": true,
+  "data": {
+    "providerMessageId": "8a3c5e1b-4f6e-4d8a-b7e9-1c2a3b4d5e6f"
+  },
+  "errors": [],
+  "warnings": []
 }

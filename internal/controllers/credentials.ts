@@ -3,6 +3,7 @@ import {
   sendPasswordResetEmail,
   sendPlatformUserCredentialsEmail,
   sendClientAppInvitationEmail,
+  sendClientAppInvitationsBulk,
   sendClientPasswordResetEmail,
 } from "../service";
 import { requireApiKey } from "../middleware.ts/apiKeyAuth";
@@ -130,6 +131,46 @@ router.post("/send_client_app_invitation", requireApiKey, async (req, res) => {
     });
   }
 });
+
+router.post(
+  "/send_client_app_invitations_bulk",
+  requireApiKey,
+  async (req, res) => {
+    const { invitations } = req.body ?? {};
+
+    if (!Array.isArray(invitations) || invitations.length === 0) {
+      return res.status(400).json({
+        message: "Missing or empty required field: invitations",
+      });
+    }
+
+    const invalid = invitations.find(
+      (i: any) => !i?.to || !i?.tempPassword || !i?.gymName || !i?.gymSlug,
+    );
+    if (invalid) {
+      return res.status(400).json({
+        message:
+          "Each invitation requires: to, tempPassword, gymName, gymSlug",
+      });
+    }
+
+    try {
+      const result = await sendClientAppInvitationsBulk(invitations);
+      logger.success("Client app invitations bulk processed", {
+        requested: result.summary.requested,
+        sent: result.summary.sent,
+        failed: result.summary.failed,
+      });
+      res.status(200).json(result);
+    } catch (error: any) {
+      logger.error("Error processing client app invitations bulk", error);
+      res.status(500).json({
+        message: "Error processing client app invitations bulk",
+        error: error?.message,
+      });
+    }
+  },
+);
 
 router.post("/send_client_password_reset", requireApiKey, async (req, res) => {
   const { to, otp, gymName, logoUrl } = req.body;

@@ -96,6 +96,58 @@ export const sendClientAppInvitationEmail = async (
   });
 };
 
+const delay = (ms: number): Promise<void> =>
+  new Promise((resolve) => setTimeout(resolve, ms));
+
+// Resend permite ~2 correos/segundo; 600ms entre envios deja margen seguro.
+const BULK_INVITATION_THROTTLE_MS = 600;
+
+export type ClientAppInvitationBulkItem = Omit<ClientAppInvitationMail, "subject">;
+
+export interface BulkInvitationResult {
+  to: string;
+  status: "sent" | "failed";
+  error?: string;
+}
+
+export interface BulkInvitationsResponse {
+  summary: { requested: number; sent: number; failed: number };
+  results: BulkInvitationResult[];
+}
+
+export const sendClientAppInvitationsBulk = async (
+  invitations: ClientAppInvitationBulkItem[],
+): Promise<BulkInvitationsResponse> => {
+  const results: BulkInvitationResult[] = [];
+
+  for (let i = 0; i < invitations.length; i++) {
+    const inv = invitations[i];
+    try {
+      await sendClientAppInvitationEmail({
+        ...inv,
+        subject: `Bienvenido a la app | ${inv.gymName}`,
+      });
+      results.push({ to: inv.to, status: "sent" });
+    } catch (error: any) {
+      results.push({ to: inv.to, status: "failed", error: error?.message });
+    }
+
+    if (i < invitations.length - 1) {
+      await delay(BULK_INVITATION_THROTTLE_MS);
+    }
+  }
+
+  const sent = results.filter((r) => r.status === "sent").length;
+  return {
+    summary: {
+      requested: invitations.length,
+      sent,
+      failed: results.length - sent,
+    },
+    results,
+  };
+};
+
 export const sendClientPasswordResetEmail = async (
   opts: ClientPasswordResetMail,
 ): Promise<void> => {
