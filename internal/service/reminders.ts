@@ -94,7 +94,6 @@ function generateReminderReportHTML(
 
       return `
             <tr>
-                <td style="padding:10px 8px; border-bottom:1px solid #1e1e1e; font-family:monospace; font-size:12px; color:#6b7280; background-color:#0f0f0f;">${result.publicId || "N/A"}</td>
                 <td style="padding:10px 8px; border-bottom:1px solid #1e1e1e; color:#d1d5db; background-color:#0f0f0f;">${result.email}</td>
                 <td style="padding:10px 8px; border-bottom:1px solid #1e1e1e; text-align:center; background-color:#0f0f0f;">
                     <span style="color:${statusColor}; font-weight:600;">${statusText}</span>
