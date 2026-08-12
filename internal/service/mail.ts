@@ -1,6 +1,6 @@
 import { config } from "../../config/config";
 import { AdminRenewalReportMail, Mail, ReminderMail } from "../domain/mail";
-import { getLogoCid } from "../domain/logo";
+import { DASHCORE_LOGOS, getLogoCid } from "../domain/logo";
 import { createServiceLogger } from "../../utils/logger";
 import { Resend } from "resend";
 
@@ -72,13 +72,28 @@ export async function sendMail(
         ]
       : [];
 
+    // Solo se adjunta la variante que la plantilla referencia: el HTML de
+    // campañas llega compuesto desde el backend y no lleva logo de DashCore.
+    const dashcoreAttachment = DASHCORE_LOGOS.filter((logo) =>
+      opts.html?.includes(`cid:${logo.cid}`),
+    ).map((logo) => ({
+      filename: `${logo.cid}.png`,
+      content: logo.base64,
+      contentType: "image/png",
+      contentId: logo.cid,
+    }));
+
     const extraAttachments = (options.attachments ?? []).map((att) => ({
       filename: att.filename,
       content: att.content,
       contentType: att.contentType,
     }));
 
-    const mergedAttachments = [...logoAttachment, ...extraAttachments];
+    const mergedAttachments = [
+      ...logoAttachment,
+      ...dashcoreAttachment,
+      ...extraAttachments,
+    ];
 
     const payload: Parameters<typeof resend.emails.send>[0] = {
       from: `${config.SENDER_EMAIL}`,
@@ -89,8 +104,10 @@ export async function sendMail(
       ...(mergedAttachments.length > 0 && { attachments: mergedAttachments }),
     };
 
+    // El logo de DashCore no cuenta: va inline y es fijo, no agrega latencia
+    // de descarga como el logo del gym (path remoto) ni peso como el PDF B2B.
     const timeoutMs =
-      mergedAttachments.length > 0
+      logoAttachment.length + extraAttachments.length > 0
         ? RESEND_ATTACHMENT_TIMEOUT_MS
         : RESEND_TIMEOUT_MS;
     const result = await withTimeout(
@@ -98,6 +115,12 @@ export async function sendMail(
       timeoutMs,
       "Resend send",
     );
+
+    // El SDK de Resend no lanza ante un rechazo de la API: devuelve { error }.
+    // Sin este chequeo un envío fallido se reportaba como enviado.
+    if (result.error) {
+      throw new Error(result.error.message || "Resend rejected the email");
+    }
 
     logger.info("Email sent via Resend", {
       email: opts.to,

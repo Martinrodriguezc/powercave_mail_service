@@ -54,10 +54,10 @@ function renderSalesSection(config: SalesSectionConfig): string {
                 <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse; margin-top:8px; border:1px solid #2a2a2a;">
                   <thead>
                     <tr style="background-color:#131313;">
-                      <th align="left" style="padding:12px 8px; font-weight:bold; color:#D4A853; font-size:13px; border-bottom:2px solid #2a2a2a;">Cliente</th>
-                      <th align="left" style="padding:12px 8px; font-weight:bold; color:#D4A853; font-size:13px; border-bottom:2px solid #2a2a2a;">${config.columnHeader}</th>
-                      <th align="right" style="padding:12px 8px; font-weight:bold; color:#D4A853; font-size:13px; border-bottom:2px solid #2a2a2a;">Monto</th>
-                      <th align="center" style="padding:12px 8px; font-weight:bold; color:#D4A853; font-size:13px; border-bottom:2px solid #2a2a2a;">Hora</th>
+                      <th align="left" style="padding:12px 8px; font-weight:bold; color:#dd920d; font-size:13px; border-bottom:2px solid #2a2a2a;">Cliente</th>
+                      <th align="left" style="padding:12px 8px; font-weight:bold; color:#dd920d; font-size:13px; border-bottom:2px solid #2a2a2a;">${config.columnHeader}</th>
+                      <th align="right" style="padding:12px 8px; font-weight:bold; color:#dd920d; font-size:13px; border-bottom:2px solid #2a2a2a;">Monto</th>
+                      <th align="center" style="padding:12px 8px; font-weight:bold; color:#dd920d; font-size:13px; border-bottom:2px solid #2a2a2a;">Hora</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -65,7 +65,7 @@ function renderSalesSection(config: SalesSectionConfig): string {
                   </tbody>
                   <tfoot>
                     <tr style="background-color:#131313; border-top:2px solid #2a2a2a;">
-                      <td colspan="2" align="right" style="padding:12px 8px; font-weight:bold; color:#D4A853; font-size:15px;">Total:</td>
+                      <td colspan="2" align="right" style="padding:12px 8px; font-weight:bold; color:#dd920d; font-size:15px;">Total:</td>
                       <td align="right" style="padding:12px 8px; font-weight:bold; color:#ffffff; font-size:15px;">${formatCurrency(config.totalAmount)}</td>
                       <td style="padding:12px 8px;"></td>
                     </tr>

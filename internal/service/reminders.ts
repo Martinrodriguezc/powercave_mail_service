@@ -218,7 +218,8 @@ export async function sendReminderReportEmail(
   recipients: string[],
   gymName?: string,
   logoUrl?: string | null,
-): Promise<void> {
+): Promise<{ sent: number }> {
+  let sent = 0;
   const fecha = new Date().toLocaleDateString("es-CL", {
     timeZone: "America/Santiago",
     year: "numeric",
@@ -245,6 +246,7 @@ export async function sendReminderReportEmail(
         gymName: gymName ?? undefined,
       });
 
+      sent++;
       logger.success("Administrative report sent", {
         email: recipient,
         reportDate: fecha,
@@ -261,6 +263,8 @@ export async function sendReminderReportEmail(
       await delay(1000);
     }
   }
+
+  return { sent };
 }
 
 export const sendBulkReminderMails = async (

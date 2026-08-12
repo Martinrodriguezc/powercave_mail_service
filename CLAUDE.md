@@ -52,12 +52,18 @@ All routes are prefixed with `/mail`. Two auth strategies:
 | POST | `/mail/send_password_reset` | API Key | Password reset link email |
 | POST | `/mail/send_platform_user_credentials` | API Key | New user credentials email |
 | GET | `/mail/last-emails-by-tenant` | JWT | Recent emails grouped by tenant |
+| GET | `/mail/test/types` | JWT (SUPERADMIN) | Lista los tipos de correo testeables |
+| POST | `/mail/test/send` | JWT (SUPERADMIN) | Envía una plantilla de prueba (`{ type, to?, withTestData, gymName?, logoUrl? }`) |
 
 ## Email Templates
 
 HTML templates live in `internal/html/` and are loaded once at startup via `fs.readFileSync` in `internal/domain/templates.ts`. Templates use string replacement (not a templating engine) — placeholders like `{{userName}}` are replaced in service functions.
 
 Each gym can attach its logo as an inline CID attachment (`internal/domain/logo.ts`).
+
+El logo de DashCore vive en `assets/` (variante clara para las plantillas oscuras, oscura para la nota de venta B2B) y se adjunta como CID desde `sendMail` solo si el HTML referencia `cid:dashcore_logo` o `cid:dashcore_logo_light`. El pie de todas las plantillas dice "© {{year}} DashCore", no el nombre del gimnasio. El naranjo de marca es `#dd920d` y los títulos usan `'Gemunu Libre'` con fallback a `'Segoe UI'` (la webfont solo carga en Apple Mail / Samsung Mail / Outlook Mac).
+
+Para ver una plantilla en el navegador sin enviarla: `node scripts/preview.mjs <template>` → `scripts/preview.html`.
 
 ## Key Patterns
 

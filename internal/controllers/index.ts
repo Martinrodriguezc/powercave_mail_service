@@ -7,6 +7,7 @@ import tenantRouter from "./tenant";
 import paymentLinkRouter from "./paymentLink";
 import welcomeRouter from "./welcome";
 import lowStockAlertRouter from "./lowStockAlert";
+import testRouter from "./test";
 
 const router = Router();
 
@@ -18,5 +19,6 @@ router.use(tenantRouter);
 router.use(paymentLinkRouter);
 router.use(welcomeRouter);
 router.use(lowStockAlertRouter);
+router.use(testRouter);
 
 export default router;

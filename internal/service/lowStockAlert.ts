@@ -78,9 +78,9 @@ export function renderLowStockAlertHTML(opts: LowStockAlertMail): string {
     ? renderSection(
         "Materiales con stock bajo",
         opts.materialItems,
-        "#D4A853",
+        "#dd920d",
         "#1c1608",
-        "rgba(212,168,83,0.35)",
+        "rgba(221,146,13,0.35)",
       )
     : "";
 

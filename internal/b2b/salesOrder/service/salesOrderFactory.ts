@@ -94,6 +94,7 @@ export const renderSalesOrderFactoryHTML = (
     /\{\{attachmentFilename\}\}/g,
     escapeHtml(opts.attachment.filename),
   );
+  html = html.replace(/\{\{year\}\}/g, String(new Date().getFullYear()));
 
   return html;
 };
