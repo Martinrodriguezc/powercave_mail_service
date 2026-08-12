@@ -32,7 +32,7 @@ const dataUri = (file) =>
 // como [[token]] para detectar placeholders sin rellenar.
 const values = {
   year: String(new Date().getFullYear()),
-  gymName: "Gimnasio de Prueba",
+  gymName: process.argv[3] || "Gimnasio de Prueba",
   userName: "Camila Rojas",
   planName: "Plan Mensual Full",
   expiryDate: "20-08-2026",
