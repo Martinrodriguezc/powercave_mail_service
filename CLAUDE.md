@@ -61,7 +61,7 @@ HTML templates live in `internal/html/` and are loaded once at startup via `fs.r
 
 Each gym can attach its logo as an inline CID attachment (`internal/domain/logo.ts`).
 
-El logo de DashCore vive en `assets/` (variante clara para las plantillas oscuras, oscura para la nota de venta B2B) y se adjunta como CID desde `sendMail` solo si el HTML referencia `cid:dashcore_logo` o `cid:dashcore_logo_light`. El pie de todas las plantillas dice "© {{year}} DashCore", no el nombre del gimnasio. El naranjo de marca es `#dd920d` y los títulos usan `'Gemunu Libre'` con fallback a `'Segoe UI'` (la webfont solo carga en Apple Mail / Samsung Mail / Outlook Mac).
+El logo de DashCore vive en `assets/`. El sufijo del archivo nombra el **fondo**, igual que en el frontend: `dashcore-logo.png` va sobre fondo oscuro (las 12 plantillas dark) y `dashcore-logo-light.png` sobre fondo claro (la nota de venta B2B). Se adjunta como CID desde `sendMail` solo si el HTML referencia `cid:dashcore_logo"` o `cid:dashcore_logo_light"` — la comilla de cierre importa, sin ella el primer CID matchea al segundo. El pie de todas las plantillas dice "© {{year}} DashCore", no el nombre del gimnasio. El naranjo de marca es `#dd920d` y los títulos usan `'Gemunu Libre'` con fallback a `'Segoe UI'` (la webfont solo carga en Apple Mail / Samsung Mail / Outlook Mac).
 
 Para ver una plantilla en el navegador sin enviarla: `node scripts/preview.mjs <template>` → `scripts/preview.html`.
 

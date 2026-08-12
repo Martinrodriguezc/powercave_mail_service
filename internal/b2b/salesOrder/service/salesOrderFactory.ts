@@ -1,18 +1,11 @@
 import { sendMail } from "../../../service/mail";
 import { getLogoImgHtml } from "../../../domain/logo";
 import { salesOrderFactoryTemplate } from "../domain/templates";
+import { escapeHtml } from "../../../../utils/html";
 import type {
   SalesOrderFactoryLine,
   SalesOrderFactoryMail,
 } from "../domain/mail";
-
-const escapeHtml = (value: string): string =>
-  value
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#39;");
 
 const formatQuantity = (line: SalesOrderFactoryLine): string => {
   const decimals = line.quantityUnit === "UNIT" ? 0 : 2;

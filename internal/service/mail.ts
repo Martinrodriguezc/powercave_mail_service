@@ -74,8 +74,11 @@ export async function sendMail(
 
     // Solo se adjunta la variante que la plantilla referencia: el HTML de
     // campañas llega compuesto desde el backend y no lleva logo de DashCore.
+    // La comilla de cierre es necesaria: sin ella "cid:dashcore_logo" también
+    // matchea "cid:dashcore_logo_light" y la nota de venta B2B se llevaba las
+    // dos variantes, con la oscura colgando como adjunto sin referenciar.
     const dashcoreAttachment = DASHCORE_LOGOS.filter((logo) =>
-      opts.html?.includes(`cid:${logo.cid}`),
+      opts.html?.includes(`cid:${logo.cid}"`),
     ).map((logo) => ({
       filename: `${logo.cid}.png`,
       content: logo.base64,

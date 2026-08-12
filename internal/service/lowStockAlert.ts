@@ -1,21 +1,8 @@
-import {
-  LowStockAlertItem,
-  LowStockAlertMail,
-} from "../domain/mail";
+import { LowStockAlertItem, LowStockAlertMail } from "../domain/mail";
 import { getLogoImgHtml } from "../domain/logo";
 import { lowStockAlertTemplate } from "../domain/templates";
 import { sendMail } from "./mail";
-
-// Escapa caracteres HTML para evitar inyeccion via nombres provenientes
-// del backend (los items son input semi-estructurado del usuario).
-function escapeHtml(value: string): string {
-  return String(value)
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#39;");
-}
+import { escapeHtml } from "../../utils/html";
 
 // Renderiza filas de la tabla por item. Los colores se derivan del color
 // de acento de la seccion (gold/red) para mantener coherencia visual.

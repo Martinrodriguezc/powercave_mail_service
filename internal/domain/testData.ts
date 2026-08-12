@@ -63,9 +63,16 @@ const requireSent = async <T>(
   return value;
 };
 
-const testPdfBase64 = fs
-  .readFileSync(path.join(__dirname, "../../assets/test-sales-order.pdf"))
-  .toString("base64");
+// Perezoso a propósito: es un fixture solo del tester, pero este módulo lo
+// importa cmd/main.ts. Leerlo al arranque haría que el servicio entero no
+// levante si el PDF no llega al deploy, y con él caerían todos los correos.
+let testPdfBase64: string | null = null;
+const getTestPdfBase64 = (): string => {
+  testPdfBase64 ??= fs
+    .readFileSync(path.join(__dirname, "../../assets/test-sales-order.pdf"))
+    .toString("base64");
+  return testPdfBase64;
+};
 
 export const TEST_MAILS: Record<string, TestMail> = {
   reminder: {
@@ -98,29 +105,29 @@ export const TEST_MAILS: Record<string, TestMail> = {
       requireSent(
         sendReminderReportEmail(
           ctx.full
-          ? [
-              {
-                publicId: "cli-0001",
-                email: "camila.rojas@example.com",
-                status: "success",
-                error: null,
-                reason: null,
-              },
-              {
-                publicId: "cli-0002",
-                email: "diego.munoz@example.com",
-                status: "skipped",
-                error: null,
-                reason: "Ya se envió un correo en las últimas 48 horas",
-              },
-              {
-                publicId: "cli-0003",
-                email: "sin-correo@example.com",
-                status: "failed",
-                error: "Invalid recipient",
-                reason: "Invalid recipient",
-              },
-            ]
+            ? [
+                {
+                  publicId: "cli-0001",
+                  email: "camila.rojas@example.com",
+                  status: "success",
+                  error: null,
+                  reason: null,
+                },
+                {
+                  publicId: "cli-0002",
+                  email: "diego.munoz@example.com",
+                  status: "skipped",
+                  error: null,
+                  reason: "Ya se envió un correo en las últimas 48 horas",
+                },
+                {
+                  publicId: "cli-0003",
+                  email: "sin-correo@example.com",
+                  status: "failed",
+                  error: "Invalid recipient",
+                  reason: "Invalid recipient",
+                },
+              ]
             : [],
           [ctx.to],
           gym(ctx),
@@ -405,7 +412,8 @@ export const TEST_MAILS: Record<string, TestMail> = {
       sendSalesOrderFactoryMail({
         to: ctx.to,
         gymName: gym(ctx) || null,
-        gymLegalName: ctx.gymName ?? (ctx.full ? "Gimnasio de Prueba SpA" : null),
+        gymLegalName:
+          ctx.gymName ?? (ctx.full ? "Gimnasio de Prueba SpA" : null),
         gymRut: ctx.full ? "76.543.210-K" : null,
         logoUrl: logo(ctx),
         orderNumber: ctx.full ? 1042 : 0,
@@ -440,7 +448,7 @@ export const TEST_MAILS: Record<string, TestMail> = {
         total: ctx.full ? "597.856" : "0",
         attachment: {
           filename: "nota-de-venta-1042.pdf",
-          contentBase64: testPdfBase64,
+          contentBase64: getTestPdfBase64(),
           mimeType: "application/pdf",
         },
       }),
