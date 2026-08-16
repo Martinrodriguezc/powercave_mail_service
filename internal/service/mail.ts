@@ -12,13 +12,15 @@ const resend = new Resend(config.RESEND_API_KEY);
 // el timeout del SO (~2 min) y dejar de aceptar conexiones nuevas. El de
 // adjuntos es más amplio porque subir el PDF a Resend tarda más; ambos quedan
 // por debajo del timeout que el backend da a cada llamada (20s / 120s).
-const RESEND_TIMEOUT_MS = 15_000;
+export const RESEND_TIMEOUT_MS = 15_000;
 const RESEND_ATTACHMENT_TIMEOUT_MS = 60_000;
+
+export { resend };
 
 // El SDK de Resend (6.x) no expone AbortSignal, así que acotamos con una
 // carrera contra un timer. No cancela el fetch subyacente, pero libera el
 // worker: el resultado tardío se ignora.
-function withTimeout<T>(
+export function withTimeout<T>(
   promise: Promise<T>,
   ms: number,
   label: string,

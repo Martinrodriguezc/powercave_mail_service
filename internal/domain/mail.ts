@@ -144,6 +144,35 @@ export interface LowStockAlertMail extends Omit<Mail, "to"> {
   hasInventory: boolean;
 }
 
+export interface AppReleaseRecipient {
+  email: string;
+  name?: string | null;
+}
+
+export interface AppReleaseContent {
+  version: string;
+  title: string;
+  notes: string[];
+  appLogoUrl?: string | null;
+  appStoreLink?: string | null;
+  googlePlayLink?: string | null;
+  appStoreBadgeUrl?: string | null;
+  googlePlayBadgeUrl?: string | null;
+}
+
+export interface AppReleaseMail extends AppReleaseContent {
+  subject: string;
+  recipients: AppReleaseRecipient[];
+  sentBy: string;
+  announcementPublicId: string;
+}
+
+export interface AppReleaseSendResult {
+  email: string;
+  status: "sent" | "failed";
+  errorMessage: string | null;
+}
+
 export interface ReminderReportResult {
   publicId: string | null;
   email: string;

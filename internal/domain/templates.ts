@@ -60,3 +60,8 @@ export const lowStockAlertTemplate = fs.readFileSync(
   path.join(__dirname, "../html/low_stock_alert.html"),
   "utf8",
 );
+
+export const appReleaseTemplate = fs.readFileSync(
+  path.join(__dirname, "../html/app_release.html"),
+  "utf8",
+);

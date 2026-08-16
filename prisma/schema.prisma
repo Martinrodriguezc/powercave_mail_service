@@ -26,6 +26,7 @@ model EmailLog {
 enum MailType {
   plan_renovation_reminder
   admin_reminder
+  app_release
 }
 
 enum EmailStatus {
