@@ -13,6 +13,9 @@ import {
   clientPasswordResetTemplate,
 } from "../domain/templates";
 import { sendMail, resend, withTimeout, RESEND_TIMEOUT_MS } from "./mail";
+import { createServiceLogger } from "../../utils/logger";
+
+const logger = createServiceLogger("credentials-bulk");
 
 export const sendPasswordResetEmail = async (
   opts: PasswordResetMail,
@@ -128,6 +131,10 @@ export interface BulkInvitationsResponse {
   results: BulkInvitationResult[];
 }
 
+/** 429 de Resend: cuota diaria agotada o rate limit; reintentar no sirve. */
+const isQuotaError = (error: { statusCode?: number; name?: string }): boolean =>
+  error.statusCode === 429 || error.name === "daily_quota_exceeded";
+
 /**
  * Envia el lote en llamadas batch de 100, no correo por correo: cada llamada
  * mantiene su propia contrasena temporal por destinatario.
@@ -140,10 +147,8 @@ export const sendClientAppInvitationsBulk = async (
     status: "sent",
   }));
 
-  const markChunkFailed = (start: number, size: number, error: string) => {
-    for (let i = start; i < start + size; i++) {
-      results[i] = { to: results[i].to, status: "failed", error };
-    }
+  const markFailed = (index: number, error: string) => {
+    results[index] = { to: results[index].to, status: "failed", error };
   };
 
   for (
@@ -167,20 +172,43 @@ export const sendClientAppInvitationsBulk = async (
       );
 
       if (response.error) {
-        throw new Error(response.error.message || "Resend rejected the batch");
+        const message = response.error.message || "Resend rejected the batch";
+        // Contra la cuota diaria agotada no hay reintento util: el lote entero
+        // y el resto de los lotes van a recibir el mismo 429.
+        if (isQuotaError(response.error)) {
+          logger.error("Resend quota reached, aborting the bulk", new Error(message), {
+            pending: invitations.length - start,
+          });
+          for (let i = start; i < invitations.length; i++) markFailed(i, message);
+          break;
+        }
+        throw new Error(message);
       }
 
       // Con validacion permisiva Resend devuelve solo los indices rechazados;
       // el resto salio. El indice es relativo al chunk enviado.
-      for (const failure of response.data?.errors ?? []) {
+      const failures = response.data?.errors ?? [];
+      for (const failure of failures) {
         const result = results[start + failure.index];
         if (result) {
           result.status = "failed";
           result.error = failure.message;
         }
       }
+      if (failures.length > 0) {
+        logger.error(
+          "Resend rejected invitations inside the batch",
+          new Error(failures[0].message),
+          { rejected: failures.length, size: chunk.length },
+        );
+      }
     } catch (error: any) {
-      markChunkFailed(start, chunk.length, error?.message || "Unknown error");
+      // Sin reintento: el backend no persiste las credenciales de lo que no
+      // salio, asi que el lote se recupera volviendo a filtrar por "Sin
+      // invitar". El log es la unica pista de por que fallo, y faltaba.
+      logger.error("Resend batch send failed", error, { size: chunk.length });
+      const message = error?.message || "Unknown error";
+      for (let i = start; i < start + chunk.length; i++) markFailed(i, message);
     }
 
     if (start + MAX_INVITATIONS_PER_BATCH < invitations.length) {
