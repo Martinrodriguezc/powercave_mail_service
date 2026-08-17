@@ -34,12 +34,27 @@ export function getLogoImgHtml(
 ): string {
   if (!logoUrl || typeof logoUrl !== "string" || logoUrl.trim() === "")
     return "";
-  const cid = getLogoCid(gymName);
+  return buildLogoImgHtml(`cid:${getLogoCid(gymName)}`);
+}
+
+/**
+ * Variante con `src` remoto para las plantillas que viajan por la API batch de
+ * Resend, que no admite adjuntos y por lo tanto tampoco CID.
+ */
+export function getRemoteLogoImgHtml(
+  logoUrl: string | null | undefined,
+): string {
+  if (!logoUrl || typeof logoUrl !== "string" || logoUrl.trim() === "")
+    return "";
+  return buildLogoImgHtml(logoUrl.trim());
+}
+
+function buildLogoImgHtml(src: string): string {
   return `<table cellpadding="0" cellspacing="0" border="0" role="presentation" style="margin:0 auto 24px auto;">
         <tr>
           <td align="center" style="padding:4px;border-radius:50%;background:linear-gradient(135deg,#dd920d,#b0740a);line-height:0;">
             <!--[if mso]><table cellpadding="0" cellspacing="0" border="0"><tr><td style="padding:4px"><![endif]-->
-            <img src="cid:${cid}" alt="Logo" width="100" height="100" border="0" style="display:block;width:100px;height:100px;border-radius:50%;object-fit:cover;outline:none;text-decoration:none;" />
+            <img src="${src}" alt="Logo" width="100" height="100" border="0" style="display:block;width:100px;height:100px;border-radius:50%;object-fit:cover;outline:none;text-decoration:none;" />
             <!--[if mso]></td></tr></table><![endif]-->
           </td>
         </tr>

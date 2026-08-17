@@ -12,6 +12,10 @@ import { createServiceLogger } from "../../utils/logger";
 const router = Router();
 const logger = createServiceLogger("credentials");
 
+// El servicio parte la lista en llamadas batch de 100; este tope solo acota
+// el tamano de una request para que no quede colgada indefinidamente.
+const MAX_INVITATIONS_PER_REQUEST = 500;
+
 router.post("/send_password_reset", requireApiKey, async (req, res) => {
   const { to, resetLink, subject, gymName, logoUrl } = req.body;
 
@@ -88,6 +92,7 @@ router.post("/send_client_app_invitation", requireApiKey, async (req, res) => {
     gymName,
     gymSlug,
     logoUrl,
+    dashcoreLogoUrl,
     appLogoUrl,
     appStoreBadgeUrl,
     googlePlayBadgeUrl,
@@ -110,6 +115,7 @@ router.post("/send_client_app_invitation", requireApiKey, async (req, res) => {
       gymName,
       gymSlug,
       logoUrl: logoUrl ?? null,
+      dashcoreLogoUrl: dashcoreLogoUrl ?? null,
       appLogoUrl: appLogoUrl ?? null,
       appStoreBadgeUrl: appStoreBadgeUrl ?? null,
       googlePlayBadgeUrl: googlePlayBadgeUrl ?? null,
@@ -141,6 +147,12 @@ router.post(
     if (!Array.isArray(invitations) || invitations.length === 0) {
       return res.status(400).json({
         message: "Missing or empty required field: invitations",
+      });
+    }
+
+    if (invitations.length > MAX_INVITATIONS_PER_REQUEST) {
+      return res.status(400).json({
+        message: `Too many invitations: max ${MAX_INVITATIONS_PER_REQUEST} per request`,
       });
     }
 

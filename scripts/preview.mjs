@@ -37,6 +37,9 @@ const values = {
   planName: "Plan Mensual Full",
   expiryDate: "20-08-2026",
   logoImg: "",
+  // La invitación a la app ya no usa CID: recibe el logo armado desde el
+  // servicio, así que el preview lo reproduce con el asset local.
+  dashcoreLogoImg: `<img src="${dataUri("dashcore-logo.png")}" alt="DashCore" width="180" style="display:block; margin:0 auto 12px; width:180px; height:auto;">`,
 };
 
 let html = fs.readFileSync(template.file, "utf8");
