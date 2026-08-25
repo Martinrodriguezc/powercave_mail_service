@@ -246,7 +246,7 @@ export const TEST_MAILS: Record<string, TestMail> = {
         logoUrl: logo(ctx),
         html: ctx.full
           ? `<div style="font-family:'Segoe UI',Arial,sans-serif;background:#0f0f0f;color:#d1d5db;padding:32px;">
-               <h1 style="color:#dd920d;margin:0 0 16px;">30% de descuento</h1>
+               <h1 style="color:#f5b305;margin:0 0 16px;">30% de descuento</h1>
                <p style="margin:0;">Renueva tu plan antes del 31 de agosto y obtén 30% en tu próxima mensualidad.</p>
              </div>`
           : "",

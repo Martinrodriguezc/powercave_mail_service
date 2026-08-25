@@ -142,7 +142,7 @@ Solo se alcanza si Resend falla o hay un error en el render (no debería pasar t
 
 Cada sección (Materiales o Inventario) es una `<table>` envuelta en una caja con su color de acento:
 
-- **Materiales** → título "Materiales con stock bajo", acento dorado `#D4A853`, fondo `#1c1608`, border `rgba(212,168,83,0.35)`.
+- **Materiales** → título "Materiales con stock bajo", acento dorado `#f5b305`, fondo `#1c1608`, border `rgba(245,179,5,0.35)`.
 - **Inventario** → título "Inventario con stock bajo", acento rojo `#fca5a5`, fondo `#180a0a`, border `rgba(239,68,68,0.32)`.
 
 Las filas se construyen con `renderItemRows(items, accentColor)`: un `<tr>` por item con columnas **Item** (`name`), **Stock actual** (`currentStock` + ` ${unit}` si hay), **Mínimo** (`minStockAlert` + ` ${unit}` si hay). El último row sin border-bottom.

@@ -5,8 +5,8 @@ import { sendMail } from "./mail";
 
 const EXPIRATION_NOTE_HTML = `<table width="100%" cellpadding="0" cellspacing="0" role="presentation" style="margin:0 0 20px;">
                 <tr>
-                  <td style="background-color:#1c1608; border:1px solid rgba(221,146,13,0.35); border-radius:8px; padding:14px 20px; text-align:center;">
-                    <p style="margin:0; font-size:13px; color:#dd920d;">Este link expira en 48 horas.</p>
+                  <td style="background-color:#1c1608; border:1px solid rgba(245,179,5,0.35); border-radius:8px; padding:14px 20px; text-align:center;">
+                    <p style="margin:0; font-size:13px; color:#f5b305;">Este link expira en 48 horas.</p>
                   </td>
                 </tr>
               </table>`;

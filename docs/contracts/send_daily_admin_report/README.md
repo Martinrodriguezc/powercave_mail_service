@@ -118,7 +118,7 @@ Posibles causas:
 | `{{gymName}}` | `opts.gymName \|\| ""` | Global. Aparece en `<title>`, preheader, header, saludo y footer. |
 | `{{reportDate}}` | `opts.reportDate \|\| ""` | Global. Barra dorada bajo el header. |
 | `{{year}}` | `new Date().getFullYear()` | Global. Footer copyright. |
-| `{{EXPIRING_SECTION}}` | Tabla HTML o párrafo "Sin planes próximos a vencer." | Sustitución única (no global). Color dorado (`#D4A853`) para fechas. |
+| `{{EXPIRING_SECTION}}` | Tabla HTML o párrafo "Sin planes próximos a vencer." | Sustitución única (no global). Color dorado (`#f5b305`) para fechas. |
 | `{{RECENTLY_SECTION}}` | Tabla HTML o párrafo "Sin planes vencidos en los últimos 7 días." | Sustitución única. Color rojo claro (`#fca5a5`) para fechas. |
 
 ### Tablas dinámicas
@@ -131,7 +131,7 @@ Posibles causas:
 
 ### Diferenciación visual entre listas
 
-- **`expiringSoon`** → header de tabla con label "VENCE EL", border dorado (`rgba(212,168,83,0.3)`), fechas en dorado (`#D4A853`). Box exterior con fondo `#1c1608` (warm dark).
+- **`expiringSoon`** → header de tabla con label "VENCE EL", border dorado (`rgba(245,179,5,0.3)`), fechas en dorado (`#f5b305`). Box exterior con fondo `#1c1608` (warm dark).
 - **`recentlyExpired`** → header de tabla con label "VENCIÓ EL", border rojo (`rgba(239,68,68,0.3)`), fechas en rojo claro (`#fca5a5`). Box exterior con fondo `#180a0a` (warm dark red).
 
 ## Notas e inconsistencias

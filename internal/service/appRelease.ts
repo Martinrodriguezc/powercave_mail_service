@@ -32,7 +32,7 @@ function buildNotesHtml(notes: string[]): string {
       ) => `<table width="100%" cellpadding="0" cellspacing="0" role="presentation" style="margin:0 0 12px;">
                       <tr>
                         <td width="18" valign="top" style="padding-top:7px;">
-                          <div style="width:6px; height:6px; background-color:#dd920d; border-radius:50%;"></div>
+                          <div style="width:6px; height:6px; background-color:#f5b305; border-radius:50%;"></div>
                         </td>
                         <td style="color:#d1d5db; font-size:15px; line-height:1.7;">${escapeHtml(note)}</td>
                       </tr>
@@ -55,7 +55,7 @@ function buildStoreButtons(content: AppReleaseContent): string {
   // a un boton de texto con el mismo link.
   const textButton = (link: string, label: string) =>
     `<td style="padding:0 6px;" align="center">
-                          <a href="${escapeHtml(link)}" target="_blank" style="display:inline-block; background-color:#dd920d; color:#0a0a0a; font-size:14px; font-weight:700; text-decoration:none; padding:12px 22px; border-radius:6px;">${label}</a>
+                          <a href="${escapeHtml(link)}" target="_blank" style="display:inline-block; background-color:#f5b305; color:#0a0a0a; font-size:14px; font-weight:700; text-decoration:none; padding:12px 22px; border-radius:6px;">${label}</a>
                         </td>`;
 
   if (content.appStoreLink) {

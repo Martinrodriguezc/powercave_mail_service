@@ -52,7 +52,7 @@ export function getRemoteLogoImgHtml(
 function buildLogoImgHtml(src: string): string {
   return `<table cellpadding="0" cellspacing="0" border="0" role="presentation" style="margin:0 auto 24px auto;">
         <tr>
-          <td align="center" style="padding:4px;border-radius:50%;background:linear-gradient(135deg,#dd920d,#b0740a);line-height:0;">
+          <td align="center" style="padding:4px;border-radius:50%;background:linear-gradient(135deg,#f5b305,#c48f04);line-height:0;">
             <!--[if mso]><table cellpadding="0" cellspacing="0" border="0"><tr><td style="padding:4px"><![endif]-->
             <img src="${src}" alt="Logo" width="100" height="100" border="0" style="display:block;width:100px;height:100px;border-radius:50%;object-fit:cover;outline:none;text-decoration:none;" />
             <!--[if mso]></td></tr></table><![endif]-->

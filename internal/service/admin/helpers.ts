@@ -33,13 +33,13 @@ export function renderDailyAdminReportHTML(
     ? `<table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
               <thead>
                 <tr>
-                  <th align="left" style="font-size:11px; font-weight:600; color:#dd920d; letter-spacing:1px; text-transform:uppercase; padding:0 16px 12px 0; border-bottom:1px solid rgba(221,146,13,0.3);">Usuario</th>
-                  <th align="left" style="font-size:11px; font-weight:600; color:#dd920d; letter-spacing:1px; text-transform:uppercase; padding:0 16px 12px 0; border-bottom:1px solid rgba(221,146,13,0.3);">Plan</th>
-                  <th align="left" style="font-size:11px; font-weight:600; color:#dd920d; letter-spacing:1px; text-transform:uppercase; padding:0 0 12px 0; border-bottom:1px solid rgba(221,146,13,0.3);">Vence el</th>
+                  <th align="left" style="font-size:11px; font-weight:600; color:#f5b305; letter-spacing:1px; text-transform:uppercase; padding:0 16px 12px 0; border-bottom:1px solid rgba(245,179,5,0.3);">Usuario</th>
+                  <th align="left" style="font-size:11px; font-weight:600; color:#f5b305; letter-spacing:1px; text-transform:uppercase; padding:0 16px 12px 0; border-bottom:1px solid rgba(245,179,5,0.3);">Plan</th>
+                  <th align="left" style="font-size:11px; font-weight:600; color:#f5b305; letter-spacing:1px; text-transform:uppercase; padding:0 0 12px 0; border-bottom:1px solid rgba(245,179,5,0.3);">Vence el</th>
                 </tr>
               </thead>
               <tbody>
-                ${renderPlanRows(opts.expiringSoon, "#dd920d")}
+                ${renderPlanRows(opts.expiringSoon, "#f5b305")}
               </tbody>
             </table>`
     : `<p style="color:#6b7280; font-size:14px; margin:0; font-style:italic;">Sin planes próximos a vencer.</p>`;
