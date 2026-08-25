@@ -6,6 +6,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <!-- Gemunu Libre solo carga en Apple Mail / Samsung Mail / Outlook Mac; el resto usa el fallback. -->
   <link href="https://fonts.googleapis.com/css2?family=Gemunu+Libre:wght@600;700&display=swap" rel="stylesheet">
+  <!-- Declara el esquema para que Gmail movil no aplique su propia transformacion
+       de color: sin esto aclara el fondo, vuelve cafe el dorado y deja el logo
+       (que Gmail no invierte) con su texto blanco sobre un fondo claro. Los meta
+       los leen Apple Mail y Outlook; el :root del style es el que lee Gmail. -->
+  <meta name="color-scheme" content="light">
+  <meta name="supported-color-schemes" content="light">
+  <style>
+    :root { color-scheme: light; supported-color-schemes: light; }
+  </style>
 </head>
 <body style="margin:0; padding:0; background-color:#f4f4f5; font-family:'Segoe UI',Arial,sans-serif; color:#1f1f1f;">
 
@@ -13,7 +22,7 @@
     Nueva orden de venta N° {{orderNumber}} lista para producción.
   </div>
 
-  <table width="100%" bgcolor="#f4f4f5" cellpadding="0" cellspacing="0" role="presentation">
+  <table width="100%" bgcolor="#f4f4f5" style="background-color:#f4f4f5;" cellpadding="0" cellspacing="0" role="presentation">
     <tr>
       <td align="center" style="padding:32px 16px;">
 
