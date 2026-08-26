@@ -1,10 +1,12 @@
 import {
   TrainerAccountExistsMail,
   TrainerEmailVerificationMail,
+  TrainerInvitationMail,
 } from "../domain/mail";
 import {
   trainerAccountExistsTemplate,
   trainerEmailVerificationTemplate,
+  trainerInvitationTemplate,
 } from "../domain/templates";
 import { sendMail } from "./mail";
 
@@ -25,6 +27,17 @@ export const sendTrainerAccountExistsEmail = async (
   opts: TrainerAccountExistsMail,
 ): Promise<void> => {
   let html = trainerAccountExistsTemplate;
+  html = html.replace(/\{\{loginLink\}\}/g, opts.loginLink);
+  html = html.replace(/\{\{year\}\}/g, new Date().getFullYear().toString());
+
+  await sendMail({ to: opts.to, subject: opts.subject, html });
+};
+
+export const sendTrainerInvitationEmail = async (
+  opts: TrainerInvitationMail,
+): Promise<void> => {
+  let html = trainerInvitationTemplate;
+  html = html.replace(/\{\{gymName\}\}/g, opts.gymName);
   html = html.replace(/\{\{loginLink\}\}/g, opts.loginLink);
   html = html.replace(/\{\{year\}\}/g, new Date().getFullYear().toString());
 

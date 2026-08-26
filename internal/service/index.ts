@@ -20,4 +20,5 @@ export { sendLowStockAlertEmail } from "./lowStockAlert";
 export {
   sendTrainerEmailVerificationEmail,
   sendTrainerAccountExistsEmail,
+  sendTrainerInvitationEmail,
 } from "./trainerAccount";

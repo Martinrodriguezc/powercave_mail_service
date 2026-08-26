@@ -2,6 +2,7 @@ import { Router } from "express";
 import {
   sendTrainerAccountExistsEmail,
   sendTrainerEmailVerificationEmail,
+  sendTrainerInvitationEmail,
 } from "../service";
 import { requireApiKey } from "../middleware.ts/apiKeyAuth";
 import { createServiceLogger } from "../../utils/logger";
@@ -71,6 +72,34 @@ router.post("/send_trainer_account_exists", requireApiKey, async (req, res) => {
     });
     res.status(500).json({
       message: "Error sending trainer account exists notice",
+      error: error?.message,
+    });
+  }
+});
+
+router.post("/send_trainer_invitation", requireApiKey, async (req, res) => {
+  const { to, gymName, loginLink, subject } = req.body;
+
+  if (!to || !gymName || !loginLink) {
+    return res.status(400).json({
+      message: "Missing required fields: to, gymName, loginLink",
+    });
+  }
+
+  try {
+    await sendTrainerInvitationEmail({
+      to,
+      gymName,
+      loginLink,
+      subject: subject || `${gymName} te invitó a su equipo | Dashcore`,
+    });
+
+    logger.success("Trainer invitation sent", { email: to });
+    res.status(200).json({ message: "Trainer invitation sent successfully" });
+  } catch (error: any) {
+    logger.error("Error sending trainer invitation", error, { email: to });
+    res.status(500).json({
+      message: "Error sending trainer invitation",
       error: error?.message,
     });
   }

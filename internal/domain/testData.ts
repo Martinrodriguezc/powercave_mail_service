@@ -14,6 +14,7 @@ import {
 import {
   sendTrainerEmailVerificationEmail,
   sendTrainerAccountExistsEmail,
+  sendTrainerInvitationEmail,
 } from "../service/trainerAccount";
 import {
   sendManagerWelcomeEmail,
@@ -265,6 +266,17 @@ export const TEST_MAILS: Record<string, TestMail> = {
         subject: subject("Verifica tu correo"),
         userName: "Ana",
         verificationLink: link(ctx.full),
+      }),
+  },
+
+  trainer_invitation: {
+    label: "Invitación a un gimnasio (entrenador)",
+    send: (ctx) =>
+      sendTrainerInvitationEmail({
+        to: ctx.to,
+        subject: subject("Te invitaron a su equipo"),
+        gymName: gym(ctx),
+        loginLink: link(ctx.full),
       }),
   },
 

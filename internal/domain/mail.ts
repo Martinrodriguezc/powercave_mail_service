@@ -135,6 +135,11 @@ export interface TrainerAccountExistsMail extends Mail {
   loginLink: string;
 }
 
+export interface TrainerInvitationMail extends Mail {
+  gymName: string;
+  loginLink: string;
+}
+
 export type LowStockItemKind = "material" | "inventory";
 
 export interface LowStockAlertItem {

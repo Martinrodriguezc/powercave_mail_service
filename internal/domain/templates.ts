@@ -75,3 +75,8 @@ export const trainerAccountExistsTemplate = fs.readFileSync(
   path.join(__dirname, "../html/trainer_account_exists.html"),
   "utf8",
 );
+
+export const trainerInvitationTemplate = fs.readFileSync(
+  path.join(__dirname, "../html/trainer_invitation.html"),
+  "utf8",
+);
