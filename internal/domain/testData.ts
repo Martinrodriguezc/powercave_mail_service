@@ -12,6 +12,10 @@ import {
   sendPlatformUserCredentialsEmail,
 } from "../service/credentials";
 import {
+  sendTrainerEmailVerificationEmail,
+  sendTrainerAccountExistsEmail,
+} from "../service/trainerAccount";
+import {
   sendManagerWelcomeEmail,
   sendStaffWelcomeEmail,
 } from "../service/welcome";
@@ -250,6 +254,27 @@ export const TEST_MAILS: Record<string, TestMail> = {
                <p style="margin:0;">Renueva tu plan antes del 31 de agosto y obtén 30% en tu próxima mensualidad.</p>
              </div>`
           : "",
+      }),
+  },
+
+  trainer_email_verification: {
+    label: "Verificar correo (entrenador)",
+    send: (ctx) =>
+      sendTrainerEmailVerificationEmail({
+        to: ctx.to,
+        subject: subject("Verifica tu correo"),
+        userName: "Ana",
+        verificationLink: link(ctx.full),
+      }),
+  },
+
+  trainer_account_exists: {
+    label: "Ya tienes una cuenta (entrenador)",
+    send: (ctx) =>
+      sendTrainerAccountExistsEmail({
+        to: ctx.to,
+        subject: subject("Ya tienes una cuenta"),
+        loginLink: link(ctx.full),
       }),
   },
 

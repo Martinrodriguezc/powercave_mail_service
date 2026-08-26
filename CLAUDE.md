@@ -51,6 +51,8 @@ All routes are prefixed with `/mail`. Two auth strategies:
 | POST | `/mail/send_daily_sales_report` | API Key | Daily sales summary |
 | POST | `/mail/send_password_reset` | API Key | Password reset link email |
 | POST | `/mail/send_platform_user_credentials` | API Key | New user credentials email |
+| POST | `/mail/send_trainer_email_verification` | API Key | Trainer email verification link (24h) |
+| POST | `/mail/send_trainer_account_exists` | API Key | Notice that the email already has an account |
 | GET | `/mail/last-emails-by-tenant` | JWT | Recent emails grouped by tenant |
 | GET | `/mail/test/types` | JWT (SUPERADMIN) | Lista los tipos de correo testeables |
 | POST | `/mail/test/send` | JWT (SUPERADMIN) | Envía una plantilla de prueba (`{ type, to?, withTestData, gymName?, logoUrl? }`) |

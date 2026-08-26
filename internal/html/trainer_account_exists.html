@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Ya tienes una cuenta</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <!-- Gemunu Libre solo carga en Apple Mail / Samsung Mail / Outlook Mac; el resto usa el fallback. -->
+  <link href="https://fonts.googleapis.com/css2?family=Gemunu+Libre:wght@600;700&display=swap" rel="stylesheet">
+  <!-- Declara el esquema para que Gmail movil no aplique su propia transformacion
+       de color: sin esto aclara el fondo, vuelve cafe el dorado y deja el logo
+       (que Gmail no invierte) con su texto blanco sobre un fondo claro. Los meta
+       los leen Apple Mail y Outlook; el :root del style es el que lee Gmail. -->
+  <meta name="color-scheme" content="dark">
+  <meta name="supported-color-schemes" content="dark">
+  <style>
+    :root { color-scheme: dark; supported-color-schemes: dark; }
+  </style>
+</head>
+<body style="margin:0; padding:0; background-color:#0a0a0a; font-family:'Segoe UI',Arial,sans-serif;">
+
+  <!-- Preheader hidden -->
+  <div style="display:none; max-height:0; overflow:hidden; font-size:1px; line-height:1px; color:#0a0a0a; mso-hide:all;">
+    Ya existe una cuenta con este correo en Dashcore.
+  </div>
+
+  <table width="100%" bgcolor="#0a0a0a" style="background-color:#0a0a0a;" cellpadding="0" cellspacing="0" role="presentation">
+    <tr>
+      <td align="center" style="padding:32px 16px;">
+
+        <table width="620" cellpadding="0" cellspacing="0" role="presentation" style="max-width:620px; width:100%;">
+
+          <!-- ═══ HEADER ═══ -->
+          <tr>
+            <td align="center" style="background-color:#0f0f0f; border-radius:12px 12px 0 0; border-top:1px solid #f5b305; border-left:1px solid #f5b305; border-right:1px solid #f5b305; padding:40px 48px 30px;">
+              <h1 style="font-family:'Gemunu Libre','Segoe UI',Arial,sans-serif; color:#f5b305; margin:0; font-size:28px; font-weight:700; letter-spacing:2px; text-transform:uppercase;">Dashcore</h1>
+              <table width="100%" cellpadding="0" cellspacing="0" role="presentation" style="margin:16px 0 12px;">
+                <tr>
+                  <td style="border-bottom:1px solid #2a2a2a;"></td>
+                  <td width="32" align="center" style="padding:0 10px;">
+                    <div style="width:5px; height:5px; background-color:#f5b305; border-radius:50%;"></div>
+                  </td>
+                  <td style="border-bottom:1px solid #2a2a2a;"></td>
+                </tr>
+              </table>
+              <p style="color:#6b7280; margin:0; font-size:11px; letter-spacing:3px; text-transform:uppercase;">Cuenta existente</p>
+            </td>
+          </tr>
+
+          <!-- ═══ BODY ═══ -->
+          <tr>
+            <td style="background-color:#0f0f0f; border-left:1px solid #232323; border-right:1px solid #232323; padding:36px 48px;">
+
+              <p style="color:#d1d5db; font-size:15px; line-height:1.8; margin:0 0 20px;">
+                Recibimos un intento de registro con este correo, pero ya existe una cuenta de Dashcore asociada a él.
+              </p>
+
+              <p style="color:#d1d5db; font-size:15px; line-height:1.8; margin:0 0 28px;">
+                Entra con tu contraseña de siempre. Si no la recuerdas, puedes recuperarla desde la misma pantalla.
+              </p>
+
+              <!-- CTA button -->
+              <table width="100%" cellpadding="0" cellspacing="0" role="presentation" style="margin:0 0 28px;">
+                <tr>
+                  <td align="center">
+                    <a href="{{loginLink}}" target="_blank" rel="noopener noreferrer"
+                       style="display:inline-block; background-color:#f5b305; color:#0f0f0f; font-size:15px; font-weight:700; text-decoration:none; padding:14px 36px; border-radius:8px; letter-spacing:1px; border:2px solid #f5b305;">
+                      Ir a iniciar sesión
+                    </a>
+                  </td>
+                </tr>
+              </table>
+
+              <!-- Fallback link -->
+              <table width="100%" cellpadding="0" cellspacing="0" role="presentation" style="margin:0 0 20px;">
+                <tr>
+                  <td style="background-color:#141414; border:1px solid #2a2a2a; border-radius:8px; padding:16px 20px;">
+                    <p style="margin:0 0 6px; font-size:12px; color:#6b7280;">Si el botón no funciona, copia y pega este enlace en tu navegador:</p>
+                    <p style="margin:0; font-size:12px; word-break:break-all;"><a href="{{loginLink}}" target="_blank" rel="noopener noreferrer" style="color:#f5b305; text-decoration:none;">{{loginLink}}</a></p>
+                  </td>
+                </tr>
+              </table>
+
+              <p style="color:#6b7280; font-size:13px; line-height:1.7; margin:0;">
+                Si no intentaste registrarte, puedes ignorar este correo. Tu cuenta permanece segura y no se creó ninguna cuenta nueva.
+              </p>
+
+            </td>
+          </tr>
+
+          <!-- ═══ FOOTER ═══ -->
+          <tr>
+            <td style="background-color:#0a0a0a; border:1px solid #1a1a1a; border-top:1px solid #f5b305; border-radius:0 0 12px 12px; padding:22px 48px; text-align:center;">
+              <img src="cid:dashcore_logo" alt="DashCore" width="180" height="47" border="0" style="display:block; margin:0 auto 12px; width:180px; height:auto; outline:none; text-decoration:none;">
+              <p style="margin:0 0 4px; font-size:11px; color:#6b7280; letter-spacing:1px; text-transform:uppercase;">&copy; {{year}} DashCore &mdash; Todos los derechos reservados</p>
+            </td>
+          </tr>
+
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>

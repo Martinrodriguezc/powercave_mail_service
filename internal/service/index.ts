@@ -15,8 +15,9 @@ export {
 } from "./credentials";
 export { getLastEmailByTenant } from "./tenant";
 export { sendPaymentLinkEmail } from "./paymentLink";
-export {
-  sendManagerWelcomeEmail,
-  sendStaffWelcomeEmail,
-} from "./welcome";
+export { sendManagerWelcomeEmail, sendStaffWelcomeEmail } from "./welcome";
 export { sendLowStockAlertEmail } from "./lowStockAlert";
+export {
+  sendTrainerEmailVerificationEmail,
+  sendTrainerAccountExistsEmail,
+} from "./trainerAccount";

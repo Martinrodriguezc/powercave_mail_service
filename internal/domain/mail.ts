@@ -124,6 +124,17 @@ export interface StaffWelcomeMail extends Mail {
   logoUrl?: string | null;
 }
 
+// El entrenador no pertenece a ningun gimnasio, asi que estos dos correos no
+// llevan gymName ni logoUrl: la cabecera es la marca de la plataforma.
+export interface TrainerEmailVerificationMail extends Mail {
+  userName: string;
+  verificationLink: string;
+}
+
+export interface TrainerAccountExistsMail extends Mail {
+  loginLink: string;
+}
+
 export type LowStockItemKind = "material" | "inventory";
 
 export interface LowStockAlertItem {

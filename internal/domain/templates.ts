@@ -65,3 +65,13 @@ export const appReleaseTemplate = fs.readFileSync(
   path.join(__dirname, "../html/app_release.html"),
   "utf8",
 );
+
+export const trainerEmailVerificationTemplate = fs.readFileSync(
+  path.join(__dirname, "../html/trainer_email_verification.html"),
+  "utf8",
+);
+
+export const trainerAccountExistsTemplate = fs.readFileSync(
+  path.join(__dirname, "../html/trainer_account_exists.html"),
+  "utf8",
+);
