@@ -197,3 +197,21 @@ export interface ReminderReportResult {
   error: string | null;
   reason: string | null; // Razón por la que no se envió (error, o "Ya se envió en las últimas 48 horas")
 }
+
+export interface CampaignBatchRecipient {
+  email: string;
+  html: string;
+}
+
+export interface CampaignBatchMail {
+  recipients: CampaignBatchRecipient[];
+  subject: string;
+  gymName?: string | null;
+  logoUrl?: string | null;
+}
+
+export interface CampaignSendResult {
+  email: string;
+  status: "sent" | "failed";
+  errorMessage: string | null;
+}

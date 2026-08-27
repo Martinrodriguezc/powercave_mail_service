@@ -5,7 +5,11 @@ export {
   sendReminderReportEmail,
   sendBulkReminderMails,
 } from "./reminders";
-export { sendCampaignEmail } from "./campaign";
+export {
+  sendCampaignEmail,
+  sendCampaignBatch,
+  MAX_CAMPAIGN_RECIPIENTS_PER_BATCH,
+} from "./campaign";
 export {
   sendPasswordResetEmail,
   sendPlatformUserCredentialsEmail,
