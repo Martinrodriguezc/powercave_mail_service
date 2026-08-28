@@ -5,9 +5,11 @@ import {
   staffWelcomeTemplate,
 } from "../domain/templates";
 import { sendMail } from "./mail";
+import type { MailContext } from "./mailLog";
 
 export const sendManagerWelcomeEmail = async (
   opts: ManagerWelcomeMail,
+  ctx: MailContext,
 ): Promise<void> => {
   let html = managerWelcomeTemplate;
 
@@ -22,17 +24,21 @@ export const sendManagerWelcomeEmail = async (
   html = html.replace(/\{\{loginLink\}\}/g, opts.loginLink);
   html = html.replace(/\{\{year\}\}/g, new Date().getFullYear().toString());
 
-  await sendMail({
-    to: opts.to,
-    subject: opts.subject,
-    html: html,
-    logoUrl: opts.logoUrl ?? undefined,
-    gymName: opts.gymName,
-  });
+  await sendMail(
+    {
+      to: opts.to,
+      subject: opts.subject,
+      html: html,
+      logoUrl: opts.logoUrl ?? undefined,
+      gymName: opts.gymName,
+    },
+    { log: { context: ctx, mailType: "manager_welcome", clientName: opts.userName } },
+  );
 };
 
 export const sendStaffWelcomeEmail = async (
   opts: StaffWelcomeMail,
+  ctx: MailContext,
 ): Promise<void> => {
   let html = staffWelcomeTemplate;
 
@@ -45,11 +51,14 @@ export const sendStaffWelcomeEmail = async (
   html = html.replace(/\{\{loginLink\}\}/g, opts.loginLink);
   html = html.replace(/\{\{year\}\}/g, new Date().getFullYear().toString());
 
-  await sendMail({
-    to: opts.to,
-    subject: opts.subject,
-    html: html,
-    logoUrl: opts.logoUrl ?? undefined,
-    gymName: opts.gymName,
-  });
+  await sendMail(
+    {
+      to: opts.to,
+      subject: opts.subject,
+      html: html,
+      logoUrl: opts.logoUrl ?? undefined,
+      gymName: opts.gymName,
+    },
+    { log: { context: ctx, mailType: "staff_welcome", clientName: opts.userName } },
+  );
 };

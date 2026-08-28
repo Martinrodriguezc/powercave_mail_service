@@ -1,5 +1,7 @@
 # POST /mail/send_client_app_invitation
 
+> Campos comunes de identidad de gimnasio, registro en `mail_logs` y tope diario: ver [`../_common.md`](../_common.md).
+
 ## Propósito
 Invita a un cliente del gimnasio a usar la app móvil "Dashcore Members". El correo incluye el código del gym (slug), el email de la cuenta y una contraseña temporal, además de pasos y badges para descargar la app desde App Store / Google Play.
 

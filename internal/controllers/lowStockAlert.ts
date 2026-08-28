@@ -1,6 +1,8 @@
 import { Router } from "express";
 import { sendLowStockAlertEmail } from "../service";
 import { requireApiKey } from "../middleware.ts/apiKeyAuth";
+import { respondIfDailyLimitReached } from "./limitResponse";
+import { resolveMailContext } from "../service/mailLog";
 import { createServiceLogger } from "../../utils/logger";
 import {
   LowStockAlertItem,
@@ -214,7 +216,7 @@ router.post("/send_low_stock_alert", requireApiKey, async (req, res) => {
       inventoryItems,
       hasMaterials: materialItems.length > 0,
       hasInventory: inventoryItems.length > 0,
-    });
+    }, resolveMailContext(req.body));
 
     logger.success("Low stock alert email sent", {
       recipients: to.length,
@@ -226,6 +228,8 @@ router.post("/send_low_stock_alert", requireApiKey, async (req, res) => {
       .status(200)
       .json({ message: "Low stock alert email sent successfully" });
   } catch (error: any) {
+    if (respondIfDailyLimitReached(res, error)) return;
+
     logger.error("Error sending low stock alert email", error, { gymName });
     res.status(500).json({
       message: "Error sending low stock alert email",

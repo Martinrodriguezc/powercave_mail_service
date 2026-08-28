@@ -33,6 +33,7 @@ Go-inspired layout with `cmd/`, `internal/`, `config/`, `utils/`:
 - **`config/config.ts`** — Central env var config object
 - **`utils/logger.ts`** — Pino-based structured logger
 - **`prisma/schema.prisma`** — `EmailLog` model for tracking sent emails
+- **`internal/service/mailLog.ts`** — contexto de gimnasio, tope diario y escritura del registro
 
 ## API Endpoints
 
@@ -55,6 +56,7 @@ All routes are prefixed with `/mail`. Two auth strategies:
 | POST | `/mail/send_trainer_account_exists` | API Key | Notice that the email already has an account |
 | POST | `/mail/send_trainer_invitation` | API Key | A gym invited the trainer to join |
 | GET | `/mail/last-emails-by-tenant` | JWT | Recent emails grouped by tenant |
+| GET | `/mail/usage` | JWT (SUPERADMIN) | Consumo de correos: hoy, mes, por gimnasio y por tipo (`?month=YYYY-MM`) |
 | GET | `/mail/test/types` | JWT (SUPERADMIN) | Lista los tipos de correo testeables |
 | POST | `/mail/test/send` | JWT (SUPERADMIN) | Envía una plantilla de prueba (`{ type, to?, withTestData, gymName?, logoUrl? }`) |
 
@@ -74,7 +76,7 @@ Para ver una plantilla en el navegador sin enviarla: `node scripts/preview.mjs <
 
 - **Bulk sends** use sequential processing with 1-2s delays between emails (rate limiting for Resend)
 - **Reminder deduplication**: the reminder service checks `EmailLog` to skip recipients who received a reminder in the last 48 hours
-- **Email logging**: sent emails are recorded in the `mail_logs` table (`EmailLog` model) with status tracking (pending/sent/failed)
+- **Email logging**: **todos** los envíos se registran en `mail_logs` (`EmailLog`) con una sola escritura y el estado final (`sent`/`failed`/`blocked`), atribuidos al gimnasio (`gymPublicId`, `gymName`, `localDay`). El registro y el chequeo de cupo viven en `internal/service/mailLog.ts` y se aplican en los 4 puntos que tocan Resend. Ver `docs/contracts/_common.md`
 - **Comments and docs are in Spanish** — this is the project convention
 
 ## Environment Variables
@@ -86,3 +88,4 @@ See `.env.example`. Key vars:
 - `MAIL_SERVICE_API_KEY` — Shared secret for backend-to-service auth
 - `JWT_SECRET` — Must match the backend's JWT secret (for tenant endpoint)
 - `ALLOWED_ORIGINS` — Comma-separated CORS origins
+- `MAIL_DAILY_LIMIT_DEFAULT` — Tope diario de correos por gimnasio (default 1000)

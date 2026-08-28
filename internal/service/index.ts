@@ -26,3 +26,4 @@ export {
   sendTrainerAccountExistsEmail,
   sendTrainerInvitationEmail,
 } from "./trainerAccount";
+export { getMailUsage, InvalidMonthError } from "./usage";

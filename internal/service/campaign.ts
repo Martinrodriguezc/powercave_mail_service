@@ -2,6 +2,7 @@ import { CampaignBatchMail, CampaignSendResult, Mail } from "../domain/mail";
 import { getLogoImgHtml, getRemoteLogoImgHtml } from "../domain/logo";
 import { createServiceLogger } from "../../utils/logger";
 import { resend, withTimeout, RESEND_TIMEOUT_MS, sendMail } from "./mail";
+import { checkQuota, logMail, type MailContext } from "./mailLog";
 import { config } from "../../config/config";
 
 const logger = createServiceLogger("campaign");
@@ -12,7 +13,10 @@ export const MAX_CAMPAIGN_RECIPIENTS_PER_BATCH = 100;
  * Envía un email de campaña con HTML pre-compuesto desde el backend.
  * Inyecta el logo del gym como CID attachment si está disponible.
  */
-export const sendCampaignEmail = async (opts: Mail): Promise<void> => {
+export const sendCampaignEmail = async (
+  opts: Mail,
+  ctx: MailContext,
+): Promise<void> => {
   let html = opts.html ?? "";
 
   // Inyectar logo inline si el HTML contiene el placeholder
@@ -23,13 +27,16 @@ export const sendCampaignEmail = async (opts: Mail): Promise<void> => {
     );
   }
 
-  await sendMail({
-    to: opts.to,
-    subject: opts.subject,
-    html,
-    gymName: opts.gymName ?? undefined,
-    logoUrl: opts.logoUrl ?? undefined,
-  });
+  await sendMail(
+    {
+      to: opts.to,
+      subject: opts.subject,
+      html,
+      gymName: opts.gymName ?? undefined,
+      logoUrl: opts.logoUrl ?? undefined,
+    },
+    { log: { context: ctx, mailType: "campaign_email" } },
+  );
 };
 
 /**
@@ -39,6 +46,7 @@ export const sendCampaignEmail = async (opts: Mail): Promise<void> => {
  */
 export async function sendCampaignBatch(
   opts: CampaignBatchMail,
+  ctx: MailContext,
 ): Promise<CampaignSendResult[]> {
   const logoImg = getRemoteLogoImgHtml(opts.logoUrl);
 
@@ -53,7 +61,22 @@ export async function sendCampaignBatch(
     .map((recipient, index) => ({ recipient, index }))
     .filter(({ recipient }) => !!recipient.email);
 
-  if (sendable.length === 0) return results;
+  // Los que no entran en el cupo del dia se marcan y no viajan: un lote
+  // parcialmente enviado no es un error, cada destinatario trae su estado.
+  const quota = await checkQuota(ctx, sendable.length);
+  const blocked = sendable.splice(quota.allowed);
+  for (const { index } of blocked) {
+    const result = results[index];
+    if (result) {
+      result.status = "blocked";
+      result.errorMessage = `Daily email limit reached (${quota.dailyLimit})`;
+    }
+  }
+
+  if (sendable.length === 0) {
+    await logCampaignBatch(opts, ctx, results);
+    return results;
+  }
 
   const payload = sendable.map(({ recipient }) => ({
     from: `${config.SENDER_EMAIL}`,
@@ -98,5 +121,24 @@ export async function sendCampaignBatch(
     }
   }
 
+  await logCampaignBatch(opts, ctx, results);
+
   return results;
+}
+
+async function logCampaignBatch(
+  opts: CampaignBatchMail,
+  ctx: MailContext,
+  results: CampaignSendResult[],
+): Promise<void> {
+  await logMail(
+    ctx,
+    results.map((result) => ({
+      recipient: result.email,
+      subject: opts.subject,
+      mailType: "campaign_email" as const,
+      status: result.status,
+      errorMessage: result.errorMessage,
+    })),
+  );
 }

@@ -1,5 +1,7 @@
 # GET /mail/last-emails-by-tenant
 
+> Campos comunes de identidad de gimnasio, registro en `mail_logs` y tope diario: ver [`../_common.md`](../_common.md).
+
 ## Proposito
 
 Listar los ultimos correos enviados, deduplicados por `publicId` (identificador del cliente/destinatario en el dominio del backend), para que un usuario MANAGER o SUPERADMIN pueda revisar desde el frontend la actividad reciente de correos transaccionales. El nombre del endpoint sugiere "agrupado por tenant", pero el codigo en realidad agrupa por cliente (`publicId`), no por gimnasio.

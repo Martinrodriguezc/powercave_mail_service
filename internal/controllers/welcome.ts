@@ -4,6 +4,8 @@ import {
   sendStaffWelcomeEmail,
 } from "../service";
 import { requireApiKey } from "../middleware.ts/apiKeyAuth";
+import { respondIfDailyLimitReached } from "./limitResponse";
+import { resolveMailContext } from "../service/mailLog";
 import { createServiceLogger } from "../../utils/logger";
 
 const router = Router();
@@ -45,11 +47,13 @@ router.post("/send_manager_welcome", requireApiKey, async (req, res) => {
       freeMonthEndsAt,
       loginLink,
       logoUrl: logoUrl ?? null,
-    });
+    }, resolveMailContext(req.body));
 
     logger.success("Manager welcome email sent", { email: to });
     res.status(200).json({ message: "Manager welcome email sent successfully" });
   } catch (error: any) {
+    if (respondIfDailyLimitReached(res, error)) return;
+
     logger.error("Error sending manager welcome email", error, { email: to });
     res.status(500).json({
       message: "Error sending manager welcome email",
@@ -76,11 +80,13 @@ router.post("/send_staff_welcome", requireApiKey, async (req, res) => {
       gymName,
       loginLink,
       logoUrl: logoUrl ?? null,
-    });
+    }, resolveMailContext(req.body));
 
     logger.success("Staff welcome email sent", { email: to });
     res.status(200).json({ message: "Staff welcome email sent successfully" });
   } catch (error: any) {
+    if (respondIfDailyLimitReached(res, error)) return;
+
     logger.error("Error sending staff welcome email", error, { email: to });
     res.status(500).json({
       message: "Error sending staff welcome email",

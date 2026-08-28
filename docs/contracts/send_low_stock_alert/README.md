@@ -1,5 +1,7 @@
 # POST /mail/send_low_stock_alert
 
+> Campos comunes de identidad de gimnasio, registro en `mail_logs` y tope diario: ver [`../_common.md`](../_common.md).
+
 ## Propósito
 
 Envía una alerta cuando uno o más items (materiales operativos del gimnasio y/o productos de inventario en venta) descienden al o por debajo de su umbral mínimo configurado (`minStockAlert`). El correo va a múltiples destinatarios (admin, bodega, operaciones) y muestra dos secciones diferenciadas: **Materiales** (acento dorado) e **Inventario** (acento rojo). Se dispara desde el backend cuando se actualiza el stock de un item y cruza el umbral.

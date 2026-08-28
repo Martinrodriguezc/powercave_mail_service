@@ -26,6 +26,7 @@ export interface AppConfig {
   RESEND_API_KEY: string;
   SENDER_EMAIL: string;
   MAIL_SERVICE_API_KEY: string;
+  MAIL_DAILY_LIMIT_DEFAULT: number;
   NODE_ENV: string | undefined;
   isProduction: boolean;
 }
@@ -39,6 +40,12 @@ const REQUIRED_ENV_VARS = [
 
 const currentNodeEnv = process.env.NODE_ENV;
 
+// Tope diario de correos por gimnasio. Es un guardarrail contra abuso, no una
+// palanca comercial: el default es holgado para la operacion normal de un gym.
+const DEFAULT_MAIL_DAILY_LIMIT = 1000;
+
+const parsedDailyLimit = Number(process.env.MAIL_DAILY_LIMIT_DEFAULT);
+
 export const config: AppConfig = {
   JWT_SECRET: process.env.JWT_SECRET || "",
   ALLOWED_ORIGINS: process.env.ALLOWED_ORIGINS || process.env.ALLOWED_ORIGIN,
@@ -46,6 +53,10 @@ export const config: AppConfig = {
   RESEND_API_KEY: process.env.RESEND_API_KEY || "",
   SENDER_EMAIL: process.env.SENDER_EMAIL || "",
   MAIL_SERVICE_API_KEY: process.env.MAIL_SERVICE_API_KEY || "",
+  MAIL_DAILY_LIMIT_DEFAULT:
+    Number.isInteger(parsedDailyLimit) && parsedDailyLimit > 0
+      ? parsedDailyLimit
+      : DEFAULT_MAIL_DAILY_LIMIT,
   NODE_ENV: currentNodeEnv,
   isProduction:
     currentNodeEnv === undefined ||

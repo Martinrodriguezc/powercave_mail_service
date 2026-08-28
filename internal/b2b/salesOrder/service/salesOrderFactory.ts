@@ -1,4 +1,5 @@
 import { sendMail } from "../../../service/mail";
+import type { MailContext } from "../../../service/mailLog";
 import { getLogoImgHtml } from "../../../domain/logo";
 import { salesOrderFactoryTemplate } from "../domain/templates";
 import { escapeHtml } from "../../../../utils/html";
@@ -94,6 +95,7 @@ export const renderSalesOrderFactoryHTML = (
 
 export const sendSalesOrderFactoryMail = async (
   opts: SalesOrderFactoryMail,
+  ctx: MailContext,
 ): Promise<void> => {
   const html = renderSalesOrderFactoryHTML(opts);
   const subject = `Nueva orden de venta N° ${opts.orderNumber}${opts.gymName ? ` | ${opts.gymName}` : ""}`;
@@ -114,6 +116,11 @@ export const sendSalesOrderFactoryMail = async (
           contentType: opts.attachment.mimeType,
         },
       ],
+      log: {
+        context: ctx,
+        mailType: "sales_order_to_factory",
+        clientName: opts.clientBusinessName,
+      },
     },
   );
 };

@@ -5,6 +5,8 @@ import {
   sendTrainerInvitationEmail,
 } from "../service";
 import { requireApiKey } from "../middleware.ts/apiKeyAuth";
+import { respondIfDailyLimitReached } from "./limitResponse";
+import { resolveMailContext } from "../service/mailLog";
 import { createServiceLogger } from "../../utils/logger";
 
 const router = Router();
@@ -28,13 +30,15 @@ router.post(
         userName,
         verificationLink,
         subject: subject || "Verifica tu correo | Dashcore",
-      });
+      }, resolveMailContext(req.body));
 
       logger.success("Trainer email verification sent", { email: to });
       res
         .status(200)
         .json({ message: "Trainer email verification sent successfully" });
     } catch (error: any) {
+      if (respondIfDailyLimitReached(res, error)) return;
+
       logger.error("Error sending trainer email verification", error, {
         email: to,
       });
@@ -60,13 +64,15 @@ router.post("/send_trainer_account_exists", requireApiKey, async (req, res) => {
       to,
       loginLink,
       subject: subject || "Ya tienes una cuenta | Dashcore",
-    });
+    }, resolveMailContext(req.body));
 
     logger.success("Trainer account exists notice sent", { email: to });
     res
       .status(200)
       .json({ message: "Trainer account exists notice sent successfully" });
   } catch (error: any) {
+    if (respondIfDailyLimitReached(res, error)) return;
+
     logger.error("Error sending trainer account exists notice", error, {
       email: to,
     });
@@ -92,11 +98,13 @@ router.post("/send_trainer_invitation", requireApiKey, async (req, res) => {
       gymName,
       loginLink,
       subject: subject || `${gymName} te invitó a su equipo | Dashcore`,
-    });
+    }, resolveMailContext(req.body));
 
     logger.success("Trainer invitation sent", { email: to });
     res.status(200).json({ message: "Trainer invitation sent successfully" });
   } catch (error: any) {
+    if (respondIfDailyLimitReached(res, error)) return;
+
     logger.error("Error sending trainer invitation", error, { email: to });
     res.status(500).json({
       message: "Error sending trainer invitation",

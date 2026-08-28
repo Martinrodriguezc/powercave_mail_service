@@ -1,6 +1,8 @@
 import { Router } from "express";
 import { sendBulkReminderMails, sendReminderReportEmail } from "../service";
+import { resolveMailContext } from "../service/mailLog";
 import { requireApiKey } from "../middleware.ts/apiKeyAuth";
+import { respondIfDailyLimitReached } from "./limitResponse";
 import { createServiceLogger } from "../../utils/logger";
 
 const router = Router();
@@ -27,7 +29,7 @@ router.post("/send_reminder", requireApiKey, async (req, res) => {
             message: "report_recipients is required and must be a non-empty array of email addresses"
         });
     }
-    const sentBy = req.body.sentBy ?? 'backend_service';
+    const ctx = resolveMailContext(req.body);
     const gymName = req.body.gymName as string | undefined;
     const logoUrl = req.body.logoUrl as string | null | undefined;
 
@@ -53,7 +55,7 @@ router.post("/send_reminder", requireApiKey, async (req, res) => {
             ...(logoUrl != null && { logoUrl }),
         }));
 
-        const result = await sendBulkReminderMails(reminderMails, sentBy);
+        const result = await sendBulkReminderMails(reminderMails, ctx);
 
         await new Promise(resolve => setTimeout(resolve, 2000));
 
@@ -62,7 +64,7 @@ router.post("/send_reminder", requireApiKey, async (req, res) => {
             successful: result.successful,
             failed: result.failed.length
         });
-        await sendReminderReportEmail(result.reporte_final, reportRecipients, gymName, logoUrl);
+        await sendReminderReportEmail(result.reporte_final, reportRecipients, ctx, gymName, logoUrl);
 
         res.status(200).json({
             message: "Reminders processed successfully",
@@ -72,6 +74,8 @@ router.post("/send_reminder", requireApiKey, async (req, res) => {
             ...(result.failed.length > 0 && { failures: result.failed })
         });
     } catch (error: any) {
+      if (respondIfDailyLimitReached(res, error)) return;
+
         logger.error('Error sending reminders', error, {
             totalReminders: reminders.length
         });

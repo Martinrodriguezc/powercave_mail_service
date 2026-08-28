@@ -1,5 +1,7 @@
 # POST /mail/send_campaign_email
 
+> Campos comunes de identidad de gimnasio, registro en `mail_logs` y tope diario: ver [`../_common.md`](../_common.md).
+
 ## Propósito
 Endpoint genérico de "reenvío": recibe un HTML **pre-renderizado por el backend** (típicamente una campaña de marketing o un broadcast manual) y lo envía vía Resend al destinatario. El mail_service no construye el contenido — solo inyecta opcionalmente el logo inline si el HTML incluye el placeholder `{{logoImg}}`.
 

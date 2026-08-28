@@ -1,5 +1,7 @@
 # POST /mail/send_password_reset
 
+> Campos comunes de identidad de gimnasio, registro en `mail_logs` y tope diario: ver [`../_common.md`](../_common.md).
+
 ## Propósito
 Envía un correo al staff (usuario de plataforma) con un enlace para restablecer su contraseña tras solicitarlo desde el flujo "Olvidé mi contraseña" del admin SPA. El enlace incluye un token y tiene una vigencia indicada en el template de 60 minutos.
 

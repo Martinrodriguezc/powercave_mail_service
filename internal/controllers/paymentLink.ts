@@ -1,6 +1,8 @@
 import { Router } from "express";
 import { sendPaymentLinkEmail } from "../service";
 import { requireApiKey } from "../middleware.ts/apiKeyAuth";
+import { respondIfDailyLimitReached } from "./limitResponse";
+import { resolveMailContext } from "../service/mailLog";
 import { createServiceLogger } from "../../utils/logger";
 
 const router = Router();
@@ -49,7 +51,7 @@ router.post("/send_payment_link", requireApiKey, async (req, res) => {
       gymName: gymName ?? null,
       logoUrl: logoUrl ?? null,
       isRecurring: isRecurring ?? false,
-    });
+    }, resolveMailContext(req.body));
 
     logger.success("Payment link email sent", {
       email: to,
@@ -57,6 +59,8 @@ router.post("/send_payment_link", requireApiKey, async (req, res) => {
     });
     res.status(200).json({ message: "Payment link email sent successfully" });
   } catch (error: unknown) {
+    if (respondIfDailyLimitReached(res, error)) return;
+
     logger.error("Error sending payment link email", error, { email: to });
     const message = error instanceof Error ? error.message : String(error);
     res.status(500).json({

@@ -20,6 +20,7 @@ import {
   sendManagerWelcomeEmail,
   sendStaffWelcomeEmail,
 } from "../service/welcome";
+import { resolveMailContext } from "../service/mailLog";
 import { sendPaymentLinkEmail } from "../service/paymentLink";
 import { sendLowStockAlertEmail } from "../service/lowStockAlert";
 import { sendCampaignEmail } from "../service/campaign";
@@ -46,6 +47,9 @@ export interface TestMail {
 }
 
 const SENT_BY = "mail_tester";
+// Los envios de prueba queman cuota real de Resend, asi que se registran igual.
+// Van sin gimnasio: no consumen el cupo diario de nadie.
+const testContext = () => resolveMailContext({ sentBy: SENT_BY });
 const GYM = "Gimnasio de Prueba";
 const LINK = "https://app.dashcore.cl";
 
@@ -98,7 +102,7 @@ export const TEST_MAILS: Record<string, TestMail> = {
               expiryDate: ctx.full ? "20-08-2026" : "",
             },
           ],
-          SENT_BY,
+          testContext(),
         ),
         (result) => result.successful,
       ),
@@ -135,6 +139,7 @@ export const TEST_MAILS: Record<string, TestMail> = {
               ]
             : [],
           [ctx.to],
+          testContext(),
           gym(ctx),
           logo(ctx),
         ),
@@ -176,7 +181,7 @@ export const TEST_MAILS: Record<string, TestMail> = {
               ]
             : [],
         },
-        SENT_BY,
+        testContext(),
       ),
   },
 
@@ -237,25 +242,28 @@ export const TEST_MAILS: Record<string, TestMail> = {
             totalAmount: ctx.full ? 20000 : 0,
           },
         },
-        SENT_BY,
+        testContext(),
       ),
   },
 
   campaign_email: {
     label: "Campaña / promoción",
     send: (ctx) =>
-      sendCampaignEmail({
-        to: ctx.to,
-        subject: subject("Campaña de prueba"),
-        gymName: gym(ctx),
-        logoUrl: logo(ctx),
-        html: ctx.full
-          ? `<div style="font-family:'Segoe UI',Arial,sans-serif;background:#0f0f0f;color:#d1d5db;padding:32px;">
+      sendCampaignEmail(
+        {
+          to: ctx.to,
+          subject: subject("Campaña de prueba"),
+          gymName: gym(ctx),
+          logoUrl: logo(ctx),
+          html: ctx.full
+            ? `<div style="font-family:'Segoe UI',Arial,sans-serif;background:#0f0f0f;color:#d1d5db;padding:32px;">
                <h1 style="color:#f5b305;margin:0 0 16px;">30% de descuento</h1>
                <p style="margin:0;">Renueva tu plan antes del 31 de agosto y obtén 30% en tu próxima mensualidad.</p>
              </div>`
-          : "",
-      }),
+            : "",
+        },
+        testContext(),
+      ),
   },
 
   trainer_email_verification: {
@@ -266,7 +274,7 @@ export const TEST_MAILS: Record<string, TestMail> = {
         subject: subject("Verifica tu correo"),
         userName: "Ana",
         verificationLink: link(ctx.full),
-      }),
+      }, testContext()),
   },
 
   trainer_invitation: {
@@ -277,7 +285,7 @@ export const TEST_MAILS: Record<string, TestMail> = {
         subject: subject("Te invitaron a su equipo"),
         gymName: gym(ctx),
         loginLink: link(ctx.full),
-      }),
+      }, testContext()),
   },
 
   trainer_account_exists: {
@@ -287,7 +295,7 @@ export const TEST_MAILS: Record<string, TestMail> = {
         to: ctx.to,
         subject: subject("Ya tienes una cuenta"),
         loginLink: link(ctx.full),
-      }),
+      }, testContext()),
   },
 
   password_reset: {
@@ -299,7 +307,7 @@ export const TEST_MAILS: Record<string, TestMail> = {
         gymName: gym(ctx),
         logoUrl: logo(ctx),
         resetLink: link(ctx.full),
-      }),
+      }, testContext()),
   },
 
   platform_user_credentials: {
@@ -312,7 +320,7 @@ export const TEST_MAILS: Record<string, TestMail> = {
         logoUrl: logo(ctx),
         temporaryPassword: ctx.full ? "Temp-2026-Ax9" : "",
         resetPasswordLink: link(ctx.full),
-      }),
+      }, testContext()),
   },
 
   client_app_invitation: {
@@ -327,7 +335,7 @@ export const TEST_MAILS: Record<string, TestMail> = {
         tempPassword: ctx.full ? "Temp-2026-Ax9" : "",
         appStoreLink: link(ctx.full),
         googlePlayLink: link(ctx.full),
-      }),
+      }, testContext()),
   },
 
   client_app_invitations_bulk: {
@@ -344,7 +352,7 @@ export const TEST_MAILS: Record<string, TestMail> = {
             appStoreLink: link(ctx.full),
             googlePlayLink: link(ctx.full),
           },
-        ]),
+        ], testContext()),
         (result) => result.summary.sent,
       ),
   },
@@ -358,7 +366,7 @@ export const TEST_MAILS: Record<string, TestMail> = {
         gymName: gym(ctx),
         logoUrl: logo(ctx),
         otp: ctx.full ? "482913" : "",
-      }),
+      }, testContext()),
   },
 
   manager_welcome: {
@@ -373,7 +381,7 @@ export const TEST_MAILS: Record<string, TestMail> = {
         serviceStartDate: ctx.full ? "12 de agosto de 2026" : "",
         freeMonthEndsAt: ctx.full ? "12 de septiembre de 2026" : "",
         loginLink: link(ctx.full),
-      }),
+      }, testContext()),
   },
 
   staff_welcome: {
@@ -386,7 +394,7 @@ export const TEST_MAILS: Record<string, TestMail> = {
         logoUrl: logo(ctx),
         userName: ctx.full ? "Diego Muñoz" : "",
         loginLink: link(ctx.full),
-      }),
+      }, testContext()),
   },
 
   payment_link: {
@@ -404,7 +412,7 @@ export const TEST_MAILS: Record<string, TestMail> = {
         providerName: ctx.full ? "Mercado Pago" : "",
         providerLogoUrl: "",
         isRecurring: false,
-      }),
+      }, testContext()),
   },
 
   low_stock_alert: {
@@ -440,7 +448,7 @@ export const TEST_MAILS: Record<string, TestMail> = {
           : [],
         hasMaterials: ctx.full,
         hasInventory: ctx.full,
-      }),
+      }, testContext()),
   },
 
   sales_order_to_factory: {
@@ -488,7 +496,7 @@ export const TEST_MAILS: Record<string, TestMail> = {
           contentBase64: getTestPdfBase64(),
           mimeType: "application/pdf",
         },
-      }),
+      }, testContext()),
   },
 };
 

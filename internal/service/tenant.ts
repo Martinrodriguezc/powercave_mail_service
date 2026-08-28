@@ -3,24 +3,25 @@ import { prisma } from "./db";
 
 export interface TenantScope {
   role: "SUPERADMIN" | "MANAGER" | "STAFF";
-  gymName: string;
+  gymPublicId: string | null;
 }
 
-// Filtro temporal de tenant-leakage: hoy `EmailLog` no tiene columna `gymPublicId`,
-// y `sentBy` viene del backend con formato `cron_<gymName>` (ver
-// backend/src/services/cron/cronTasks.ts). Anclamos con `startsWith` para evitar
-// que un MANAGER vea emails de otros gyms.
-// El fix definitivo (columna `gymPublicId` indexada) llega con el port a Go.
+// El filtro anterior usaba `sentBy startsWith "cron_<gymName>"`, que no tiene
+// ancla de cierre: un gimnasio cuyo nombre es prefijo de otro veia los correos
+// del otro. Ahora `mail_logs` tiene `gymPublicId` indexado y el JWT lo trae,
+// asi que el scope es igualdad exacta sobre el identificador, no sobre el
+// nombre. Las filas anteriores a esa columna quedan con `gymPublicId` nulo y
+// por lo tanto fuera del alcance de un MANAGER, que es el lado seguro.
 const buildTenantWhere = (
   scope: TenantScope,
 ): Prisma.EmailLogWhereInput | undefined => {
   if (scope.role === "SUPERADMIN") {
     return undefined;
   }
-  if (!scope.gymName) {
+  if (!scope.gymPublicId) {
     return { id: -1 };
   }
-  return { sentBy: { startsWith: `cron_${scope.gymName}` } };
+  return { gymPublicId: scope.gymPublicId };
 };
 
 export const getLastEmailByTenant = async (scope: TenantScope) => {

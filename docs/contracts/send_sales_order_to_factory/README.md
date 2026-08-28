@@ -1,5 +1,7 @@
 # POST /mail/send_sales_order_to_factory
 
+> Campos comunes de identidad de gimnasio, registro en `mail_logs` y tope diario: ver [`../_common.md`](../_common.md).
+
 ## Proposito
 
 Enviar a la fabrica/proveedor (el destinatario `to`, tipicamente una direccion de produccion externa al gimnasio) una nota de venta B2B generada en el ERP de PowerCave/Dashcore. El correo contiene el detalle de productos, totales con IVA y el PDF completo de la nota de venta como adjunto para procesamiento en fabrica. Es el unico endpoint del subdominio B2B del mail_service y vive bajo `internal/b2b/salesOrder/`.

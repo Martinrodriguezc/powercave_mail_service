@@ -1,5 +1,7 @@
 # POST /mail/send_trainer_invitation
 
+> Campos comunes de identidad de gimnasio, registro en `mail_logs` y tope diario: ver [`../_common.md`](../_common.md).
+
 ## Propósito
 Avisa a un entrenador que un gimnasio lo invitó a sumarse a su equipo. La invitación queda esperando
 en su cuenta hasta que la acepte o la rechace; este correo solo le dice que existe.

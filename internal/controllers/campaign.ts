@@ -5,6 +5,8 @@ import {
   MAX_CAMPAIGN_RECIPIENTS_PER_BATCH,
 } from "../service";
 import { requireApiKey } from "../middleware.ts/apiKeyAuth";
+import { respondIfDailyLimitReached } from "./limitResponse";
+import { resolveMailContext } from "../service/mailLog";
 import { createServiceLogger } from "../../utils/logger";
 
 const router = Router();
@@ -23,13 +25,16 @@ router.post("/send_campaign_email", requireApiKey, async (req, res) => {
 
     logger.info("Enviando email de campaña", { to, subject });
 
-    await sendCampaignEmail({
-      to,
-      subject,
-      html,
-      gymName: gymName ?? null,
-      logoUrl: logoUrl ?? null,
-    });
+    await sendCampaignEmail(
+      {
+        to,
+        subject,
+        html,
+        gymName: gymName ?? null,
+        logoUrl: logoUrl ?? null,
+      },
+      resolveMailContext(req.body),
+    );
 
     logger.success("Email de campaña enviado", { to, subject });
 
@@ -37,6 +42,8 @@ router.post("/send_campaign_email", requireApiKey, async (req, res) => {
       .status(200)
       .json({ message: "Campaign email sent successfully" });
   } catch (error: any) {
+    if (respondIfDailyLimitReached(res, error)) return;
+
     logger.error("Error enviando email de campaña", error, { to, subject });
     return res.status(500).json({ message: "Error sending campaign email" });
   }
@@ -67,12 +74,15 @@ router.post("/send_campaign_batch", requireApiKey, async (req, res) => {
       });
     }
 
-    const results = await sendCampaignBatch({
-      recipients,
-      subject,
-      gymName: gymName ?? null,
-      logoUrl: logoUrl ?? null,
-    });
+    const results = await sendCampaignBatch(
+      {
+        recipients,
+        subject,
+        gymName: gymName ?? null,
+        logoUrl: logoUrl ?? null,
+      },
+      resolveMailContext(req.body),
+    );
 
     logger.info("Lote de campaña enviado", {
       size: results.length,
@@ -81,6 +91,8 @@ router.post("/send_campaign_batch", requireApiKey, async (req, res) => {
 
     return res.status(200).json({ results });
   } catch (error: any) {
+    if (respondIfDailyLimitReached(res, error)) return;
+
     logger.error("Error enviando lote de campaña", error, { subject });
     return res.status(500).json({ message: "Error sending campaign batch" });
   }

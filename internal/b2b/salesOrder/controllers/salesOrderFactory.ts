@@ -1,5 +1,7 @@
 import { Router } from "express";
 import { requireApiKey } from "../../../middleware.ts/apiKeyAuth";
+import { respondIfDailyLimitReached } from "../../../controllers/limitResponse";
+import { resolveMailContext } from "../../../service/mailLog";
 import { createServiceLogger } from "../../../../utils/logger";
 import { sendSalesOrderFactoryMail } from "../service/salesOrderFactory";
 import type {
@@ -168,13 +170,15 @@ router.post("/send_sales_order_to_factory", requireApiKey, async (req, res) => {
   }
 
   try {
-    await sendSalesOrderFactoryMail(opts);
+    await sendSalesOrderFactoryMail(opts, resolveMailContext(req.body));
     logger.success("Sales order factory email sent", {
       email: opts.to,
       orderNumber: opts.orderNumber,
     });
     return res.status(200).json({ message: "Sales order factory email sent" });
   } catch (error: unknown) {
+    if (respondIfDailyLimitReached(res, error)) return;
+
     logger.error("Error sending sales order factory email", error, {
       email: opts.to,
       orderNumber: opts.orderNumber,

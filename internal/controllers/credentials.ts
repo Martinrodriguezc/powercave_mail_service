@@ -7,6 +7,8 @@ import {
   sendClientPasswordResetEmail,
 } from "../service";
 import { requireApiKey } from "../middleware.ts/apiKeyAuth";
+import { respondIfDailyLimitReached } from "./limitResponse";
+import { resolveMailContext } from "../service/mailLog";
 import { createServiceLogger } from "../../utils/logger";
 
 const router = Router();
@@ -33,11 +35,13 @@ router.post("/send_password_reset", requireApiKey, async (req, res) => {
         subject || `Restablece tu contraseña${gymName ? ` | ${gymName}` : ""}`,
       gymName,
       logoUrl: logoUrl ?? null,
-    });
+    }, resolveMailContext(req.body));
 
     logger.success("Password reset email sent", { email: to });
     res.status(200).json({ message: "Password reset email sent successfully" });
   } catch (error: any) {
+    if (respondIfDailyLimitReached(res, error)) return;
+
     logger.error("Error sending password reset email", error, { email: to });
     res.status(500).json({
       message: "Error sending password reset email",
@@ -69,11 +73,13 @@ router.post(
         gymName: gymName ?? null,
         resetPasswordLink,
         logoUrl: logoUrl ?? null,
-      });
+      }, resolveMailContext(req.body));
 
       logger.success("Platform user credentials email sent", { email: to });
       res.status(200).send();
     } catch (error: any) {
+      if (respondIfDailyLimitReached(res, error)) return;
+
       logger.error("Error sending platform user credentials email", error, {
         email: to,
       });
@@ -121,13 +127,15 @@ router.post("/send_client_app_invitation", requireApiKey, async (req, res) => {
       googlePlayBadgeUrl: googlePlayBadgeUrl ?? null,
       appStoreLink: appStoreLink ?? null,
       googlePlayLink: googlePlayLink ?? null,
-    });
+    }, resolveMailContext(req.body));
 
     logger.success("Client app invitation email sent", { email: to });
     res
       .status(200)
       .json({ message: "Client app invitation email sent successfully" });
   } catch (error: any) {
+    if (respondIfDailyLimitReached(res, error)) return;
+
     logger.error("Error sending client app invitation email", error, {
       email: to,
     });
@@ -167,7 +175,7 @@ router.post(
     }
 
     try {
-      const result = await sendClientAppInvitationsBulk(invitations);
+      const result = await sendClientAppInvitationsBulk(invitations, resolveMailContext(req.body));
       logger.success("Client app invitations bulk processed", {
         requested: result.summary.requested,
         sent: result.summary.sent,
@@ -175,6 +183,8 @@ router.post(
       });
       res.status(200).json(result);
     } catch (error: any) {
+      if (respondIfDailyLimitReached(res, error)) return;
+
       logger.error("Error processing client app invitations bulk", error);
       res.status(500).json({
         message: "Error processing client app invitations bulk",
@@ -201,13 +211,15 @@ router.post("/send_client_password_reset", requireApiKey, async (req, res) => {
       otp,
       gymName,
       logoUrl: logoUrl ?? null,
-    });
+    }, resolveMailContext(req.body));
 
     logger.success("Client password reset email sent", { email: to });
     res
       .status(200)
       .json({ message: "Client password reset email sent successfully" });
   } catch (error: any) {
+    if (respondIfDailyLimitReached(res, error)) return;
+
     logger.error("Error sending client password reset email", error, {
       email: to,
     });

@@ -2,6 +2,7 @@ import { LowStockAlertItem, LowStockAlertMail } from "../domain/mail";
 import { getLogoImgHtml } from "../domain/logo";
 import { lowStockAlertTemplate } from "../domain/templates";
 import { sendMail } from "./mail";
+import type { MailContext } from "./mailLog";
 import { escapeHtml } from "../../utils/html";
 
 // Renderiza filas de la tabla por item. Los colores se derivan del color
@@ -97,6 +98,7 @@ export function renderLowStockAlertHTML(opts: LowStockAlertMail): string {
 
 export const sendLowStockAlertEmail = async (
   opts: LowStockAlertMail,
+  ctx: MailContext,
 ): Promise<void> => {
   const html = renderLowStockAlertHTML(opts);
 
@@ -104,12 +106,15 @@ export const sendLowStockAlertEmail = async (
   // recibe un string por envio. Replicamos el patron de `sendReminderReportEmail`
   // y enviamos un correo por destinatario.
   for (const recipient of opts.to) {
-    await sendMail({
-      to: recipient,
-      subject: opts.subject,
-      html,
-      logoUrl: opts.logoUrl ?? undefined,
-      gymName: opts.gymName,
-    });
+    await sendMail(
+      {
+        to: recipient,
+        subject: opts.subject,
+        html,
+        logoUrl: opts.logoUrl ?? undefined,
+        gymName: opts.gymName,
+      },
+      { log: { context: ctx, mailType: "low_stock_alert" } },
+    );
   }
 };

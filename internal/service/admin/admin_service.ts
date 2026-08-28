@@ -1,11 +1,9 @@
 import { AdminRenewalReportMail } from "../../domain/mail";
 import { renderDailyAdminReportHTML } from "./helpers";
 import { sendMail } from "..";
+import type { MailContext } from "../mailLog";
 
-export const sendDailyAdminReportMail = async (opts: AdminRenewalReportMail, sentBy: string): Promise<void> => {
-  if (!sentBy) {
-    throw new Error('Sent by is required');
-  }
+export const sendDailyAdminReportMail = async (opts: AdminRenewalReportMail, ctx: MailContext): Promise<void> => {
   if (!opts?.to) {
     throw new Error('Destination email (to) is required');
   }
@@ -15,12 +13,15 @@ export const sendDailyAdminReportMail = async (opts: AdminRenewalReportMail, sen
 
   const html = renderDailyAdminReportHTML(opts);
 
-  await sendMail({
-    to: opts.to,
-    subject: opts.subject,
-    html,
-    userName: sentBy,
-    logoUrl: opts.logoUrl ?? undefined,
-    gymName: opts.gymName ?? undefined,
-  });
+  await sendMail(
+    {
+      to: opts.to,
+      subject: opts.subject,
+      html,
+      userName: ctx.sentBy,
+      logoUrl: opts.logoUrl ?? undefined,
+      gymName: opts.gymName ?? undefined,
+    },
+    { log: { context: ctx, mailType: "daily_admin_report" } },
+  );
 };

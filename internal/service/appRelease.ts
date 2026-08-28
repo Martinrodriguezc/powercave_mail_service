@@ -7,7 +7,7 @@ import {
 import { appReleaseTemplate } from "../domain/templates";
 import { createServiceLogger } from "../../utils/logger";
 import { resend, withTimeout, RESEND_TIMEOUT_MS } from "./mail";
-import { prisma } from "./db";
+import { logMail, type MailContext } from "./mailLog";
 
 const logger = createServiceLogger("app-release");
 
@@ -126,6 +126,7 @@ export function composeAppReleaseHtml(
  */
 export async function sendAppReleaseBatch(
   opts: AppReleaseMail,
+  ctx: MailContext,
 ): Promise<AppReleaseSendResult[]> {
   const results: AppReleaseSendResult[] = opts.recipients.map((recipient) => ({
     email: recipient.email,
@@ -139,7 +140,7 @@ export async function sendAppReleaseBatch(
     .filter(({ recipient }) => !!recipient.email);
 
   if (sendable.length === 0) {
-    await logBatch(opts, results);
+    await logBatch(opts, ctx, results);
     return results;
   }
 
@@ -193,34 +194,30 @@ export async function sendAppReleaseBatch(
     }
   }
 
-  await logBatch(opts, results);
+  await logBatch(opts, ctx, results);
 
   return results;
 }
 
 async function logBatch(
   opts: AppReleaseMail,
+  ctx: MailContext,
   results: AppReleaseSendResult[],
 ): Promise<void> {
-  try {
-    await prisma.emailLog.createMany({
-      data: results.map((result, index) => ({
-        recipient: result.email,
-        subject: opts.subject,
-        mail_type: "app_release" as const,
-        publicId: opts.announcementPublicId,
-        clientName: opts.recipients[index]?.name ?? "",
-        status:
-          result.status === "sent" ? ("sent" as const) : ("failed" as const),
-        errorMessage: result.errorMessage,
-        sentBy: opts.sentBy,
-      })),
-    });
-  } catch (error: any) {
-    // El registro no puede tumbar el envio: el backend ya tiene su propio log
-    // por destinatario.
-    logger.error("Error logging app release batch", error, {
-      version: opts.version,
-    });
-  }
+  // Un anuncio cruza varios gimnasios, asi que la atribucion va por
+  // destinatario y no en el contexto comun.
+  await logMail(
+    ctx,
+    results.map((result, index) => ({
+      recipient: result.email,
+      subject: opts.subject,
+      mailType: "app_release" as const,
+      status: result.status === "sent" ? ("sent" as const) : ("failed" as const),
+      errorMessage: result.errorMessage,
+      publicId: opts.announcementPublicId,
+      clientName: opts.recipients[index]?.name ?? null,
+      gymPublicId: opts.recipients[index]?.gymPublicId ?? null,
+      gymName: opts.recipients[index]?.gymName ?? null,
+    })),
+  );
 }

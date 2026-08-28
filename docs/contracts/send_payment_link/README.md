@@ -1,5 +1,7 @@
 # POST /mail/send_payment_link
 
+> Campos comunes de identidad de gimnasio, registro en `mail_logs` y tope diario: ver [`../_common.md`](../_common.md).
+
 ## Propósito
 Envía a un cliente del gimnasio un correo con un link de pago (one-shot) o de activación de cobro recurrente, generado por el backend a través de un proveedor (ej. Mercado Pago). El correo muestra el monto, el concepto, el logo del proveedor y un botón hacia la URL de pago.
 

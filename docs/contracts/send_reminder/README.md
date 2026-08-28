@@ -1,5 +1,7 @@
 # POST /mail/send_reminder
 
+> Campos comunes de identidad de gimnasio, registro en `mail_logs` y tope diario: ver [`../_common.md`](../_common.md).
+
 ## Propósito
 
 El backend de PowerCave corre un cron diario (`backend/`) que detecta planes próximos a vencer y dispara este endpoint con la lista consolidada de recordatorios para un gym. El `mail_service` se encarga de:

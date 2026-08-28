@@ -1,5 +1,7 @@
 # POST /mail/send_daily_admin_report
 
+> Campos comunes de identidad de gimnasio, registro en `mail_logs` y tope diario: ver [`../_common.md`](../_common.md).
+
 ## Propósito
 
 Envía al equipo administrativo del gimnasio un resumen diario de renovaciones: clientes con planes que vencen pronto (3 días o menos) y clientes con planes vencidos en los últimos 7 días. El destinatario es típicamente un correo administrativo del gimnasio (manager, recepción). Es disparado por un job programado en el backend (`sales_registry`) una vez al día.

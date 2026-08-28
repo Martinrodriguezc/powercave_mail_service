@@ -4,6 +4,7 @@ import { reminderReportTemplate, reminderTemplate } from "../domain/templates";
 import { createServiceLogger } from "../../utils/logger";
 import { prisma } from "./db";
 import { sendMail } from "./mail";
+import type { MailContext } from "./mailLog";
 
 const logger = createServiceLogger("mail-service");
 
@@ -121,12 +122,8 @@ function generateReminderReportHTML(
 
 export const sendReminderMail = async (
   opts: ReminderMail,
-  sentBy: string,
+  ctx: MailContext,
 ): Promise<void> => {
-  if (!sentBy) {
-    throw new Error("Sent by is required");
-  }
-
   if (opts.publicId) {
     const { hasRecent, lastSentAt } = await hasRecentReminderSent(
       opts.publicId,
@@ -136,38 +133,21 @@ export const sendReminderMail = async (
     }
   }
 
-  let logId: number | null = null;
+  let html = reminderTemplate;
 
-  try {
-    let html = reminderTemplate;
+  html = html.replace(
+    /\{\{logoImg\}\}/g,
+    getLogoImgHtml(opts.logoUrl, opts.gymName),
+  );
+  html = html.replace(/\{\{userName\}\}/g, opts.userName || "");
+  html = html.replace(/\{\{planName\}\}/g, opts.planName || "");
+  html = html.replace(/\{\{expiryDate\}\}/g, opts.expiryDate || "");
+  html = html.replace(/\{\{gymName\}\}/g, opts.gymName || "");
+  html = html.replace(/\{\{year\}\}/g, new Date().getFullYear().toString());
+  html = html.replace(/\{\{#if.*?\}\}[\s\S]*?\{\{\/if\}\}/g, "");
 
-    html = html.replace(
-      /\{\{logoImg\}\}/g,
-      getLogoImgHtml(opts.logoUrl, opts.gymName),
-    );
-    html = html.replace(/\{\{userName\}\}/g, opts.userName || "");
-    html = html.replace(/\{\{planName\}\}/g, opts.planName || "");
-    html = html.replace(/\{\{expiryDate\}\}/g, opts.expiryDate || "");
-    html = html.replace(/\{\{gymName\}\}/g, opts.gymName || "");
-    html = html.replace(/\{\{year\}\}/g, new Date().getFullYear().toString());
-    html = html.replace(/\{\{#if.*?\}\}[\s\S]*?\{\{\/if\}\}/g, "");
-
-    if (opts.publicId) {
-      const log = await prisma.emailLog.create({
-        data: {
-          recipient: opts.to,
-          subject: opts.subject,
-          mail_type: "plan_renovation_reminder",
-          publicId: opts.publicId,
-          clientName: opts.userName,
-          status: "pending",
-          sentBy: sentBy,
-        },
-      });
-      logId = log.id;
-    }
-
-    await sendMail({
+  await sendMail(
+    {
       to: opts.to,
       subject: opts.subject,
       html: html,
@@ -176,46 +156,22 @@ export const sendReminderMail = async (
       expiryDate: opts.expiryDate,
       logoUrl: opts.logoUrl ?? undefined,
       gymName: opts.gymName ?? undefined,
-    });
-
-    if (logId) {
-      await prisma.emailLog.update({
-        where: { id: logId },
-        data: { status: "sent" },
-      });
-      logger.success("Email log updated to sent status", {
-        logId,
-        email: opts.to,
-      });
-    } else if (!opts.publicId) {
-      logger.info("Test email - skipping database log", { email: opts.to });
-    }
-  } catch (error: any) {
-    if (error instanceof RecentEmailSentError) {
-      throw error;
-    }
-
-    if (logId) {
-      await prisma.emailLog.update({
-        where: { id: logId },
-        data: {
-          status: "failed",
-          errorMessage: error?.message || "Unknown error",
-        },
-      });
-      logger.warn("Email log updated to failed status", {
-        logId,
-        email: opts.to,
-        error: error?.message,
-      });
-    }
-    throw error;
-  }
+    },
+    {
+      log: {
+        context: ctx,
+        mailType: "plan_renovation_reminder",
+        publicId: opts.publicId ?? null,
+        clientName: opts.userName,
+      },
+    },
+  );
 };
 
 export async function sendReminderReportEmail(
   reporte_final: ReminderReportResult[],
   recipients: string[],
+  ctx: MailContext,
   gymName?: string,
   logoUrl?: string | null,
 ): Promise<{ sent: number }> {
@@ -238,13 +194,16 @@ export async function sendReminderReportEmail(
   for (let i = 0; i < recipients.length; i++) {
     const recipient = recipients[i];
     try {
-      await sendMail({
-        to: recipient,
-        subject: subject,
-        html: html,
-        logoUrl: logoUrl ?? undefined,
-        gymName: gymName ?? undefined,
-      });
+      await sendMail(
+        {
+          to: recipient,
+          subject: subject,
+          html: html,
+          logoUrl: logoUrl ?? undefined,
+          gymName: gymName ?? undefined,
+        },
+        { log: { context: ctx, mailType: "admin_reminder" } },
+      );
 
       sent++;
       logger.success("Administrative report sent", {
@@ -269,7 +228,7 @@ export async function sendReminderReportEmail(
 
 export const sendBulkReminderMails = async (
   reminders: ReminderMail[],
-  sentBy: string,
+  ctx: MailContext,
 ): Promise<{
   successful: number;
   failed: { email: string; error: string }[];
@@ -281,7 +240,7 @@ export const sendBulkReminderMails = async (
     const reminder = reminders[i];
 
     try {
-      await sendReminderMail(reminder, sentBy);
+      await sendReminderMail(reminder, ctx);
       reporte_final.push({
         publicId: reminder.publicId || null,
         email: reminder.to,

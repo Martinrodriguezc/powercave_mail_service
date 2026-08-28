@@ -1,5 +1,7 @@
 # POST /mail/send_manager_welcome
 
+> Campos comunes de identidad de gimnasio, registro en `mail_logs` y tope diario: ver [`../_common.md`](../_common.md).
+
 ## Propósito
 Notifica al manager/dueño de un gimnasio recién dado de alta que su cuenta está activa, indicándole la fecha de inicio de servicio y la fecha en la que termina el primer mes gratis. Incluye un CTA hacia el panel de administración.
 

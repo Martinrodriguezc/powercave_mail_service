@@ -1,11 +1,9 @@
 import { DailySalesReportMail } from "../../domain/mail";
 import { renderDailySalesReportHTML } from "./helpers";
 import { sendMail } from "..";
+import type { MailContext } from "../mailLog";
 
-export const sendDailySalesReportMail = async (opts: DailySalesReportMail, sentBy: string): Promise<void> => {
-    if (!sentBy) {
-        throw new Error('Sent by is required');
-    }
+export const sendDailySalesReportMail = async (opts: DailySalesReportMail, ctx: MailContext): Promise<void> => {
     if (!opts?.to) {
         throw new Error('Destination email (to) is required');
     }
@@ -21,12 +19,15 @@ export const sendDailySalesReportMail = async (opts: DailySalesReportMail, sentB
 
     const html = renderDailySalesReportHTML(opts);
 
-    await sendMail({
-        to: opts.to,
-        subject: opts.subject,
-        html,
-        logoUrl: opts.logoUrl ?? undefined,
-        gymName: opts.gymName ?? undefined,
-    });
+    await sendMail(
+        {
+            to: opts.to,
+            subject: opts.subject,
+            html,
+            logoUrl: opts.logoUrl ?? undefined,
+            gymName: opts.gymName ?? undefined,
+        },
+        { log: { context: ctx, mailType: "daily_sales_report" } },
+    );
 };
 

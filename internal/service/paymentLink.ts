@@ -2,6 +2,7 @@ import { PaymentLinkMail } from "../domain/mail";
 import { getLogoImgHtml } from "../domain/logo";
 import { paymentLinkTemplate } from "../domain/templates";
 import { sendMail } from "./mail";
+import type { MailContext } from "./mailLog";
 
 const EXPIRATION_NOTE_HTML = `<table width="100%" cellpadding="0" cellspacing="0" role="presentation" style="margin:0 0 20px;">
                 <tr>
@@ -13,6 +14,7 @@ const EXPIRATION_NOTE_HTML = `<table width="100%" cellpadding="0" cellspacing="0
 
 export const sendPaymentLinkEmail = async (
   opts: PaymentLinkMail,
+  ctx: MailContext,
 ): Promise<void> => {
   let html = paymentLinkTemplate;
 
@@ -40,11 +42,20 @@ export const sendPaymentLinkEmail = async (
   html = html.replace(/\{\{expirationNote\}\}/g, expirationNote);
   html = html.replace(/\{\{year\}\}/g, new Date().getFullYear().toString());
 
-  await sendMail({
-    to: opts.to,
-    subject: opts.subject,
-    html,
-    logoUrl: opts.logoUrl ?? undefined,
-    gymName: opts.gymName ?? undefined,
-  });
+  await sendMail(
+    {
+      to: opts.to,
+      subject: opts.subject,
+      html,
+      logoUrl: opts.logoUrl ?? undefined,
+      gymName: opts.gymName ?? undefined,
+    },
+    {
+      log: {
+        context: ctx,
+        mailType: "payment_link",
+        clientName: opts.clientName,
+      },
+    },
+  );
 };

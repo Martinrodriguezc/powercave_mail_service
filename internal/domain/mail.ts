@@ -164,6 +164,8 @@ export interface LowStockAlertMail extends Omit<Mail, "to"> {
 export interface AppReleaseRecipient {
   email: string;
   name?: string | null;
+  gymPublicId?: string | null;
+  gymName?: string | null;
 }
 
 export interface AppReleaseContent {
@@ -212,6 +214,7 @@ export interface CampaignBatchMail {
 
 export interface CampaignSendResult {
   email: string;
-  status: "sent" | "failed";
+  /** `blocked`: el gimnasio agoto su cupo diario, el correo no viajo a Resend. */
+  status: "sent" | "failed" | "blocked";
   errorMessage: string | null;
 }

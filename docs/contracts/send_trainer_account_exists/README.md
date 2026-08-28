@@ -1,5 +1,7 @@
 # POST /mail/send_trainer_account_exists
 
+> Campos comunes de identidad de gimnasio, registro en `mail_logs` y tope diario: ver [`../_common.md`](../_common.md).
+
 ## Propósito
 Avisa que ya existe una cuenta de Dashcore con ese correo, cuando alguien intenta registrarse como
 entrenador con un correo ya tomado.

@@ -1,5 +1,6 @@
 import { Router } from "express";
 import { requireApiKey } from "../middleware.ts/apiKeyAuth";
+import { resolveMailContext } from "../service/mailLog";
 import { createServiceLogger } from "../../utils/logger";
 import {
   composeAppReleaseHtml,
@@ -71,6 +72,8 @@ router.post("/send_app_release", requireApiKey, async (req, res) => {
     ? req.body.recipients.map((r: any) => ({
         email: typeof r?.email === "string" ? r.email.trim() : "",
         name: typeof r?.name === "string" ? r.name : null,
+        gymPublicId: typeof r?.gymPublicId === "string" ? r.gymPublicId : null,
+        gymName: typeof r?.gymName === "string" ? r.gymName : null,
       }))
     : [];
 
@@ -95,13 +98,18 @@ router.post("/send_app_release", requireApiKey, async (req, res) => {
     size: recipients.length,
   });
 
-  const results = await sendAppReleaseBatch({
-    ...pickContent(req.body, validated),
-    subject,
-    recipients,
-    sentBy: sentBy ?? "system",
-    announcementPublicId,
-  });
+  // El anuncio lo inicia el superadmin y cruza varios gimnasios: se registra
+  // atribuido a cada uno, pero no consume su cupo diario.
+  const results = await sendAppReleaseBatch(
+    {
+      ...pickContent(req.body, validated),
+      subject,
+      recipients,
+      sentBy: sentBy ?? "system",
+      announcementPublicId,
+    },
+    resolveMailContext({ sentBy: sentBy ?? "system" }),
+  );
 
   return res.status(200).json({ results });
 });

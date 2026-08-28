@@ -1,5 +1,7 @@
 # POST /mail/send_client_password_reset
 
+> Campos comunes de identidad de gimnasio, registro en `mail_logs` y tope diario: ver [`../_common.md`](../_common.md).
+
 ## Propósito
 Envía a un cliente del gimnasio (usuario de la app móvil) un código OTP de verificación para restablecer su contraseña. El correo muestra el OTP destacado e indica que expira en 15 minutos.
 

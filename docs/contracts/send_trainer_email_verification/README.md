@@ -1,5 +1,7 @@
 # POST /mail/send_trainer_email_verification
 
+> Campos comunes de identidad de gimnasio, registro en `mail_logs` y tope diario: ver [`../_common.md`](../_common.md).
+
 ## Propósito
 Envía al entrenador que acaba de registrarse el enlace para verificar su correo y activar su
 cuenta. Hasta que lo use, el login del backend le responde 403 `EMAIL_NOT_VERIFIED`. El enlace

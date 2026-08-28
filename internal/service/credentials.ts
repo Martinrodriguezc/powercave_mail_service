@@ -13,12 +13,14 @@ import {
   clientPasswordResetTemplate,
 } from "../domain/templates";
 import { sendMail, resend, withTimeout, RESEND_TIMEOUT_MS } from "./mail";
+import { checkQuota, logMail, type MailContext } from "./mailLog";
 import { createServiceLogger } from "../../utils/logger";
 
 const logger = createServiceLogger("credentials-bulk");
 
 export const sendPasswordResetEmail = async (
   opts: PasswordResetMail,
+  ctx: MailContext,
 ): Promise<void> => {
   let html = passwordResetTemplate;
 
@@ -30,17 +32,21 @@ export const sendPasswordResetEmail = async (
   html = html.replace(/\{\{year\}\}/g, new Date().getFullYear().toString());
   html = html.replace(/\{\{gymName\}\}/g, opts.gymName ?? "");
 
-  await sendMail({
-    to: opts.to,
-    subject: opts.subject,
-    html: html,
-    logoUrl: opts.logoUrl ?? undefined,
-    gymName: opts.gymName ?? undefined,
-  });
+  await sendMail(
+    {
+      to: opts.to,
+      subject: opts.subject,
+      html: html,
+      logoUrl: opts.logoUrl ?? undefined,
+      gymName: opts.gymName ?? undefined,
+    },
+    { log: { context: ctx, mailType: "password_reset" } },
+  );
 };
 
 export const sendPlatformUserCredentialsEmail = async (
   opts: PlatformUserCredentialsMail,
+  ctx: MailContext,
 ): Promise<void> => {
   let html = platformUserCredentialsTemplate;
 
@@ -54,13 +60,16 @@ export const sendPlatformUserCredentialsEmail = async (
   html = html.replace(/\{\{year\}\}/g, new Date().getFullYear().toString());
   html = html.replace(/\{\{gymName\}\}/g, opts.gymName ?? "");
 
-  await sendMail({
-    to: opts.to,
-    subject: opts.subject,
-    html: html,
-    logoUrl: opts.logoUrl ?? undefined,
-    gymName: opts.gymName ?? undefined,
-  });
+  await sendMail(
+    {
+      to: opts.to,
+      subject: opts.subject,
+      html: html,
+      logoUrl: opts.logoUrl ?? undefined,
+      gymName: opts.gymName ?? undefined,
+    },
+    { log: { context: ctx, mailType: "platform_user_credentials" } },
+  );
 };
 
 /**
@@ -98,15 +107,19 @@ export function composeClientAppInvitationHtml(
 
 export const sendClientAppInvitationEmail = async (
   opts: ClientAppInvitationMail,
+  ctx: MailContext,
 ): Promise<void> => {
   // Sin `logoUrl`: el HTML ya apunta al logo por URL y el adjunto quedaria
   // colgando sin que ninguna etiqueta lo referencie.
-  await sendMail({
-    to: opts.to,
-    subject: opts.subject,
-    html: composeClientAppInvitationHtml(opts),
-    gymName: opts.gymName ?? undefined,
-  });
+  await sendMail(
+    {
+      to: opts.to,
+      subject: opts.subject,
+      html: composeClientAppInvitationHtml(opts),
+      gymName: opts.gymName ?? undefined,
+    },
+    { log: { context: ctx, mailType: "client_app_invitation" } },
+  );
 };
 
 const delay = (ms: number): Promise<void> =>
@@ -122,7 +135,8 @@ export type ClientAppInvitationBulkItem = Omit<ClientAppInvitationMail, "subject
 
 export interface BulkInvitationResult {
   to: string;
-  status: "sent" | "failed";
+  /** `blocked`: el gimnasio agoto su cupo diario, el correo no viajo a Resend. */
+  status: "sent" | "failed" | "blocked";
   error?: string;
 }
 
@@ -141,6 +155,7 @@ const isQuotaError = (error: { statusCode?: number; name?: string }): boolean =>
  */
 export const sendClientAppInvitationsBulk = async (
   invitations: ClientAppInvitationBulkItem[],
+  ctx: MailContext,
 ): Promise<BulkInvitationsResponse> => {
   const results: BulkInvitationResult[] = invitations.map((inv) => ({
     to: inv.to,
@@ -151,12 +166,27 @@ export const sendClientAppInvitationsBulk = async (
     results[index] = { to: results[index].to, status: "failed", error };
   };
 
+  // Lo que no entra en el cupo del dia se marca y no viaja: el lote sale
+  // parcial, cada destinatario trae su estado.
+  const quota = await checkQuota(ctx, invitations.length);
+  for (let i = quota.allowed; i < invitations.length; i++) {
+    results[i] = {
+      to: results[i].to,
+      status: "blocked",
+      error: `Daily email limit reached (${quota.dailyLimit})`,
+    };
+  }
+  const sendableCount = quota.allowed;
+
   for (
     let start = 0;
-    start < invitations.length;
+    start < sendableCount;
     start += MAX_INVITATIONS_PER_BATCH
   ) {
-    const chunk = invitations.slice(start, start + MAX_INVITATIONS_PER_BATCH);
+    const chunk = invitations.slice(
+      start,
+      Math.min(start + MAX_INVITATIONS_PER_BATCH, sendableCount),
+    );
     const payload = chunk.map((inv) => ({
       from: `${config.SENDER_EMAIL}`,
       to: inv.to,
@@ -177,9 +207,9 @@ export const sendClientAppInvitationsBulk = async (
         // y el resto de los lotes van a recibir el mismo 429.
         if (isQuotaError(response.error)) {
           logger.error("Resend quota reached, aborting the bulk", new Error(message), {
-            pending: invitations.length - start,
+            pending: sendableCount - start,
           });
-          for (let i = start; i < invitations.length; i++) markFailed(i, message);
+          for (let i = start; i < sendableCount; i++) markFailed(i, message);
           break;
         }
         throw new Error(message);
@@ -211,10 +241,21 @@ export const sendClientAppInvitationsBulk = async (
       for (let i = start; i < start + chunk.length; i++) markFailed(i, message);
     }
 
-    if (start + MAX_INVITATIONS_PER_BATCH < invitations.length) {
+    if (start + MAX_INVITATIONS_PER_BATCH < sendableCount) {
       await delay(BATCH_THROTTLE_MS);
     }
   }
+
+  await logMail(
+    ctx,
+    results.map((result, index) => ({
+      recipient: result.to,
+      subject: `Bienvenido a la app | ${invitations[index]?.gymName ?? ""}`,
+      mailType: "client_app_invitation" as const,
+      status: result.status,
+      errorMessage: result.error ?? null,
+    })),
+  );
 
   const sent = results.filter((r) => r.status === "sent").length;
   return {
@@ -229,6 +270,7 @@ export const sendClientAppInvitationsBulk = async (
 
 export const sendClientPasswordResetEmail = async (
   opts: ClientPasswordResetMail,
+  ctx: MailContext,
 ): Promise<void> => {
   let html = clientPasswordResetTemplate;
 
@@ -240,11 +282,14 @@ export const sendClientPasswordResetEmail = async (
   html = html.replace(/\{\{otp\}\}/g, opts.otp);
   html = html.replace(/\{\{year\}\}/g, new Date().getFullYear().toString());
 
-  await sendMail({
-    to: opts.to,
-    subject: opts.subject,
-    html: html,
-    logoUrl: opts.logoUrl ?? undefined,
-    gymName: opts.gymName ?? undefined,
-  });
+  await sendMail(
+    {
+      to: opts.to,
+      subject: opts.subject,
+      html: html,
+      logoUrl: opts.logoUrl ?? undefined,
+      gymName: opts.gymName ?? undefined,
+    },
+    { log: { context: ctx, mailType: "client_password_reset" } },
+  );
 };

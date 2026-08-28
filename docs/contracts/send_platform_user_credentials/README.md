@@ -1,5 +1,7 @@
 # POST /mail/send_platform_user_credentials
 
+> Campos comunes de identidad de gimnasio, registro en `mail_logs` y tope diario: ver [`../_common.md`](../_common.md).
+
 ## Propósito
 Envía a un nuevo usuario de plataforma (staff/manager) sus credenciales iniciales: el correo de la cuenta y una contraseña temporal, junto con un enlace para forzar el reseteo en el primer login. Se dispara cuando el backend crea un usuario.
 

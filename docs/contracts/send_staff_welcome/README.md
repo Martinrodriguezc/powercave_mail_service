@@ -1,5 +1,7 @@
 # POST /mail/send_staff_welcome
 
+> Campos comunes de identidad de gimnasio, registro en `mail_logs` y tope diario: ver [`../_common.md`](../_common.md).
+
 ## Propósito
 Notifica a un colaborador (staff/recepción/entrenador) recién creado en un gimnasio existente que su cuenta está activa y le entrega el enlace al panel. A diferencia del welcome de manager, este correo no menciona fechas de servicio ni período gratis.
 

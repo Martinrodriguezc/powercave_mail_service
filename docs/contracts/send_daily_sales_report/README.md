@@ -1,5 +1,7 @@
 # POST /mail/send_daily_sales_report
 
+> Campos comunes de identidad de gimnasio, registro en `mail_logs` y tope diario: ver [`../_common.md`](../_common.md).
+
 ## Propósito
 
 Envía al equipo administrativo del gimnasio un resumen diario de ventas, desglosado en tres categorías: planes/membresías, alimentos (suplementos, snacks, bebidas) y mercadería (ropa, accesorios). Cada categoría trae el listado individual de ventas con cliente, producto, monto y hora, más un subtotal. Adicionalmente incluye el `totalRevenue` global del día. Lo dispara un job programado del backend (`sales_registry`) una vez al día.

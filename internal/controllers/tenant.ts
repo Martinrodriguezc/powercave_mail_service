@@ -14,7 +14,7 @@ router.get("/last-emails-by-tenant", requireAuth, requireMailServiceAccess, asyn
         }
         const lastEmails = await getLastEmailByTenant({
             role: req.user.role,
-            gymName: req.user.gymName,
+            gymPublicId: req.user.gymPublicId,
         });
 
         res.status(200).json({

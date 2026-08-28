@@ -110,7 +110,9 @@ VALIDATION 400               INTERNAL 500
 2. `ALTER COLUMN gymPublicId SET NOT NULL`.
 3. Dropear cualquier columna legacy del schema TS si la hay.
 
-**Coordinación de migraciones**: Mientras coexistan, las migraciones se aplican desde el Go (via `golang-migrate`). Prisma del TS no se vuelve a tocar.
+**Coordinación de migraciones**: Mientras coexistan, las migraciones se aplican desde el Go (via `golang-migrate`).
+
+> **Actualizado ago-2026**: el port a Go no arrancó y la cuota de Resend quedaba expuesta, así que el esquema de esta sección (`gymPublicId`, `providerMessageId`, enum granular) se implementó en Prisma, más `gymName`, `dailyLimit` y `localDay`. `metadata` JSONB **no** se implementó: no había consumidor. Cuando el port arranque, parte de este documento ya es realidad, no plan.
 
 ---
 
