@@ -5,6 +5,7 @@ import {
   sendClientAppInvitationEmail,
   sendClientAppInvitationsBulk,
   sendClientPasswordResetEmail,
+  sendAthleteAppInvitationEmail,
 } from "../service";
 import { requireApiKey } from "../middleware.ts/apiKeyAuth";
 import { respondIfDailyLimitReached } from "./limitResponse";
@@ -193,6 +194,49 @@ router.post(
     }
   },
 );
+
+// Acceso del atleta a Dashcore Athletes. Sin gimnasio: lo firma el entrenador.
+router.post("/send_athlete_app_invitation", requireApiKey, async (req, res) => {
+  const { to, tempPassword, trainerName, appStoreLink, googlePlayLink } =
+    req.body;
+
+  if (
+    !to ||
+    !tempPassword ||
+    typeof trainerName !== "string" ||
+    !trainerName.trim()
+  ) {
+    return res.status(400).json({
+      message: "Missing required fields: to, tempPassword, trainerName",
+    });
+  }
+
+  try {
+    await sendAthleteAppInvitationEmail({
+      to,
+      subject: "Tu acceso a Dashcore Athletes",
+      tempPassword,
+      trainerName: trainerName.trim(),
+      appStoreLink: appStoreLink ?? null,
+      googlePlayLink: googlePlayLink ?? null,
+    }, resolveMailContext(req.body));
+
+    logger.success("Athlete app invitation email sent", { email: to });
+    res
+      .status(200)
+      .json({ message: "Athlete app invitation email sent successfully" });
+  } catch (error: any) {
+    if (respondIfDailyLimitReached(res, error)) return;
+
+    logger.error("Error sending athlete app invitation email", error, {
+      email: to,
+    });
+    res.status(500).json({
+      message: "Error sending athlete app invitation email",
+      error: error?.message,
+    });
+  }
+});
 
 router.post("/send_client_password_reset", requireApiKey, async (req, res) => {
   const { to, otp, gymName, logoUrl } = req.body;

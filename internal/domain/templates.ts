@@ -80,3 +80,8 @@ export const trainerInvitationTemplate = fs.readFileSync(
   path.join(__dirname, "../html/trainer_invitation.html"),
   "utf8",
 );
+
+export const athleteAppInvitationTemplate = fs.readFileSync(
+  path.join(__dirname, "../html/athlete_app_invitation.html"),
+  "utf8",
+);

@@ -108,6 +108,13 @@ export interface ClientAppInvitationMail extends Mail {
   googlePlayLink?: string | null;
 }
 
+export interface AthleteAppInvitationMail extends Mail {
+  tempPassword: string;
+  trainerName: string;
+  appStoreLink?: string | null;
+  googlePlayLink?: string | null;
+}
+
 export interface ManagerWelcomeMail extends Mail {
   userName: string;
   gymName: string;

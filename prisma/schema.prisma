@@ -50,6 +50,7 @@ enum MailType {
   trainer_email_verification
   trainer_account_exists
   trainer_invitation
+  athlete_app_invitation
 }
 
 enum EmailStatus {

@@ -8,6 +8,7 @@ import {
   sendClientAppInvitationEmail,
   sendClientAppInvitationsBulk,
   sendClientPasswordResetEmail,
+  sendAthleteAppInvitationEmail,
   sendPasswordResetEmail,
   sendPlatformUserCredentialsEmail,
 } from "../service/credentials";
@@ -355,6 +356,19 @@ export const TEST_MAILS: Record<string, TestMail> = {
         ], testContext()),
         (result) => result.summary.sent,
       ),
+  },
+
+  athlete_app_invitation: {
+    label: "Acceso a Dashcore Athletes (atleta del entrenador)",
+    send: (ctx) =>
+      sendAthleteAppInvitationEmail({
+        to: ctx.to,
+        subject: subject("Tu acceso a Dashcore Athletes"),
+        trainerName: ctx.full ? "Ana Soto" : "",
+        tempPassword: ctx.full ? "Temp-2026-Ax9" : "",
+        appStoreLink: link(ctx.full),
+        googlePlayLink: link(ctx.full),
+      }, testContext()),
   },
 
   client_password_reset: {

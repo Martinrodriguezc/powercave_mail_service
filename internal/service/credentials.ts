@@ -3,6 +3,7 @@ import {
   PlatformUserCredentialsMail,
   ClientAppInvitationMail,
   ClientPasswordResetMail,
+  AthleteAppInvitationMail,
 } from "../domain/mail";
 import { config } from "../../config/config";
 import { getLogoImgHtml, getRemoteLogoImgHtml } from "../domain/logo";
@@ -11,10 +12,12 @@ import {
   platformUserCredentialsTemplate,
   clientAppInvitationTemplate,
   clientPasswordResetTemplate,
+  athleteAppInvitationTemplate,
 } from "../domain/templates";
 import { sendMail, resend, withTimeout, RESEND_TIMEOUT_MS } from "./mail";
 import { checkQuota, logMail, type MailContext } from "./mailLog";
 import { createServiceLogger } from "../../utils/logger";
+import { escapeHtml } from "../../utils/html";
 
 const logger = createServiceLogger("credentials-bulk");
 
@@ -291,5 +294,63 @@ export const sendClientPasswordResetEmail = async (
       gymName: opts.gymName ?? undefined,
     },
     { log: { context: ctx, mailType: "client_password_reset" } },
+  );
+};
+
+/**
+ * Botones de tienda del atleta. Sin badges en S3 (la app no esta publicada):
+ * son botones de texto, y sin ningun link el bloque entero desaparece.
+ */
+function buildAthleteStoreButtons(
+  opts: Pick<AthleteAppInvitationMail, "appStoreLink" | "googlePlayLink">,
+): string {
+  const button = (link: string, label: string) =>
+    `<td style="padding:0 6px;" align="center">
+                          <a href="${escapeHtml(link)}" target="_blank" style="display:inline-block; background-color:#f5b305; color:#0a0a0a; font-size:14px; font-weight:700; text-decoration:none; padding:12px 22px; border-radius:6px;">${label}</a>
+                        </td>`;
+
+  const buttons: string[] = [];
+  if (opts.appStoreLink) buttons.push(button(opts.appStoreLink, "App Store"));
+  if (opts.googlePlayLink)
+    buttons.push(button(opts.googlePlayLink, "Google Play"));
+  if (buttons.length === 0) return "";
+
+  return `<table width="100%" cellpadding="0" cellspacing="0" role="presentation" style="margin:0 0 28px;">
+                <tr>
+                  <td align="center" style="padding:20px 0 8px; border-top:1px solid #1a1a1a;">
+                    <p style="margin:0 0 14px; font-size:11px; color:#6b7280; letter-spacing:2px; text-transform:uppercase;">Descarga la app</p>
+                    <table cellpadding="0" cellspacing="0" border="0" role="presentation" style="margin:0 auto;">
+                      <tr>
+                        ${buttons.join("\n                        ")}
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+              </table>`;
+}
+
+export function composeAthleteAppInvitationHtml(
+  opts: Omit<AthleteAppInvitationMail, "subject">,
+): string {
+  return athleteAppInvitationTemplate
+    .replace(/\{\{trainerName\}\}/g, escapeHtml(opts.trainerName))
+    .replace(/\{\{userEmail\}\}/g, escapeHtml(opts.to))
+    .replace(/\{\{tempPassword\}\}/g, escapeHtml(opts.tempPassword))
+    .replace(/\{\{storeButtons\}\}/g, buildAthleteStoreButtons(opts))
+    .replace(/\{\{year\}\}/g, new Date().getFullYear().toString());
+}
+
+/** Sin gimnasio: el atleta es del entrenador. El logo de DashCore va por CID. */
+export const sendAthleteAppInvitationEmail = async (
+  opts: AthleteAppInvitationMail,
+  ctx: MailContext,
+): Promise<void> => {
+  await sendMail(
+    {
+      to: opts.to,
+      subject: opts.subject,
+      html: composeAthleteAppInvitationHtml(opts),
+    },
+    { log: { context: ctx, mailType: "athlete_app_invitation" } },
   );
 };
