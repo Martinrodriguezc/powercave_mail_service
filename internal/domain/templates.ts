@@ -85,3 +85,8 @@ export const athleteAppInvitationTemplate = fs.readFileSync(
   path.join(__dirname, "../html/athlete_app_invitation.html"),
   "utf8",
 );
+
+export const athletePasswordResetTemplate = fs.readFileSync(
+  path.join(__dirname, "../html/athlete_password_reset.html"),
+  "utf8",
+);

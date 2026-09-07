@@ -17,6 +17,7 @@ export {
   sendClientAppInvitationsBulk,
   sendClientPasswordResetEmail,
   sendAthleteAppInvitationEmail,
+  sendAthletePasswordResetEmail,
 } from "./credentials";
 export { getLastEmailByTenant } from "./tenant";
 export { sendPaymentLinkEmail } from "./paymentLink";

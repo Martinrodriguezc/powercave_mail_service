@@ -51,6 +51,7 @@ enum MailType {
   trainer_account_exists
   trainer_invitation
   athlete_app_invitation
+  athlete_password_reset
 }
 
 enum EmailStatus {

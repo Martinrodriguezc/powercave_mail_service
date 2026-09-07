@@ -6,6 +6,7 @@ import {
   sendClientAppInvitationsBulk,
   sendClientPasswordResetEmail,
   sendAthleteAppInvitationEmail,
+  sendAthletePasswordResetEmail,
 } from "../service";
 import { requireApiKey } from "../middleware.ts/apiKeyAuth";
 import { respondIfDailyLimitReached } from "./limitResponse";
@@ -237,6 +238,50 @@ router.post("/send_athlete_app_invitation", requireApiKey, async (req, res) => {
     });
   }
 });
+
+// Codigo de recuperacion del atleta. Sin gimnasio: nombre y entrenador son
+// opcionales porque un atleta que nunca entro todavia no tiene nombre.
+router.post(
+  "/send_athlete_password_reset",
+  requireApiKey,
+  async (req, res) => {
+    const { to, otp, athleteName, trainerName } = req.body;
+
+    if (!to || !otp) {
+      return res
+        .status(400)
+        .json({ message: "Missing required fields: to, otp" });
+    }
+
+    try {
+      await sendAthletePasswordResetEmail(
+        {
+          to,
+          subject: "Tu código de recuperación | Dashcore Athletes",
+          otp,
+          athleteName: athleteName ?? null,
+          trainerName: trainerName ?? null,
+        },
+        resolveMailContext(req.body),
+      );
+
+      logger.success("Athlete password reset email sent", { email: to });
+      res
+        .status(200)
+        .json({ message: "Athlete password reset email sent successfully" });
+    } catch (error: any) {
+      if (respondIfDailyLimitReached(res, error)) return;
+
+      logger.error("Error sending athlete password reset email", error, {
+        email: to,
+      });
+      res.status(500).json({
+        message: "Error sending athlete password reset email",
+        error: error?.message,
+      });
+    }
+  },
+);
 
 router.post("/send_client_password_reset", requireApiKey, async (req, res) => {
   const { to, otp, gymName, logoUrl } = req.body;

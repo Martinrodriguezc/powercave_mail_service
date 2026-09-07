@@ -9,6 +9,7 @@ import {
   sendClientAppInvitationsBulk,
   sendClientPasswordResetEmail,
   sendAthleteAppInvitationEmail,
+  sendAthletePasswordResetEmail,
   sendPasswordResetEmail,
   sendPlatformUserCredentialsEmail,
 } from "../service/credentials";
@@ -368,6 +369,18 @@ export const TEST_MAILS: Record<string, TestMail> = {
         tempPassword: ctx.full ? "Temp-2026-Ax9" : "",
         appStoreLink: link(ctx.full),
         googlePlayLink: link(ctx.full),
+      }, testContext()),
+  },
+
+  athlete_password_reset: {
+    label: "Código de recuperación (app de atletas)",
+    send: (ctx) =>
+      sendAthletePasswordResetEmail({
+        to: ctx.to,
+        subject: subject("Tu código de recuperación"),
+        otp: ctx.full ? "482913" : "",
+        athleteName: ctx.full ? "Ana" : null,
+        trainerName: ctx.full ? "Luis Pardo" : null,
       }, testContext()),
   },
 

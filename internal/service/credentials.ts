@@ -4,6 +4,7 @@ import {
   ClientAppInvitationMail,
   ClientPasswordResetMail,
   AthleteAppInvitationMail,
+  AthletePasswordResetMail,
 } from "../domain/mail";
 import { config } from "../../config/config";
 import { getLogoImgHtml, getRemoteLogoImgHtml } from "../domain/logo";
@@ -13,6 +14,7 @@ import {
   clientAppInvitationTemplate,
   clientPasswordResetTemplate,
   athleteAppInvitationTemplate,
+  athletePasswordResetTemplate,
 } from "../domain/templates";
 import { sendMail, resend, withTimeout, RESEND_TIMEOUT_MS } from "./mail";
 import { checkQuota, logMail, type MailContext } from "./mailLog";
@@ -352,5 +354,43 @@ export const sendAthleteAppInvitationEmail = async (
       html: composeAthleteAppInvitationHtml(opts),
     },
     { log: { context: ctx, mailType: "athlete_app_invitation" } },
+  );
+};
+
+/** El saludo se arma aca: sin nombre queda "Hola," a secas, no "Hola ,". */
+function buildGreeting(athleteName?: string | null): string {
+  const name = athleteName?.trim();
+  return name ? `Hola ${escapeHtml(name)},` : "Hola,";
+}
+
+/** La firma del entrenador desaparece entera si el backend no la mando. */
+function buildTrainerLine(trainerName?: string | null): string {
+  const name = trainerName?.trim();
+  if (!name) return "";
+  return ` Ni Dashcore ni ${escapeHtml(name)} te lo van a pedir.`;
+}
+
+export function composeAthletePasswordResetHtml(
+  opts: Omit<AthletePasswordResetMail, "subject">,
+): string {
+  return athletePasswordResetTemplate
+    .replace(/\{\{greeting\}\}/g, buildGreeting(opts.athleteName))
+    .replace(/\{\{otp\}\}/g, escapeHtml(opts.otp))
+    .replace(/\{\{trainerLine\}\}/g, buildTrainerLine(opts.trainerName))
+    .replace(/\{\{year\}\}/g, new Date().getFullYear().toString());
+}
+
+/** Sin gimnasio, igual que la invitacion: el logo de DashCore va por CID. */
+export const sendAthletePasswordResetEmail = async (
+  opts: AthletePasswordResetMail,
+  ctx: MailContext,
+): Promise<void> => {
+  await sendMail(
+    {
+      to: opts.to,
+      subject: opts.subject,
+      html: composeAthletePasswordResetHtml(opts),
+    },
+    { log: { context: ctx, mailType: "athlete_password_reset" } },
   );
 };

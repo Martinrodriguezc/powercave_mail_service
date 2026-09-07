@@ -115,6 +115,12 @@ export interface AthleteAppInvitationMail extends Mail {
   googlePlayLink?: string | null;
 }
 
+export interface AthletePasswordResetMail extends Mail {
+  otp: string;
+  athleteName?: string | null;
+  trainerName?: string | null;
+}
+
 export interface ManagerWelcomeMail extends Mail {
   userName: string;
   gymName: string;
