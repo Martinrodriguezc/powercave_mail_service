@@ -89,6 +89,15 @@ export interface PaymentLinkMail extends Mail {
   isRecurring: boolean;
 }
 
+export interface PaymentFailedMail extends Mail {
+  clientName: string;
+  planName: string;
+  amount: string;
+  providerName: string;
+  reason: string | null;
+  willRetry: boolean;
+}
+
 export interface ClientPasswordResetMail extends Mail {
   otp: string;
   gymName: string;

@@ -24,6 +24,7 @@ import {
 } from "../service/welcome";
 import { resolveMailContext } from "../service/mailLog";
 import { sendPaymentLinkEmail } from "../service/paymentLink";
+import { sendPaymentFailedEmail } from "../service/paymentFailed";
 import { sendLowStockAlertEmail } from "../service/lowStockAlert";
 import { sendCampaignEmail } from "../service/campaign";
 import { sendDailyAdminReportMail } from "../service/admin/admin_service";
@@ -439,6 +440,23 @@ export const TEST_MAILS: Record<string, TestMail> = {
         providerName: ctx.full ? "Mercado Pago" : "",
         providerLogoUrl: "",
         isRecurring: false,
+      }, testContext()),
+  },
+
+  payment_failed: {
+    label: "Cobro recurrente rechazado",
+    send: (ctx) =>
+      sendPaymentFailedEmail({
+        to: ctx.to,
+        subject: subject("Tu pago no se pudo procesar"),
+        gymName: gym(ctx),
+        logoUrl: logo(ctx),
+        clientName: ctx.full ? "Camila Rojas" : "",
+        planName: ctx.full ? "Plan Mensual Full" : "",
+        amount: ctx.full ? "$45.000 CLP" : "",
+        providerName: "Mercado Pago",
+        reason: ctx.full ? "Tu tarjeta no tenía saldo suficiente" : null,
+        willRetry: ctx.full,
       }, testContext()),
   },
 

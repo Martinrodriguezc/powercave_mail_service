@@ -90,3 +90,8 @@ export const athletePasswordResetTemplate = fs.readFileSync(
   path.join(__dirname, "../html/athlete_password_reset.html"),
   "utf8",
 );
+
+export const paymentFailedTemplate = fs.readFileSync(
+  path.join(__dirname, "../html/payment_failed.html"),
+  "utf8",
+);

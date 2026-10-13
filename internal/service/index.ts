@@ -21,6 +21,7 @@ export {
 } from "./credentials";
 export { getLastEmailByTenant } from "./tenant";
 export { sendPaymentLinkEmail } from "./paymentLink";
+export { sendPaymentFailedEmail } from "./paymentFailed";
 export { sendManagerWelcomeEmail, sendStaffWelcomeEmail } from "./welcome";
 export { sendLowStockAlertEmail } from "./lowStockAlert";
 export {
