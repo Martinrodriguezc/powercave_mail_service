@@ -30,3 +30,4 @@ export {
   sendTrainerInvitationEmail,
 } from "./trainerAccount";
 export { getMailUsage, InvalidMonthError } from "./usage";
+export { sendBulkInactivityReminders } from "./inactivityReminder";

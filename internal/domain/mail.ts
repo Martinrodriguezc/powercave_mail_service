@@ -240,3 +240,10 @@ export interface CampaignSendResult {
   status: "sent" | "failed" | "blocked";
   errorMessage: string | null;
 }
+
+export interface InactivityReminderMail extends Mail {
+  userName: string;
+  publicId: string;
+  daysSinceLastVisit: number;
+  lastAccessAt: string | null;
+}

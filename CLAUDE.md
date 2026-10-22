@@ -58,6 +58,7 @@ All routes are prefixed with `/mail`. Two auth strategies:
 | POST | `/mail/send_athlete_app_invitation` | API Key | Athlete credentials for Dashcore Athletes, signed by the trainer |
 | POST | `/mail/send_athlete_password_reset` | API Key | 6-digit recovery code for the athlete, no gym |
 | POST | `/mail/send_payment_failed` | API Key | Notice to the member that their recurring charge was rejected |
+| POST | `/mail/send_inactivity_reminder` | API Key | "We miss you" to members with an active plan and no visits in X days (once per streak) |
 | GET | `/mail/last-emails-by-tenant` | JWT | Recent emails grouped by tenant |
 | GET | `/mail/usage` | JWT (SUPERADMIN) | Consumo de correos: hoy, mes, por gimnasio y por tipo (`?month=YYYY-MM`) |
 | GET | `/mail/test/types` | JWT (SUPERADMIN) | Lista los tipos de correo testeables |

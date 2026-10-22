@@ -95,3 +95,8 @@ export const paymentFailedTemplate = fs.readFileSync(
   path.join(__dirname, "../html/payment_failed.html"),
   "utf8",
 );
+
+export const inactivityReminderTemplate = fs.readFileSync(
+  path.join(__dirname, "../html/inactivity_reminder.html"),
+  "utf8",
+);

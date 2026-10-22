@@ -34,6 +34,7 @@ const values = {
   year: String(new Date().getFullYear()),
   gymName: process.argv[3] || "Gimnasio de Prueba",
   userName: "Camila Rojas",
+  days: "21",
   planName: "Plan Mensual Full",
   expiryDate: "20-08-2026",
   logoImg: "",

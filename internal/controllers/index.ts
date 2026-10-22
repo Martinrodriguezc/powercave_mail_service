@@ -12,6 +12,7 @@ import trainerAccountRouter from "./trainerAccount";
 import lowStockAlertRouter from "./lowStockAlert";
 import testRouter from "./test";
 import appReleaseRouter from "./appRelease";
+import inactivityReminderRouter from "./inactivityReminder";
 
 const router = Router();
 
@@ -27,6 +28,7 @@ router.use(welcomeRouter);
 router.use(trainerAccountRouter);
 router.use(lowStockAlertRouter);
 router.use(appReleaseRouter);
+router.use(inactivityReminderRouter);
 router.use(testRouter);
 
 export default router;
