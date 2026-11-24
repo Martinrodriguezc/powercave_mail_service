@@ -54,6 +54,8 @@ enum MailType {
   athlete_password_reset
   payment_failed
   inactivity_reminder
+  guest_trial_confirmation
+  guest_trial_cancelled
 }
 
 enum EmailStatus {

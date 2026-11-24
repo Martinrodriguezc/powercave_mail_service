@@ -100,3 +100,13 @@ export const inactivityReminderTemplate = fs.readFileSync(
   path.join(__dirname, "../html/inactivity_reminder.html"),
   "utf8",
 );
+
+export const guestTrialConfirmationTemplate = fs.readFileSync(
+  path.join(__dirname, "../html/guest_trial_confirmation.html"),
+  "utf8",
+);
+
+export const guestTrialCancelledTemplate = fs.readFileSync(
+  path.join(__dirname, "../html/guest_trial_cancelled.html"),
+  "utf8",
+);

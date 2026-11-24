@@ -1,0 +1,14 @@
+{
+  "to": "invitado@example.com",
+  "guestName": "Camila Rojas",
+  "className": "Funcional HIIT",
+  "classDate": "martes 2 de diciembre",
+  "classTime": "19:30",
+  "gymAddress": "Av. Apoquindo 4500, Las Condes",
+  "cancelUrl": "https://app.dashcore.cl/trial/cancel?token=abc123",
+  "logoUrl": "https://cdn.dashcore.cl/gyms/powercave-las-condes/logo.jpg",
+  "gymPublicId": "6f1c2d3e-4b5a-4c7d-8e9f-0a1b2c3d4e5f",
+  "gymName": "PowerCave Las Condes",
+  "gymTimezone": "America/Santiago",
+  "dailyEmailLimit": null
+}

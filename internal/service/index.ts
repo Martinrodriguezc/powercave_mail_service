@@ -31,3 +31,7 @@ export {
 } from "./trainerAccount";
 export { getMailUsage, InvalidMonthError } from "./usage";
 export { sendBulkInactivityReminders } from "./inactivityReminder";
+export {
+  sendGuestTrialConfirmationEmail,
+  sendGuestTrialCancelledEmail,
+} from "./guestTrial";

@@ -247,3 +247,23 @@ export interface InactivityReminderMail extends Mail {
   daysSinceLastVisit: number;
   lastAccessAt: string | null;
 }
+
+export interface GuestTrialConfirmationMail extends Mail {
+  guestName: string;
+  className: string;
+  classDate: string;
+  classTime: string;
+  gymAddress: string | null;
+  cancelUrl: string;
+}
+
+export const GUEST_TRIAL_CANCEL_REASONS = ["STAFF", "CLASS_CANCELLED"] as const;
+export type GuestTrialCancelReason = (typeof GUEST_TRIAL_CANCEL_REASONS)[number];
+
+export interface GuestTrialCancelledMail extends Mail {
+  guestName: string;
+  className: string;
+  classDate: string;
+  classTime: string;
+  reason: GuestTrialCancelReason;
+}

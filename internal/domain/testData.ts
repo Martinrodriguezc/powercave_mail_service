@@ -25,6 +25,10 @@ import {
 import { resolveMailContext } from "../service/mailLog";
 import { sendPaymentLinkEmail } from "../service/paymentLink";
 import { sendPaymentFailedEmail } from "../service/paymentFailed";
+import {
+  sendGuestTrialCancelledEmail,
+  sendGuestTrialConfirmationEmail,
+} from "../service/guestTrial";
 import { sendLowStockAlertEmail } from "../service/lowStockAlert";
 import { sendCampaignEmail } from "../service/campaign";
 import { sendDailyAdminReportMail } from "../service/admin/admin_service";
@@ -457,6 +461,39 @@ export const TEST_MAILS: Record<string, TestMail> = {
         providerName: "Mercado Pago",
         reason: ctx.full ? "Tu tarjeta no tenía saldo suficiente" : null,
         willRetry: ctx.full,
+      }, testContext()),
+  },
+
+  guest_trial_confirmation: {
+    label: "Clase de prueba confirmada",
+    send: (ctx) =>
+      sendGuestTrialConfirmationEmail({
+        to: ctx.to,
+        subject: subject("Tu clase de prueba está confirmada"),
+        gymName: gym(ctx),
+        logoUrl: logo(ctx),
+        guestName: ctx.full ? "Camila Rojas" : "",
+        className: ctx.full ? "Funcional HIIT" : "",
+        classDate: ctx.full ? "martes 2 de diciembre" : "",
+        classTime: ctx.full ? "19:30" : "",
+        gymAddress: ctx.full ? "Av. Apoquindo 4500, Las Condes" : null,
+        cancelUrl: link(ctx.full),
+      }, testContext()),
+  },
+
+  guest_trial_cancelled: {
+    label: "Clase de prueba cancelada",
+    send: (ctx) =>
+      sendGuestTrialCancelledEmail({
+        to: ctx.to,
+        subject: subject("Tu clase de prueba fue cancelada"),
+        gymName: gym(ctx),
+        logoUrl: logo(ctx),
+        guestName: ctx.full ? "Camila Rojas" : "",
+        className: ctx.full ? "Funcional HIIT" : "",
+        classDate: ctx.full ? "martes 2 de diciembre" : "",
+        classTime: ctx.full ? "19:30" : "",
+        reason: "CLASS_CANCELLED",
       }, testContext()),
   },
 
